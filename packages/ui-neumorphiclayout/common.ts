@@ -10,6 +10,12 @@ export enum State {
   PRESSED_IN_OUT
 }
 
+export class CanvasColor extends Color {
+  get drawColor() {
+    return global.isAndroid ? this.android : this;
+  }
+}
+
 export const brightIntensityProperty = new Property < NeumorphicLayoutCommon,
   number > ({
     name: 'brightIntensity',
@@ -42,11 +48,11 @@ export const darkIntensityProperty = new Property < NeumorphicLayoutCommon,
   });
 
 export const neumorphicColorProperty = new Property < NeumorphicLayoutCommon,
-  Color > ({
+  CanvasColor > ({
     name: 'neumorphicColor',
-    defaultValue: new Color(White),
-    equalityComparer: Color.equals,
-    valueConverter: (value) => new Color(value),
+    defaultValue: new CanvasColor(White),
+    equalityComparer: CanvasColor.equals,
+    valueConverter: (value) => new CanvasColor(value),
     valueChanged: (target, oldValue, newValue) => {
       target.brightColor = target.manipulateColor(newValue, 1 + target.brightIntensity);
       target.darkColor = target.manipulateColor(newValue, 1 - target.darkIntensity);
@@ -55,10 +61,10 @@ export const neumorphicColorProperty = new Property < NeumorphicLayoutCommon,
   });
 
 export const overlayColorProperty = new Property < NeumorphicLayoutCommon,
-  Color > ({
+  CanvasColor > ({
     name: 'overlayColor',
-    equalityComparer: Color.equals,
-    valueConverter: (value) => new Color(value),
+    equalityComparer: CanvasColor.equals,
+    valueConverter: (value) => new CanvasColor(value),
     valueChanged: (target, oldValue, newValue) => {
       target.isLoaded && target.invalidate();
     }
@@ -105,13 +111,13 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
 
   public readonly augmentedCanvas: Canvas = new Canvas(0, 0);
 
-  public brightColor: Color;
+  public brightColor: CanvasColor;
   public brightIntensity: number;
   public cornerRadius: number;
-  public darkColor: Color;
+  public darkColor: CanvasColor;
   public darkIntensity: number;
-  public neumorphicColor: Color;
-  public overlayColor: Color;
+  public neumorphicColor: CanvasColor;
+  public overlayColor: CanvasColor;
   public shadowDistance: number;
   public shadowRadius: number;
   public state: State;
@@ -123,12 +129,12 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
   private paintBright: Paint;
   private paintDark: Paint;
 
-  public manipulateColor(color: Color, factor: number): Color {
+  public manipulateColor(color: CanvasColor, factor: number): CanvasColor {
     const a = color.a;
     const r = Math.round(color.r * factor);
     const g = Math.round(color.g * factor);
     const b = Math.round(color.b * factor);
-    return new Color(a, Math.min(r, 255), Math.min(g, 255), Math.min(b, 255));
+    return new CanvasColor(a, Math.min(r, 255), Math.min(g, 255), Math.min(b, 255));
   }
 
   public onCanvasDraw(canvas: Canvas) {
@@ -179,47 +185,43 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
     const actualSize = this.getActualSize();
     const width = actualSize.width;
     const height = actualSize.height;
-
-    let neumorphicColorNative, brightColorNative, darkColorNative, overlayColorNative;
-    if (global.isAndroid) {
-      neumorphicColorNative = this.neumorphicColor.android;
-      brightColorNative = this.brightColor.android;
-      darkColorNative = this.darkColor.android;
-      if (this.overlayColor) {
-        overlayColorNative = this.overlayColor.android;
-      }
-    } else {
-      neumorphicColorNative = this.neumorphicColor;
-      brightColorNative = this.brightColor;
-      darkColorNative = this.darkColor;
-      if (this.overlayColor) {
-        overlayColorNative = this.overlayColor;
-      }
-    }
+    const bgColor = this.overlayColor || this.neumorphicColor;
 
     const shadowRadius: number = this.shadowRadius || (this.shadowDistance * 2);
-    let linearGradient = null;
+    let gradientFromColor = null;
+    let gradientToColor = null;
 
     switch (state) {
-      case State.FLAT:
-      case State.PRESSED:
-        this.paintBase.setColor(overlayColorNative || neumorphicColorNative);
-        break;
       case State.CONCAVE:
-        linearGradient = new LinearGradient(0, 0, width, height, darkColorNative, brightColorNative, TileMode.CLAMP);
+        if (this.overlayColor) {
+          gradientFromColor = this.manipulateColor(this.overlayColor, 1 - this.darkIntensity);
+          gradientToColor = this.manipulateColor(this.overlayColor, 1 + this.brightIntensity);
+        } else {
+          gradientFromColor = this.darkColor;
+          gradientToColor = this.brightColor;
+        }
+        break;
+      case State.CONVEX:
+        if (this.overlayColor) {
+          gradientFromColor = this.manipulateColor(this.overlayColor, 1 + this.brightIntensity);
+          gradientToColor = this.manipulateColor(this.overlayColor, 1 - this.darkIntensity);
+        } else {
+          gradientFromColor = this.brightColor;
+          gradientToColor = this.darkColor;
+        }
         break;
       default:
-        linearGradient = new LinearGradient(0, 0, width, height, brightColorNative, darkColorNative, TileMode.CLAMP);
+        this.paintBase.setColor(bgColor.drawColor);
         break;
     }
 
-    if (linearGradient) {
-      this.paintBase.setShader(linearGradient);
+    if (gradientFromColor && gradientToColor) {
+      this.paintBase.setShader(new LinearGradient(0, 0, width, height, gradientFromColor.drawColor, gradientToColor.drawColor, TileMode.CLAMP));
     }
-    this.paintBright.setColor(neumorphicColorNative);
-    this.paintDark.setColor(neumorphicColorNative);
-    this.paintBright.setShadowLayer(shadowRadius, -this.shadowDistance, -this.shadowDistance, brightColorNative);
-    this.paintDark.setShadowLayer(shadowRadius, this.shadowDistance, this.shadowDistance, darkColorNative);
+    this.paintBright.setColor(bgColor.drawColor);
+    this.paintDark.setColor(bgColor.drawColor);
+    this.paintBright.setShadowLayer(shadowRadius, -this.shadowDistance, -this.shadowDistance, this.brightColor.drawColor);
+    this.paintDark.setShadowLayer(shadowRadius, this.shadowDistance, this.shadowDistance, this.darkColor.drawColor);
   }
 
   private initDefaults() {
