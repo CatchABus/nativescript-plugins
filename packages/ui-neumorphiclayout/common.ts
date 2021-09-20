@@ -122,9 +122,7 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
   public shadowRadius: number;
   public state: State;
 
-  private pathBase: Path;
-  private pathBright: Path;
-  private pathDark: Path;
+  private path: Path = new Path();
   private paintBase: Paint;
   private paintBright: Paint;
   private paintDark: Paint;
@@ -144,36 +142,40 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
 
     if (state == State.PRESSED_IN_OUT) {
       if (global.isAndroid) {
-        this.initShapes(State.FLAT);
+        this.initShape(State.FLAT);
         this.initPaints(State.FLAT);
 
-        canvas.drawPath(this.pathBright, this.paintBright);
-        canvas.drawPath(this.pathDark, this.paintDark);
-        canvas.drawPath(this.pathBase, this.paintBase);
+        canvas.drawPath(this.path, this.paintBright);
+        canvas.drawPath(this.path, this.paintDark);
+        canvas.drawPath(this.path, this.paintBase);
       }
 
-      this.initShapes(State.PRESSED);
+      this.initShape(State.PRESSED);
       this.initPaints(State.PRESSED);
 
-      canvas.clipPath(this.pathBase);
-      canvas.drawPath(this.pathBase, this.paintBase);
-      canvas.drawPath(this.pathBright, this.paintBright);
-      canvas.drawPath(this.pathDark, this.paintDark);
+      canvas.clipPath(this.path);
+      canvas.drawPath(this.path, this.paintBase);
+
+      !this.path.isInverseFillType() && this.path.toggleInverseFillType();
+      canvas.drawPath(this.path, this.paintBright);
+      canvas.drawPath(this.path, this.paintDark);
     } else {
-      this.initShapes(state);
+      this.initShape(state);
       this.initPaints(state);
 
       if (state == State.PRESSED) {
-        canvas.clipPath(this.pathBase);
-        canvas.drawPath(this.pathBase, this.paintBase);
-        canvas.drawPath(this.pathBright, this.paintBright);
-        canvas.drawPath(this.pathDark, this.paintDark);
+        canvas.clipPath(this.path);
+        canvas.drawPath(this.path, this.paintBase);
+
+        !this.path.isInverseFillType() && this.path.toggleInverseFillType();
+        canvas.drawPath(this.path, this.paintBright);
+        canvas.drawPath(this.path, this.paintDark);
       } else {
         if (global.isAndroid) {
-          canvas.drawPath(this.pathBright, this.paintBright);
-          canvas.drawPath(this.pathDark, this.paintDark);
+          canvas.drawPath(this.path, this.paintBright);
+          canvas.drawPath(this.path, this.paintDark);
         }
-        canvas.drawPath(this.pathBase, this.paintBase);
+        canvas.drawPath(this.path, this.paintBase);
       }
     }
     this.notify({ eventName: 'draw', object: this, canvas });
@@ -225,9 +227,6 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
   }
 
   private initDefaults() {
-    this.pathBase = new Path();
-    this.pathBright = new Path();
-    this.pathDark = new Path();
     this.paintBase = new Paint();
     this.paintBase.setAntiAlias(global.isAndroid);
     this.paintBright = new Paint();
@@ -236,33 +235,14 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
     this.paintDark.setAntiAlias(global.isAndroid);
   }
 
-  private initShapes(state) {
+  private initShape(state) {
     const actualSize = this.getActualSize();
     const width = actualSize.width;
     const height = actualSize.height;
 
-    this.pathBase.reset();
-    this.pathBright.reset();
-    this.pathDark.reset();
-
-    const rectF = createRectF(0, 0, width, height);
-
-    this.pathBase.addRoundRect(rectF, this.cornerRadius, this.cornerRadius, Direction.CW);
-    this.pathBright.addRoundRect(rectF, this.cornerRadius, this.cornerRadius, Direction.CW);
-    this.pathDark.addRoundRect(rectF, this.cornerRadius, this.cornerRadius, Direction.CW);
-
-    if (state == State.PRESSED) {
-      if (!this.pathBright.isInverseFillType()) {
-        this.pathBright.toggleInverseFillType();
-      }
-      if (!this.pathDark.isInverseFillType()) {
-        this.pathDark.toggleInverseFillType();
-      }
-    }
-
-    this.pathBase.close();
-    this.pathBright.close();
-    this.pathDark.close();
+    this.path.reset();
+    this.path.isInverseFillType() && this.path.toggleInverseFillType();
+    this.path.addRoundRect(createRectF(0, 0, width, height), this.cornerRadius, this.cornerRadius, Direction.CW);
   }
 
   abstract invalidate();
