@@ -214,12 +214,20 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
     this.notify({ eventName: 'draw', object: this, canvas });
   }
 
+  public onLoaded() {
+    this.off(GestureTypes.touch, onNeumorphicTouch);
+    this.on(GestureTypes.touch, onNeumorphicTouch);
+    super.onLoaded();
+  }
+
+  public onUnloaded() {
+    this.off(GestureTypes.touch, onNeumorphicTouch);
+    super.onUnloaded();
+  }
+
   _setNativeClipToBounds() {}
 
   private initDefaults() {
-    this.off(GestureTypes.touch, onNeumorphicTouch);
-    this.on(GestureTypes.touch, onNeumorphicTouch);
-      
     this.paintBase = new Paint();
     this.paintBase.setAntiAlias(global.isAndroid);
     this.paintBright = new Paint();
