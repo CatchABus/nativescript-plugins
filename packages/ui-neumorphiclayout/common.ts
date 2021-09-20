@@ -1,6 +1,21 @@
-import { AbsoluteLayout, Color, CSSType, Property, Trace } from '@nativescript/core';
+import { AbsoluteLayout, Color, CSSType, GestureTypes, Property, TouchAction, TouchGestureEventData, Trace } from '@nativescript/core';
 import { White } from '@nativescript/core/color/known-colors';
 import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style, TileMode } from '@nativescript-community/ui-canvas';
+
+function onNeumorphicTouch(args: TouchGestureEventData) {
+  const view: NeumorphicLayoutCommon = args.view as NeumorphicLayoutCommon;
+  switch (args.action) {
+    case TouchAction.down:
+      view._isTouched = true;
+      view.invalidate();
+      break;
+    case TouchAction.cancel:
+    case TouchAction.up:
+      view._isTouched = false;
+      view.invalidate();
+      break;
+  }
+}
 
 export enum State {
   FLAT,
@@ -105,6 +120,21 @@ export const stateProperty = new Property < NeumorphicLayoutCommon,
     }
   });
 
+export const touchStateProperty = new Property < NeumorphicLayoutCommon,
+  State > ({
+    name: 'touchState',
+    valueConverter: value => {
+      const formattedValue = State[value as keyof typeof State];
+      if (formattedValue == null) {
+        Trace.error('Invalid type of touch state!');
+      }
+      return formattedValue;
+    },
+    valueChanged: (target, oldValue, newValue) => {
+      target.isLoaded && target.invalidate();
+    }
+  });
+
 @CSSType('NeumorphicLayout')
 export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
   public static drawEvent = 'draw';
@@ -121,6 +151,9 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
   public shadowDistance: number;
   public shadowRadius: number;
   public state: State;
+  public touchState: State;
+
+  public _isTouched: boolean = false;
 
   private path: Path = new Path();
   private paintBase: Paint;
@@ -136,7 +169,7 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
   }
 
   public onCanvasDraw(canvas: Canvas) {
-    const state = this.state;
+    const state = this._isTouched && this.touchState != null ? this.touchState : this.state;
 
     this.initDefaults();
 
@@ -183,6 +216,18 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
 
   _setNativeClipToBounds() {}
 
+  private initDefaults() {
+    this.off(GestureTypes.touch, onNeumorphicTouch);
+    this.on(GestureTypes.touch, onNeumorphicTouch);
+      
+    this.paintBase = new Paint();
+    this.paintBase.setAntiAlias(global.isAndroid);
+    this.paintBright = new Paint();
+    this.paintBright.setAntiAlias(global.isAndroid);
+    this.paintDark = new Paint();
+    this.paintDark.setAntiAlias(global.isAndroid);
+  }
+
   private initPaints(state) {
     const actualSize = this.getActualSize();
     const width = actualSize.width;
@@ -195,7 +240,7 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
 
     switch (state) {
       case State.CONCAVE:
-        if (this.overlayColor) {
+        if (this.overlayColor != null) {
           gradientFromColor = this.manipulateColor(this.overlayColor, 1 - this.darkIntensity);
           gradientToColor = this.manipulateColor(this.overlayColor, 1 + this.brightIntensity);
         } else {
@@ -217,22 +262,13 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
         break;
     }
 
-    if (gradientFromColor && gradientToColor) {
+    if (gradientFromColor != null && gradientToColor != null) {
       this.paintBase.setShader(new LinearGradient(0, 0, width, height, gradientFromColor.drawColor, gradientToColor.drawColor, TileMode.CLAMP));
     }
     this.paintBright.setColor(bgColor.drawColor);
     this.paintDark.setColor(bgColor.drawColor);
     this.paintBright.setShadowLayer(shadowRadius, -this.shadowDistance, -this.shadowDistance, this.brightColor.drawColor);
     this.paintDark.setShadowLayer(shadowRadius, this.shadowDistance, this.shadowDistance, this.darkColor.drawColor);
-  }
-
-  private initDefaults() {
-    this.paintBase = new Paint();
-    this.paintBase.setAntiAlias(global.isAndroid);
-    this.paintBright = new Paint();
-    this.paintBright.setAntiAlias(global.isAndroid);
-    this.paintDark = new Paint();
-    this.paintDark.setAntiAlias(global.isAndroid);
   }
 
   private initShape(state) {
@@ -256,3 +292,4 @@ overlayColorProperty.register(NeumorphicLayoutCommon);
 shadowDistanceProperty.register(NeumorphicLayoutCommon);
 shadowRadiusProperty.register(NeumorphicLayoutCommon);
 stateProperty.register(NeumorphicLayoutCommon);
+touchStateProperty.register(NeumorphicLayoutCommon);

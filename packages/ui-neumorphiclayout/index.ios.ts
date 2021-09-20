@@ -7,8 +7,8 @@ export * from './common';
 class CADrawableLayer extends CALayer implements CALayerDelegate {
   drawInContext(ctx: any): void {
     const view: any = this.superlayer.delegate;
-    const owner = view.owner && view.owner.get();
-    if (owner) {
+    const owner = view != null && view.owner && view.owner.get();
+    if (owner != null) {
       const size = this.bounds.size;
       ((owner.augmentedCanvas) as any).setContext(ctx, size.width, size.height);
       owner.onCanvasDraw(owner.augmentedCanvas);
@@ -39,10 +39,9 @@ class UINeumorphicLayoutView extends UIView {
 
   drawRect(dirtyRect) {
     const owner = this.owner && this.owner.get();
-    if (owner) {
+    if (owner != null) {
       owner.onDrawRect(dirtyRect);
     }
-
     super.drawRect(dirtyRect);
   }
 }
@@ -53,7 +52,7 @@ export class NeumorphicLayout extends NeumorphicLayoutCommon {
   }
 
   public invalidate() {
-    if (this.nativeViewProtected) {
+    if (this.nativeViewProtected != null) {
       this.nativeViewProtected.setNeedsDisplay();
     }
   }

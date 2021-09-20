@@ -16,7 +16,7 @@ class NeumorphicLayoutImpl extends org.nativescript.widgets.AbsoluteLayout {
 
   public onDraw(canvas: android.graphics.Canvas) {
     const owner = this.owner && this.owner.get();
-    if (owner) {
+    if (owner != null) {
       const scale = Screen.mainScreen.scale;
       this.adjustClippingForParents();
 
@@ -32,7 +32,7 @@ class NeumorphicLayoutImpl extends org.nativescript.widgets.AbsoluteLayout {
 
   private adjustClippingForParents() {
     let parent = this.getParent();
-    while (parent && parent.getParent && !(parent instanceof NeumorphicLayoutImpl)) {
+    while (parent != null && parent.getParent != null && !(parent instanceof NeumorphicLayoutImpl)) {
       if (parent instanceof android.view.ViewGroup) {
         parent.setClipChildren(false);
       }
@@ -47,7 +47,7 @@ export class NeumorphicLayout extends NeumorphicLayoutCommon {
   }
 
   public invalidate() {
-    if (this.nativeViewProtected) {
+    if (this.nativeViewProtected != null) {
       this.nativeViewProtected.invalidate();
     }
   }
