@@ -59,6 +59,7 @@ export class NeumorphicLayout extends NeumorphicLayoutCommon {
 
   public onDrawRect(dirtyRect) {
     const nativeView = this.nativeViewProtected;
+    const state = this._isTouched && this.touchState != null ? this.touchState : this.state;
 
     nativeView.bottomLayer.frame = nativeView.bounds;
     nativeView.bottomLayer.cornerRadius = this.cornerRadius;
@@ -66,7 +67,7 @@ export class NeumorphicLayout extends NeumorphicLayoutCommon {
     nativeView.bottomLayer.shadowColor = this.brightColor.ios.CGColor;
     nativeView.bottomLayer.shadowOffset = CGSizeMake(-this.shadowDistance, -this.shadowDistance);
     nativeView.bottomLayer.shadowRadius = this.shadowRadius || (this.shadowDistance * 2);
-    nativeView.bottomLayer.shadowOpacity = this.state == State.PRESSED ? 0 : 1;
+    nativeView.bottomLayer.shadowOpacity = state == State.PRESSED ? 0 : 1;
 
     nativeView.topLayer.frame = nativeView.bounds;
     nativeView.topLayer.cornerRadius = this.cornerRadius;
@@ -76,7 +77,7 @@ export class NeumorphicLayout extends NeumorphicLayoutCommon {
     nativeView.topLayer.shadowColor = this.darkColor.ios.CGColor;
     nativeView.topLayer.shadowOffset = CGSizeMake(this.shadowDistance, this.shadowDistance);
     nativeView.topLayer.shadowRadius = this.shadowRadius || (this.shadowDistance * 2);
-    nativeView.topLayer.shadowOpacity = this.state == State.PRESSED ? 0 : 1;
+    nativeView.topLayer.shadowOpacity = state == State.PRESSED ? 0 : 1;
 
     nativeView.topLayer.setNeedsDisplay();
   }
