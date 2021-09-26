@@ -150,6 +150,7 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
   public _isTouched: boolean = false;
 
   private path: Path = new Path();
+  private innerShadowPath: Path = new Path();
   private paintBase: Paint;
   private paintBright: Paint;
   private paintDark: Paint;
@@ -182,10 +183,8 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
 
       canvas.clipPath(this.path);
       canvas.drawPath(this.path, this.paintBase);
-
-      !this.path.isInverseFillType() && this.path.toggleInverseFillType();
-      canvas.drawPath(this.path, this.paintBright);
-      canvas.drawPath(this.path, this.paintDark);
+      canvas.drawPath(this.innerShadowPath, this.paintBright);
+      canvas.drawPath(this.innerShadowPath, this.paintDark);
     } else {
       this.initShape(state);
       this.initPaints(state);
@@ -193,10 +192,8 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
       if (state == State.PRESSED) {
         canvas.clipPath(this.path);
         canvas.drawPath(this.path, this.paintBase);
-
-        !this.path.isInverseFillType() && this.path.toggleInverseFillType();
-        canvas.drawPath(this.path, this.paintBright);
-        canvas.drawPath(this.path, this.paintDark);
+        canvas.drawPath(this.innerShadowPath, this.paintBright);
+        canvas.drawPath(this.innerShadowPath, this.paintDark);
       } else {
         if (global.isAndroid) {
           canvas.drawPath(this.path, this.paintBright);
@@ -237,6 +234,7 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
     const bgColor = this.overlayColor || this.neumorphicColor;
 
     const shadowRadius: number = this.shadowRadius || (this.shadowDistance * 2);
+    const isPressable = (state == State.PRESSED || state == State.PRESSED_IN_OUT);
     const gradientColors = [];
 
     switch (state) {
@@ -266,6 +264,19 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
     if (gradientColors.length) {
       this.paintBase.setShader(new LinearGradient(0, 0, width, height, gradientColors, null, TileMode.CLAMP));
     }
+
+    if (isPressable) {
+      this.paintBright.strokeWidth = shadowRadius;
+      this.paintBright.style = Style.STROKE;
+      this.paintDark.strokeWidth = shadowRadius;
+      this.paintDark.style = Style.STROKE;
+    } else {
+      this.paintBright.strokeWidth = 0;
+      this.paintBright.style = Style.FILL;
+      this.paintDark.strokeWidth = 0;
+      this.paintDark.style = Style.FILL;
+    }
+
     this.paintBright.setColor(bgColor);
     this.paintDark.setColor(bgColor);
     this.paintBright.setShadowLayer(shadowRadius, -this.shadowDistance, -this.shadowDistance, this.brightColor);
@@ -277,9 +288,13 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
     const width = actualSize.width;
     const height = actualSize.height;
 
+    const shadowRadius: number = this.shadowRadius || (this.shadowDistance * 2);
+
     this.path.reset();
-    this.path.isInverseFillType() && this.path.toggleInverseFillType();
+    this.innerShadowPath.reset();
+
     this.path.addRoundRect(createRectF(0, 0, width, height), this.cornerRadius, this.cornerRadius, Direction.CW);
+    this.innerShadowPath.addRoundRect(createRectF(-(shadowRadius / 2), -(shadowRadius / 2), width + shadowRadius, height + shadowRadius), this.cornerRadius, this.cornerRadius, Direction.CW);
   }
 
   abstract invalidate();
