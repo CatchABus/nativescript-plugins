@@ -45,8 +45,8 @@ ns plugin add @nativescript-community/ui-neumorphiclayout
 ### Properties
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| state | State | FLAT | Determines the layout styling. Possible types: `FLAT, CONCAVE, CONVEX, PRESSED, PRESSED_IN_OUT`. Note: Pressed states are currently not available for iOS. |
-| touchState | State | undefined | Determines the layout styling during touch. Note: Pressed states are currently not available for iOS. |
+| state | State | FLAT | Determines the layout styling. Possible types: `FLAT, CONCAVE, CONVEX, PRESSED, PRESSED_IN_OUT`. |
+| touchState | State | undefined | Determines the layout styling during touch. |
 | neumorphicColor | Color | #fff | Determines the color that layout will use to set background and shadow colors. |
 | overlayColor | Color | undefined | Determines the color that layout will use to set an alternative background color. |
 | cornerRadius | number | 0 | Determines the rounding of the layout corners. |
