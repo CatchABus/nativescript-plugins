@@ -250,7 +250,7 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
         }
         break;
       case State.CONVEX:
-        if (this.overlayColor) {
+        if (this.overlayColor != null) {
           gradientColors.push(this.manipulateColor(this.overlayColor, 1 + this.brightIntensity));
           gradientColors.push(this.manipulateColor(this.overlayColor, 1 - this.darkIntensity));
         } else {
