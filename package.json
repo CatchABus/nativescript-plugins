@@ -49,6 +49,6 @@
     ]
   },
   "dependencies": {
-    "@nativescript-community/ui-canvas": "^4.0.51"
+    "@nativescript-community/ui-canvas": "^4.0.54"
   }
 }

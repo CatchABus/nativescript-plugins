@@ -4,7 +4,7 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
-    "@nativescript-community/ui-canvas": "^4.0.51",
+    "@nativescript-community/ui-canvas": "^4.0.54",
     "@nativescript-community/ui-neumorphiclayout": "file:../../packages/ui-neumorphiclayout",
     "@nativescript/core": "file:../../node_modules/@nativescript/core"
   },
