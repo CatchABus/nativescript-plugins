@@ -219,6 +219,12 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
   _setNativeClipToBounds() {}
 
   private initDefaults() {
+    if (this.brightColor == null) {
+      this.brightColor = this.manipulateColor(this.neumorphicColor, 1 + this.brightIntensity);
+    }
+    if (this.darkColor == null) {
+      this.darkColor = this.manipulateColor(this.neumorphicColor, 1 - this.darkIntensity);
+    }
     this.paintBase = new Paint();
     this.paintBase.setAntiAlias(global.isAndroid);
     this.paintBright = new Paint();
