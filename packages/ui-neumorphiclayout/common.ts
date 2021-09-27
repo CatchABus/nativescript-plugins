@@ -1,4 +1,4 @@
-import { AbsoluteLayout, Color, CSSType, GestureTypes, Property, TouchAction, TouchGestureEventData, Trace } from '@nativescript/core';
+import { AbsoluteLayout, Color, CSSType, GestureTypes, Property, TouchAction, TouchGestureEventData } from '@nativescript/core';
 import { White } from '@nativescript/core/color/known-colors';
 import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style, TileMode } from '@nativescript-community/ui-canvas';
 
@@ -18,11 +18,11 @@ function onNeumorphicTouch(args: TouchGestureEventData) {
 }
 
 export enum State {
-  FLAT,
-  CONCAVE,
-  CONVEX,
-  PRESSED,
-  PRESSED_IN_OUT
+  FLAT = 'FLAT',
+  CONCAVE = 'CONCAVE',
+  CONVEX = 'CONVEX',
+  PRESSED = 'PRESSED',
+  PRESSED_IN_OUT = 'PRESSED_IN_OUT'
 }
 
 export const brightIntensityProperty = new Property < NeumorphicLayoutCommon,
@@ -103,9 +103,9 @@ export const stateProperty = new Property < NeumorphicLayoutCommon,
     name: 'state',
     defaultValue: State.FLAT,
     valueConverter: value => {
-      const formattedValue = State[value as keyof typeof State];
+      const formattedValue = State[value];
       if (formattedValue == null) {
-        Trace.error('Invalid type of state!');
+        throw new Error('Invalid type of state!');
       }
       return formattedValue;
     },
@@ -118,13 +118,24 @@ export const touchStateProperty = new Property < NeumorphicLayoutCommon,
   State > ({
     name: 'touchState',
     valueConverter: value => {
-      const formattedValue = State[value as keyof typeof State];
-      if (formattedValue == null) {
-        Trace.error('Invalid type of touch state!');
+      let formattedValue = null;
+      if (value) {
+        formattedValue = State[value];
+        if (formattedValue == null) {
+          throw new Error('Invalid type of touch state!');
+        }
       }
       return formattedValue;
     },
     valueChanged: (target, oldValue, newValue) => {
+      if (!!newValue !== !!oldValue) {
+        if (newValue != null) {
+          target.off(GestureTypes.touch, onNeumorphicTouch);
+          target.on(GestureTypes.touch, onNeumorphicTouch);
+        } else {
+          target.off(GestureTypes.touch, onNeumorphicTouch);
+        }
+      }
       target.isLoaded && target.invalidate();
     }
   });
@@ -203,17 +214,6 @@ export abstract class NeumorphicLayoutCommon extends AbsoluteLayout {
       }
     }
     this.notify({ eventName: 'draw', object: this, canvas });
-  }
-
-  public onLoaded() {
-    this.off(GestureTypes.touch, onNeumorphicTouch);
-    this.on(GestureTypes.touch, onNeumorphicTouch);
-    super.onLoaded();
-  }
-
-  public onUnloaded() {
-    this.off(GestureTypes.touch, onNeumorphicTouch);
-    super.onUnloaded();
   }
 
   _setNativeClipToBounds() {}
