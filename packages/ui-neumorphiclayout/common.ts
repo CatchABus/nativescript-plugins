@@ -131,9 +131,11 @@ export const touchStateProperty = new Property < NeumorphicLayoutCommon,
       if (!!newValue !== !!oldValue) {
         if (newValue != null) {
           target.off(GestureTypes.touch, onNeumorphicTouch);
+          target._isTouched = false;
           target.on(GestureTypes.touch, onNeumorphicTouch);
         } else {
           target.off(GestureTypes.touch, onNeumorphicTouch);
+          target._isTouched = false;
         }
       }
       target.isLoaded && target.invalidate();
