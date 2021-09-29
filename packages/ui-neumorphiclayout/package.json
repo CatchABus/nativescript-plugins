@@ -30,7 +30,7 @@
     "url": "https://github.com/DimitrisRK/nativescript-plugins/issues"
   },
   "license": "Apache-2.0",
-  "homepage": "https://github.com/DimitrisRK/nativescript-plugins",
+  "homepage": "https://github.com/DimitrisRK/nativescript-plugins/tree/master/packages/ui-neumorphiclayout",
   "readmeFilename": "README.md",
   "bootstrapper": "@nativescript/plugin-seed"
 }
