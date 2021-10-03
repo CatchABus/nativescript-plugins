@@ -16,7 +16,8 @@ ns plugin add @nativescript-community/ui-neumorphiclayout
 ```
 
 ## Usage
-
+NOTE: Scrollable views like `ListView` or `ScrollView` must never be direct siblings of a `NeumorphicLayout` because of android `clipChildren` effect. 
+Instead, add those views inside a layout.
 ### Plain NativeScript
 ```xml
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:ui="@nativescript-community/ui-neumorphiclayout" class="page">
@@ -33,7 +34,7 @@ ns plugin add @nativescript-community/ui-neumorphiclayout
 ```
 
 ## API
-`NeumorphicLayout` inherits from [AbsoluteLayout](https://docs.nativescript.org/ui-and-styling.html#absolutelayout)
+`NeumorphicLayout` inherits from [AbsoluteLayout](https://docs.nativescript.org/ui-and-styling.html#absolutelayout).
 ### Events
 | Name | Description |
 | --- | --- |
