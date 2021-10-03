@@ -9,7 +9,6 @@ class NeumorphicLayoutImpl extends org.nativescript.widgets.AbsoluteLayout {
 
   constructor(context: android.content.Context, owner: WeakRef < NeumorphicLayout > ) {
     super(context);
-    this.setClipChildren(false);
     this.setWillNotDraw(false);
     this.owner = owner;
   }
@@ -18,7 +17,7 @@ class NeumorphicLayoutImpl extends org.nativescript.widgets.AbsoluteLayout {
     const owner = this.owner && this.owner.get();
     if (owner != null) {
       const scale = Screen.mainScreen.scale;
-      this.adjustClippingForParents();
+      this.adjustClippingForParent();
 
       canvas.save();
       canvas.scale(scale, scale); // always scale to device density to work with dp
@@ -30,13 +29,12 @@ class NeumorphicLayoutImpl extends org.nativescript.widgets.AbsoluteLayout {
     super.onDraw(canvas);
   }
 
-  private adjustClippingForParents() {
+  private adjustClippingForParent() {
     let parent = this.getParent();
-    while (parent != null && parent.getParent != null && !(parent instanceof NeumorphicLayoutImpl)) {
-      if (parent instanceof android.view.ViewGroup) {
-        parent.setClipChildren(false);
-      }
-      parent = parent.getParent();
+    // Removing clipping from all breaks the ui
+    if (parent != null && parent instanceof org.nativescript.widgets.LayoutBase) {
+      parent.setClipChildren(false);
+      parent.setClipToPadding(false);
     }
   }
 }
