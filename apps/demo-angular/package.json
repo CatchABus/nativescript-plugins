@@ -1,7 +1,7 @@
 {
   "main": "./src/main.ts",
   "dependencies": {
-    "@nativescript-community/ui-canvas": "latest",
+    "@nativescript-community/ui-canvas": "^4.2.13",
     "@nativescript-community/ui-neumorphiclayout": "file:../../dist/packages/ui-neumorphiclayout",
     "@nativescript/core": "file:../../node_modules/@nativescript/core"
   },
