@@ -16,32 +16,32 @@
   },
   "private": true,
   "devDependencies": {
-    "@angular/animations": "^12.0.0",
-    "@angular/common": "^12.0.0",
-    "@angular/compiler": "^12.0.0",
-    "@angular/compiler-cli": "^12.0.0",
-    "@angular/core": "^12.0.0",
-    "@angular/forms": "^12.0.0",
-    "@angular/platform-browser": "^12.0.0",
-    "@angular/platform-browser-dynamic": "^12.0.0",
-    "@angular/router": "^12.0.0",
-    "@nativescript/angular": "^12.0.0",
-    "@nativescript/core": "^8.0.0",
+    "@angular/animations": "^12.2.11",
+    "@angular/common": "^12.2.11",
+    "@angular/compiler": "^12.2.11",
+    "@angular/compiler-cli": "^12.2.11",
+    "@angular/core": "^12.2.11",
+    "@angular/forms": "^12.2.11",
+    "@angular/platform-browser": "^12.2.11",
+    "@angular/platform-browser-dynamic": "^12.2.11",
+    "@angular/router": "^12.2.11",
+    "@nativescript/angular": "^12.2.0",
+    "@nativescript/core": "^8.1.4",
     "@nativescript/plugin-tools": "2.0.4",
-    "@nativescript/types": "^8.0.0",
+    "@nativescript/types": "^8.1.1",
     "@nativescript/webpack": "5.0.0",
-    "@ngtools/webpack": "^12.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@ngtools/webpack": "^12.2.11",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
     "eslint-config-prettier": "^8.3.0",
-    "husky": "^5.1.3",
+    "husky": "^7.0.4",
     "nativescript-vue": "~2.9.0",
     "nativescript-vue-template-compiler": "~2.9.0",
-    "ng-packagr": "^12.0.0",
+    "ng-packagr": "^12.2.4",
     "postcss-import": "^14.0.2",
     "prettier": "^2.4.1",
-    "rxjs": "~6.6.0",
-    "typescript": "~4.2.0",
-    "zone.js": "~0.11.1"
+    "rxjs": "~7.4.0",
+    "typescript": "~4.4.4",
+    "zone.js": "~0.11.4"
   },
   "lint-staged": {
     "**/*.{js,ts,scss,json,html}": [
@@ -49,6 +49,6 @@
     ]
   },
   "dependencies": {
-    "@nativescript-community/ui-canvas": "^4.0.54"
+    "@nativescript-community/ui-canvas": "^4.2.13"
   }
 }

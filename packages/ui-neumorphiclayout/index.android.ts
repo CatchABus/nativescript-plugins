@@ -22,7 +22,7 @@ class NeumorphicLayoutImpl extends org.nativescript.widgets.AbsoluteLayout {
       canvas.save();
       canvas.scale(scale, scale); // always scale to device density to work with dp
 
-      (owner.augmentedCanvas as any)._native = canvas;
+      (owner.augmentedCanvas as any).mNative = canvas;
       owner.onCanvasDraw(owner.augmentedCanvas);
       canvas.restore();
     }
