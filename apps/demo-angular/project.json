@@ -1,0 +1,37 @@
+{
+	"root": "apps/demo-angular/",
+	"sourceRoot": "apps/demo-angular/src",
+	"projectType": "application",
+	"prefix": "demo",
+	"targets": {
+		"build": {
+			"executor": "@nativescript/nx:build",
+			"options": {
+				"noHmr": true,
+				"production": true,
+				"uglify": true,
+				"release": true,
+				"forDevice": true
+			}
+		},
+		"ios": {
+			"executor": "@nativescript/nx:build",
+			"options": {
+				"platform": "ios"
+			}
+		},
+		"android": {
+			"executor": "@nativescript/nx:build",
+			"options": {
+				"platform": "android"
+			}
+		},
+		"clean": {
+			"executor": "@nativescript/nx:build",
+			"options": {
+				"clean": true
+			}
+		}
+	},
+	"tags": []
+}

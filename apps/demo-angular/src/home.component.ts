@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'demo-home',
-  templateUrl: 'home.component.html',
+	selector: 'demo-home',
+	templateUrl: 'home.component.html',
 })
 export class HomeComponent {
-  demos = [{
-    name: 'ui-neumorphiclayout'
-  }];
+	demos = [
+		{
+			name: 'ui-neumorphiclayout',
+		},
+	];
 }

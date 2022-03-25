@@ -1,0 +1,41 @@
+{
+	"root": "packages/ui-neumorphiclayout",
+	"projectType": "library",
+	"sourceRoot": "packages/ui-neumorphiclayout",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/js:tsc",
+			"options": {
+				"outputPath": "dist/packages/ui-neumorphiclayout",
+				"tsConfig": "packages/ui-neumorphiclayout/tsconfig.json",
+				"packageJson": "packages/ui-neumorphiclayout/package.json",
+				"main": "packages/ui-neumorphiclayout/index.d.ts",
+				"assets": [
+					"packages/ui-neumorphiclayout/*.md",
+					"packages/ui-neumorphiclayout/index.d.ts",
+					"LICENSE",
+					{
+						"glob": "**/*",
+						"input": "packages/ui-neumorphiclayout/platforms/",
+						"output": "./platforms/"
+					}
+				]
+			}
+		},
+		"build.all": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"commands": ["nx run ui-neumorphiclayout:build", "node tools/scripts/build-finish.ts ui-neumorphiclayout"],
+				"parallel": false
+			}
+		},
+		"focus": {
+			"executor": "@nrwl/workspace:run-commands",
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages ui-neumorphiclayout"],
+				"parallel": false
+			}
+		}
+	},
+	"tags": []
+}

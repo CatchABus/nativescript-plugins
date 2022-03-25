@@ -1,4 +1,4 @@
-- @nativescript-community/ui-neumorphiclayout
+- [@nativescript-community/ui-neumorphiclayout](packages/ui-neumorphiclayout/README.md)
 
 # How to use?
 

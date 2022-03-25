@@ -5,13 +5,13 @@ import { NativeScriptRouterModule } from '@nativescript/angular';
 import { HomeComponent } from './home.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'ui-neumorphiclayout', loadChildren: () => import('./plugin-demos/ui-neumorphiclayout.module').then(m => m.UiNeumorphicLayoutModule) }
+	{ path: '', redirectTo: '/home', pathMatch: 'full' },
+	{ path: 'home', component: HomeComponent },
+	{ path: 'ui-neumorphiclayout', loadChildren: () => import('./plugin-demos/ui-neumorphiclayout.module').then((m) => m.UiNeumorphicLayoutModule) },
 ];
 
 @NgModule({
-  imports: [NativeScriptRouterModule.forRoot(routes)],
-  exports: [NativeScriptRouterModule],
+	imports: [NativeScriptRouterModule.forRoot(routes)],
+	exports: [NativeScriptRouterModule],
 })
 export class AppRoutingModule {}

@@ -1,0 +1,23 @@
+{
+	"root": ".",
+	"projectType": "library",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/workspace:run-commands",
+			"outputs": ["dist/packages"],
+			"options": {
+				"commands": ["nx run ui-neumorphiclayout:build.all"],
+				"parallel": false
+			}
+		},
+		"focus": {
+			"outputs": ["dist/packages"],
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages"],
+				"parallel": false
+			},
+			"executor": "@nrwl/workspace:run-commands"
+		}
+	},
+	"tags": []
+}
