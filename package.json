@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "husky install && npx ts-patch install",
-    "setup": "npx rimraf node_modules package-lock.json dist tmp yarn.lock && yarn config set ignore-engines true && ns package-manager set npm && yarn",
+    "setup": "npx rimraf node_modules package-lock.json dist tmp && ns package-manager set npm && npm install --legacy-peer-deps",
     "start": "nps",
     "add": "nx g @nativescript/plugin-tools:add-package",
     "add-angular": "nx g @nativescript/plugin-tools:add-angular",
@@ -16,32 +16,32 @@
   },
   "private": true,
   "devDependencies": {
-    "@angular/animations": "^12.2.11",
-    "@angular/common": "^12.2.11",
-    "@angular/compiler": "^12.2.11",
-    "@angular/compiler-cli": "^12.2.11",
-    "@angular/core": "^12.2.11",
-    "@angular/forms": "^12.2.11",
-    "@angular/platform-browser": "^12.2.11",
-    "@angular/platform-browser-dynamic": "^12.2.11",
-    "@angular/router": "^12.2.11",
-    "@nativescript/angular": "^12.2.0",
-    "@nativescript/core": "^8.1.4",
-    "@nativescript/plugin-tools": "2.0.4",
-    "@nativescript/types": "^8.1.1",
-    "@nativescript/webpack": "5.0.0",
-    "@ngtools/webpack": "^12.2.11",
-    "@typescript-eslint/eslint-plugin": "^5.1.0",
-    "eslint-config-prettier": "^8.3.0",
+    "@angular/animations": "^13.3.0",
+    "@angular/common": "^13.3.0",
+    "@angular/compiler": "^13.3.0",
+    "@angular/compiler-cli": "^13.3.0",
+    "@angular/core": "^13.3.0",
+    "@angular/forms": "^13.3.0",
+    "@angular/platform-browser": "^13.3.0",
+    "@angular/platform-browser-dynamic": "^13.3.0",
+    "@angular/router": "^13.3.0",
+    "@nativescript/angular": "^13.0.3",
+    "@nativescript/core": "^8.2.1",
+    "@nativescript/plugin-tools": "3.0.3",
+    "@nativescript/types": "^8.2.0",
+    "@nativescript/webpack": "5.0.6",
+    "@ngtools/webpack": "^13.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "eslint-config-prettier": "^8.5.0",
     "husky": "^7.0.4",
-    "nativescript-vue": "~2.9.0",
-    "nativescript-vue-template-compiler": "~2.9.0",
-    "ng-packagr": "^12.2.4",
-    "postcss-import": "^14.0.2",
-    "prettier": "^2.4.1",
-    "rxjs": "~7.4.0",
-    "typescript": "~4.4.4",
-    "zone.js": "~0.11.4"
+    "nativescript-vue": "~2.9.1",
+    "nativescript-vue-template-compiler": "~2.9.1",
+    "ng-packagr": "^13.3.0",
+    "postcss-import": "^14.1.0",
+    "prettier": "^2.6.1",
+    "rxjs": "~7.5.5",
+    "typescript": "~4.6.3",
+    "zone.js": "~0.11.5"
   },
   "lint-staged": {
     "**/*.{js,ts,scss,json,html}": [
@@ -49,6 +49,6 @@
     ]
   },
   "dependencies": {
-    "@nativescript-community/ui-canvas": "^4.2.13"
+    "@nativescript-community/ui-canvas": "^4.4.0"
   }
 }
