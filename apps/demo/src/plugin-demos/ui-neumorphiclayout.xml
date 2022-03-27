@@ -6,19 +6,22 @@
     <StackLayout class="px-20 bg-neumorphic">
         <ScrollView class="h-full">
           <StackLayout>
-            <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" state="FLAT" touchState="PRESSED" cornerRadius="26">
+            <StackLayout width="220" height="100" marginTop="30" backgroundColor="red" neumorphicColor="#e0e1e3" neumorphicState="FLAT" neumorphicTouchState="PRESSED" cornerRadius="26" verticalAlignment="center" tap="test">
+                <Label text="FLAT" textAlignment="center" width="100%" fontSize="24" color="#6d707d" fontWeight="bold"/>
+            </StackLayout>
+            <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" neumorphicState="FLAT" neumorphicTouchState="PRESSED" cornerRadius="26">
                 <Label text="FLAT" textAlignment="center" width="100%" fontSize="24" color="#6d707d" fontWeight="bold" top="35"/>
             </ui:NeumorphicLayout>
-            <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" state="PRESSED" touchState="FLAT" cornerRadius="26">
+            <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" neumorphicState="PRESSED" neumorphicTouchState="FLAT" cornerRadius="26">
                 <Label text="PRESSED" textAlignment="center" width="100%" fontSize="24" color="#6d707d" fontWeight="bold" top="35"/>
             </ui:NeumorphicLayout>
-            <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" state="PRESSED_IN_OUT" touchState="FLAT" cornerRadius="26">
+            <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" neumorphicState="PRESSED_IN_OUT" neumorphicTouchState="FLAT" cornerRadius="26">
                 <Label text="PRESSED_IN_OUT" textAlignment="center" width="100%" fontSize="24" color="#6d707d" fontWeight="bold" top="35"/>
             </ui:NeumorphicLayout>
-            <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" state="CONCAVE" touchState="CONVEX" cornerRadius="26">
+            <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" neumorphicState="CONCAVE" neumorphicTouchState="CONVEX" cornerRadius="26">
                 <Label text="CONCAVE" textAlignment="center" width="100%" fontSize="24" color="#6d707d" fontWeight="bold" top="35"/>
             </ui:NeumorphicLayout>
-            <ui:NeumorphicLayout width="200" height="200" marginTop="30" marginBottom="24" neumorphicColor="#e0e1e3" state="CONVEX" touchState="CONCAVE" cornerRadius="100">
+            <ui:NeumorphicLayout width="200" height="200" marginTop="30" marginBottom="24" neumorphicColor="#e0e1e3" neumorphicState="CONVEX" neumorphicTouchState="CONCAVE" cornerRadius="100">
                 <Label text="CONVEX" textAlignment="center" width="100%" fontSize="24" color="#6d707d" fontWeight="bold" top="85"/>
             </ui:NeumorphicLayout>
           </StackLayout>
