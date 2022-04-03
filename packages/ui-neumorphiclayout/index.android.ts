@@ -11,6 +11,14 @@ function getNeumorphicDrawable(view: LayoutBase): NeumorphicDrawable {
 	return background;
 }
 
+function toggleViewClipping(view, clipChildren: boolean): void {
+	// Removing clipping from all breaks the ui
+	if (view != null && view instanceof LayoutBase) {
+		view.nativeViewProtected.setClipChildren(clipChildren);
+		view.nativeViewProtected.setClipToPadding(clipChildren);
+	}
+}
+
 LayoutBase.prototype[commons.brightIntensityProperty.setNative] = function (value) {
 	const drawable = getNeumorphicDrawable(this);
 	if (drawable != null) {
@@ -54,11 +62,13 @@ LayoutBase.prototype[commons.neumorphicStateProperty.setNative] = function (valu
 	const drawable = getNeumorphicDrawable(this);
 	if (value) {
 		if (drawable == null) {
+			toggleViewClipping(this.parent, false);
 			const canvas = new commons.NeumorphicCanvas(new WeakRef(this));
 			this.nativeViewProtected.setBackground(new NeumorphicDrawable(canvas));
 		}
 	} else {
 		if (drawable != null) {
+			toggleViewClipping(this.parent, true);
 			this.nativeViewProtected.setBackground(null);
 		}
 	}

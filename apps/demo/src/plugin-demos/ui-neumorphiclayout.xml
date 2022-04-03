@@ -6,7 +6,7 @@
     <StackLayout class="px-20 bg-neumorphic">
         <ScrollView class="h-full">
           <StackLayout>
-            <StackLayout width="220" height="100" marginTop="30" backgroundColor="red" neumorphicColor="#e0e1e3" neumorphicState="FLAT" neumorphicTouchState="PRESSED" cornerRadius="26" verticalAlignment="center" tap="test">
+            <StackLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" neumorphicState="FLAT" neumorphicTouchState="PRESSED" cornerRadius="26" verticalAlignment="center" tap="test">
                 <Label text="FLAT" textAlignment="center" width="100%" fontSize="24" color="#6d707d" fontWeight="bold"/>
             </StackLayout>
             <ui:NeumorphicLayout width="220" height="100" marginTop="30" neumorphicColor="#e0e1e3" neumorphicState="FLAT" neumorphicTouchState="PRESSED" cornerRadius="26">
