@@ -11,10 +11,9 @@ function getDrawableLayers(view: LayoutBase): Array<any> {
 
 	if (sublayers != null) {
 		const count = sublayers.count;
-		for (let i = 0; i < count; i++) {
-			if (layerNames.includes(sublayers[i].name)) {
-				drawableLayers.push(sublayers[i]);
-			}
+		for (let i = 0; i < count && drawableLayers.length < layerNames.length; i++) {
+			const layer = sublayers.objectAtIndex(i);
+			layerNames.includes(layer.name) && drawableLayers.push(layer);
 		}
 	}
 	return drawableLayers;
