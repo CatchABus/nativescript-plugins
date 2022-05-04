@@ -5,8 +5,8 @@ export { State } from './common';
 
 const layerNames = ['bottomDrawable', 'topDrawable'];
 
-function getDrawableLayers(view: LayoutBase): Array<CALayer> {
-	const drawableLayers: Array<CALayer> = [];
+function getDrawableLayers(view: LayoutBase): Array<any> {
+	const drawableLayers: Array<any> = [];
 	const sublayers = view.nativeViewProtected?.layer?.sublayers;
 
 	if (sublayers != null) {
@@ -161,8 +161,8 @@ LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = function (value) 
 class CANeumorphicLayer extends CALayer implements CALayerDelegate {
 	private mAugmentedCanvas: commons.NeumorphicCanvas;
 
-	public static initWithCanvas(canvas: commons.NeumorphicCanvas) {
-		const layer = CANeumorphicLayer.layer();
+	public static initWithCanvas(canvas: commons.NeumorphicCanvas): CANeumorphicLayer {
+		const layer = CANeumorphicLayer.layer() as CANeumorphicLayer;
 		layer.mAugmentedCanvas = canvas;
 		return layer;
 	}
