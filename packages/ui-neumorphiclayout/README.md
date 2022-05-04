@@ -1,7 +1,7 @@
 [![npm](https://img.shields.io/npm/v/@nativescript-community/ui-neumorphiclayout.svg)](https://www.npmjs.com/package/@nativescript-community/ui-neumorphiclayout)
 [![npm](https://img.shields.io/npm/dt/@nativescript-community/ui-neumorphiclayout.svg?label=npm%20downloads)](https://www.npmjs.com/package/@nativescript-community/ui-neumorphiclayout)
 # @nativescript-community/ui-neumorphiclayout
-Neumorphism-based layout for NativeScript.
+A plugin that adds support for neumorphism functionality to NativeScript layout components.
 <br/><br/>
 <p align="center">
 <img align="left" src="https://raw.githubusercontent.com/CatchABus/nativescript-plugins/master/packages/ui-neumorphiclayout/media/preview1.jpg" height="400px"/>
@@ -13,6 +13,7 @@ Neumorphism-based layout for NativeScript.
 
 ```javascript
 ns plugin add @nativescript-community/ui-neumorphiclayout
+npm i @nativescript-community/ui-neumorphiclayout
 ```
 
 ## Usage
@@ -20,15 +21,15 @@ NOTE: Scrollable views like `ListView` or `ScrollView` must never be direct sibl
 Instead, add those views inside a layout.
 ### Plain NativeScript
 ```xml
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:ui="@nativescript-community/ui-neumorphiclayout" class="page">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" class="page">
     <Page.actionBar>
         <ActionBar title="Neumorphism" icon="" class="action-bar">
         </ActionBar>
     </Page.actionBar>
     <StackLayout class="px-20" backgroundColor="#e0e1e3">
-        <ui:NeumorphicLayout width="200" height="200" marginTop="30" neumorphicColor="#e0e1e3" state="CONVEX" cornerRadius="100">
-            <Label text="Tap me!" textAlignment="center" width="100%" fontSize="24" color="#6d707d" fontWeight="bold" top="85"/>
-        </ui:NeumorphicLayout>
+        <StackLayout verticalAlignment="center" width="200" height="200" marginTop="30" neumorphism="convex" fillColor="#e0e1e3" lightShadowColor="#ffffff" darkShadowColor="#bebfc1" cornerRadius="100">
+            <Label text="Tap me!" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
+        </StackLayout>
     </StackLayout>
 </Page>
 ```
