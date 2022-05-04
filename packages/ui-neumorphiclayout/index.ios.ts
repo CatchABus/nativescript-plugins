@@ -48,14 +48,19 @@ function updateSublayerShadows(view, sublayers) {
 		throw new Error('No neumorphism state found!');
 	}
 
-	bottomLayer.cornerRadius = view.cornerRadius;
+	const actualSize = view.getActualSize();
+	const width = actualSize.width;
+	const height = actualSize.height;
+	const cornerRadius = Math.min(Math.min(width, height) / 2, view.cornerRadius);
+
+	bottomLayer.cornerRadius = cornerRadius;
 	bottomLayer.backgroundColor = view.fillColor.ios.CGColor;
 	bottomLayer.shadowColor = view.lightShadowColor.ios.CGColor;
 	bottomLayer.shadowOffset = CGSizeMake(-view.shadowDistance, -view.shadowDistance);
 	bottomLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
 	bottomLayer.shadowOpacity = state == commons.STATE_PRESSED ? 0 : 1;
 
-	topLayer.cornerRadius = view.cornerRadius;
+	topLayer.cornerRadius = cornerRadius;
 	topLayer.backgroundColor = view.fillColor.ios.CGColor;
 	topLayer.contentsScale = Screen.mainScreen.scale;
 	topLayer.allowsEdgeAntialiasing = true;
@@ -92,8 +97,8 @@ LayoutBase.prototype[commons.neumorphismProperty.setNative] = function (value) {
 			topLayer.name = 'topDrawable';
 			topLayer.zPosition = -1;
 
-			this.nativeViewProtected.layer.addSublayer(bottomLayer);
-			this.nativeViewProtected.layer.addSublayer(topLayer);
+			this.nativeViewProtected.layer.insertSublayerAtIndex(bottomLayer, 0);
+			this.nativeViewProtected.layer.insertSublayerAbove(topLayer, bottomLayer);
 
 			updateSublayerShadows(this, [bottomLayer, topLayer]);
 

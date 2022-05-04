@@ -1,4 +1,4 @@
-import { backgroundInternalProperty, booleanConverter, AbsoluteLayout, LayoutBase, Color, CSSType, GestureTypes, Property, TouchAction, TouchGestureEventData } from '@nativescript/core';
+import { backgroundInternalProperty, booleanConverter, Color, LayoutBase, GestureTypes, Property, TouchAction, TouchGestureEventData } from '@nativescript/core';
 import { White } from '@nativescript/core/color/known-colors';
 import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style, TileMode } from '@nativescript-community/ui-canvas';
 
@@ -32,6 +32,7 @@ export const lightShadowColorProperty = new Property<LayoutBase, Color>({
 
 export const cornerRadiusProperty = new Property<LayoutBase, number>({
 	name: 'cornerRadius',
+	defaultValue: 0,
 	valueConverter: parseFloat,
 });
 
@@ -230,14 +231,15 @@ export class NeumorphicCanvas extends Canvas {
 		const actualSize = view.getActualSize();
 		const width = actualSize.width;
 		const height = actualSize.height;
+		const cornerRadius = Math.min(Math.min(width, height) / 2, view.cornerRadius);
 
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 
 		this.path.reset();
 		this.innerShadowPath.reset();
 
-		this.path.addRoundRect(createRectF(0, 0, width, height), view.cornerRadius, view.cornerRadius, Direction.CW);
-		this.innerShadowPath.addRoundRect(createRectF(-(shadowRadius / 2), -(shadowRadius / 2), width + shadowRadius, height + shadowRadius), view.cornerRadius, view.cornerRadius, Direction.CW);
+		this.path.addRoundRect(createRectF(0, 0, width, height), cornerRadius, cornerRadius, Direction.CW);
+		this.innerShadowPath.addRoundRect(createRectF(-(shadowRadius / 2), -(shadowRadius / 2), width + shadowRadius, height + shadowRadius), cornerRadius, cornerRadius, Direction.CW);
 	}
 }
 

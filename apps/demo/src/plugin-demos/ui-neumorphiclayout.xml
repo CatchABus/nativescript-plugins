@@ -18,7 +18,7 @@
             <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="concave" touchState="convex">
                 <Label text="Concave" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
             </StackLayout>
-            <StackLayout class="neumorphism" verticalAlignment="center" marginBottom="24" neumorphism="convex" touchState="concave" cornerRadius="100">
+            <StackLayout class="neumorphism circle" width="200" height="200" verticalAlignment="center" marginBottom="24" neumorphism="convex" touchState="concave">
                 <Label text="Convex" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
             </StackLayout>
           </StackLayout>
