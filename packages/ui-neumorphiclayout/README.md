@@ -4,9 +4,9 @@
 Neumorphism-based layout for NativeScript.
 <br/><br/>
 <p align="center">
-<img align="left" src="https://raw.githubusercontent.com/DimitrisRK/nativescript-plugins/master/packages/ui-neumorphiclayout/media/preview1.jpg" height="400px"/>
-<img src="https://raw.githubusercontent.com/DimitrisRK/nativescript-plugins/master/packages/ui-neumorphiclayout/media/preview2.jpg" height="400px"/>
-<img align="right" src="https://raw.githubusercontent.com/DimitrisRK/nativescript-plugins/master/packages/ui-neumorphiclayout/media/preview3.jpg" height="400px"/>
+<img align="left" src="https://raw.githubusercontent.com/CatchABus/nativescript-plugins/master/packages/ui-neumorphiclayout/media/preview1.jpg" height="400px"/>
+<img src="https://raw.githubusercontent.com/CatchABus/nativescript-plugins/master/packages/ui-neumorphiclayout/media/preview2.jpg" height="400px"/>
+<img align="right" src="https://raw.githubusercontent.com/CatchABus/nativescript-plugins/master/packages/ui-neumorphiclayout/media/preview3.jpg" height="400px"/>
 </p>
 
 ## Installation
