@@ -1,54 +1,55 @@
 {
-  "name": "plugins",
-  "version": "0.0.0",
-  "license": "MIT",
-  "scripts": {
-    "postinstall": "husky install && npx ts-patch install",
-    "setup": "npx rimraf node_modules package-lock.json dist tmp && ns package-manager set npm && npm install --legacy-peer-deps",
-    "start": "nps",
-    "add": "nx g @nativescript/plugin-tools:add-package",
-    "add-angular": "nx g @nativescript/plugin-tools:add-angular",
-    "config": "nx g @nativescript/plugin-tools:config",
-    "publish-packages": "nx g @nativescript/plugin-tools:publish",
-    "sync-packages-with-demos": "nx g @nativescript/plugin-tools:sync-packages-with-demos",
-    "remove-package": "nx g @nativescript/plugin-tools:remove-package",
-    "add-demo": "nx g @nativescript/plugin-tools:add-demo"
-  },
-  "private": true,
-  "devDependencies": {
-    "@angular/animations": "^13.3.0",
-    "@angular/common": "^13.3.0",
-    "@angular/compiler": "^13.3.0",
-    "@angular/compiler-cli": "^13.3.0",
-    "@angular/core": "^13.3.0",
-    "@angular/forms": "^13.3.0",
-    "@angular/platform-browser": "^13.3.0",
-    "@angular/platform-browser-dynamic": "^13.3.0",
-    "@angular/router": "^13.3.0",
-    "@nativescript/angular": "^13.0.3",
-    "@nativescript/core": "^8.2.1",
-    "@nativescript/plugin-tools": "3.0.3",
-    "@nativescript/types": "^8.2.0",
-    "@nativescript/webpack": "5.0.6",
-    "@ngtools/webpack": "^13.3.0",
-    "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "eslint-config-prettier": "^8.5.0",
-    "husky": "^7.0.4",
-    "nativescript-vue": "~2.9.1",
-    "nativescript-vue-template-compiler": "~2.9.1",
-    "ng-packagr": "^13.3.0",
-    "postcss-import": "^14.1.0",
-    "prettier": "^2.6.1",
-    "rxjs": "~7.5.5",
-    "typescript": "~4.6.3",
-    "zone.js": "~0.11.5"
-  },
-  "lint-staged": {
-    "**/*.{js,ts,scss,json,html}": [
-      "npx prettier --write"
-    ]
-  },
-  "dependencies": {
-    "@nativescript-community/ui-canvas": "^4.4.0"
-  }
+	"name": "plugins",
+	"version": "0.0.0",
+	"license": "MIT",
+	"scripts": {
+		"postinstall": "husky install && npx ts-patch install",
+		"setup": "npx rimraf node_modules package-lock.json dist tmp && ns package-manager set npm && npm install --legacy-peer-deps && nx run all:build",
+		"start": "nps",
+		"add": "nx g @nativescript/plugin-tools:add-package",
+		"add-angular": "nx g @nativescript/plugin-tools:add-angular",
+		"config": "nx g @nativescript/plugin-tools:config",
+		"publish-packages": "nx g @nativescript/plugin-tools:publish",
+		"sync-packages-with-demos": "nx g @nativescript/plugin-tools:sync-packages-with-demos",
+		"remove-package": "nx g @nativescript/plugin-tools:remove-package",
+		"add-demo": "nx g @nativescript/plugin-tools:add-demo"
+	},
+	"private": true,
+	"devDependencies": {
+		"@angular/animations": "^13.3.5",
+		"@angular/common": "^13.3.5",
+		"@angular/compiler": "^13.3.5",
+		"@angular/compiler-cli": "^13.3.5",
+		"@angular/core": "^13.3.5",
+		"@angular/forms": "^13.3.5",
+		"@angular/platform-browser": "^13.3.5",
+		"@angular/platform-browser-dynamic": "^13.3.5",
+		"@angular/router": "^13.3.5",
+		"@angular-devkit/build-angular": "~13.3.4",
+		"@nativescript/angular": "^13.0.3",
+		"@nativescript/core": "^8.2.3",
+		"@nativescript/plugin-tools": "3.0.3",
+		"@nativescript/types": "^8.2.0",
+		"@nativescript/webpack": "5.0.6",
+		"@ngtools/webpack": "^13.3.4",
+		"@typescript-eslint/eslint-plugin": "^5.22.0",
+		"eslint-config-prettier": "^8.5.0",
+		"husky": "^7.0.4",
+		"nativescript-vue": "~2.9.1",
+		"nativescript-vue-template-compiler": "~2.9.1",
+		"ng-packagr": "^13.3.1",
+		"postcss-import": "^14.1.0",
+		"prettier": "^2.6.2",
+		"rxjs": "~7.5.5",
+		"typescript": "~4.6.4",
+		"zone.js": "~0.11.5"
+	},
+	"lint-staged": {
+		"**/*.{js,ts,scss,json,html}": [
+			"npx prettier --write"
+		]
+	},
+	"dependencies": {
+		"@nativescript-community/ui-canvas": "^4.4.1"
+	}
 }

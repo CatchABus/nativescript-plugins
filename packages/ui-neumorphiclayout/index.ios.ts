@@ -1,7 +1,7 @@
 import { LayoutBase, Screen } from '@nativescript/core';
 import * as commons from './common';
 
-export { State } from './common';
+export * from './common';
 
 const layerNames = ['bottomDrawable', 'topDrawable'];
 
@@ -20,6 +20,13 @@ function getDrawableLayers(view: LayoutBase): Array<any> {
 	return drawableLayers;
 }
 
+function refresh(value) {
+	const drawableLayers = getDrawableLayers(this);
+	if (drawableLayers.length) {
+		updateSublayerShadows(this, drawableLayers);
+	}
+}
+
 function updateSublayerBounds(args) {
 	const view = args.object;
 
@@ -33,77 +40,43 @@ function updateSublayerBounds(args) {
 function updateSublayerShadows(view, sublayers) {
 	const [bottomLayer, topLayer] = sublayers;
 	if (bottomLayer == null || topLayer == null) {
-		throw new Error('updateSublayerShadows: No sublayers found!');
+		throw new Error('No shadow sublayers found!');
 	}
 
-	const state = view.isTouched ? view.neumorphicTouchState : view.neumorphicState;
+	const state = view.isTouched ? view.touchState : view.neumorphism;
+	if (!state) {
+		throw new Error('No neumorphism state found!');
+	}
 
 	bottomLayer.cornerRadius = view.cornerRadius;
-	bottomLayer.backgroundColor = view.neumorphicColor.ios.CGColor;
-	bottomLayer.shadowColor = view.brightColor.ios.CGColor;
+	bottomLayer.backgroundColor = view.fillColor.ios.CGColor;
+	bottomLayer.shadowColor = view.lightShadowColor.ios.CGColor;
 	bottomLayer.shadowOffset = CGSizeMake(-view.shadowDistance, -view.shadowDistance);
 	bottomLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
-	bottomLayer.shadowOpacity = state == commons.State.PRESSED ? 0 : 1;
+	bottomLayer.shadowOpacity = state == commons.STATE_PRESSED ? 0 : 1;
 
 	topLayer.cornerRadius = view.cornerRadius;
-	topLayer.backgroundColor = view.neumorphicColor.ios.CGColor;
+	topLayer.backgroundColor = view.fillColor.ios.CGColor;
 	topLayer.contentsScale = Screen.mainScreen.scale;
 	topLayer.allowsEdgeAntialiasing = true;
-	topLayer.shadowColor = view.darkColor.ios.CGColor;
+	topLayer.shadowColor = view.darkShadowColor.ios.CGColor;
 	topLayer.shadowOffset = CGSizeMake(view.shadowDistance, view.shadowDistance);
 	topLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
-	topLayer.shadowOpacity = state == commons.State.PRESSED ? 0 : 1;
+	topLayer.shadowOpacity = state == commons.STATE_PRESSED ? 0 : 1;
 
 	topLayer.setNeedsDisplay();
 }
 
-LayoutBase.prototype[commons.neumorphicTouchStateProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		updateSublayerShadows(this, drawableLayers);
-	}
-};
+LayoutBase.prototype[commons.cornerRadiusProperty.setNative] = refresh;
+LayoutBase.prototype[commons.isTouchedProperty.setNative] = refresh;
+LayoutBase.prototype[commons.lightShadowColorProperty.setNative] = refresh;
+LayoutBase.prototype[commons.darkShadowColorProperty.setNative] = refresh;
+LayoutBase.prototype[commons.fillColorProperty.setNative] = refresh;
+LayoutBase.prototype[commons.touchStateProperty.setNative] = refresh;
+LayoutBase.prototype[commons.shadowDistanceProperty.setNative] = refresh;
+LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = refresh;
 
-LayoutBase.prototype[commons.brightIntensityProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		this.brightColor = drawableLayers[1].getAugmentedCanvas().manipulateColor(this.neumorphicColor, 1 + value);
-		updateSublayerShadows(this, drawableLayers);
-	}
-};
-
-LayoutBase.prototype[commons.cornerRadiusProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		updateSublayerShadows(this, drawableLayers);
-	}
-};
-
-LayoutBase.prototype[commons.darkIntensityProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		this.darkColor = drawableLayers[1].getAugmentedCanvas().manipulateColor(this.neumorphicColor, 1 - value);
-		updateSublayerShadows(this, drawableLayers);
-	}
-};
-
-LayoutBase.prototype[commons.isTouchedProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		updateSublayerShadows(this, drawableLayers);
-	}
-};
-
-LayoutBase.prototype[commons.neumorphicColorProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		this.brightColor = drawableLayers[1].getAugmentedCanvas().manipulateColor(value, 1 + this.brightIntensity);
-		this.darkColor = drawableLayers[1].getAugmentedCanvas().manipulateColor(value, 1 - this.darkIntensity);
-		updateSublayerShadows(this, drawableLayers);
-	}
-};
-
-LayoutBase.prototype[commons.neumorphicStateProperty.setNative] = function (value) {
+LayoutBase.prototype[commons.neumorphismProperty.setNative] = function (value) {
 	const drawableLayers = getDrawableLayers(this);
 	if (value) {
 		if (drawableLayers.length) {
@@ -133,27 +106,6 @@ LayoutBase.prototype[commons.neumorphicStateProperty.setNative] = function (valu
 			}
 		}
 		this.off(LayoutBase.layoutChangedEvent, updateSublayerBounds);
-	}
-};
-
-LayoutBase.prototype[commons.overlayColorProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		updateSublayerShadows(this, drawableLayers);
-	}
-};
-
-LayoutBase.prototype[commons.shadowDistanceProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		updateSublayerShadows(this, drawableLayers);
-	}
-};
-
-LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = function (value) {
-	const drawableLayers = getDrawableLayers(this);
-	if (drawableLayers.length) {
-		updateSublayerShadows(this, drawableLayers);
 	}
 };
 

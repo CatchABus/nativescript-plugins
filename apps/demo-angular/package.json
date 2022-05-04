@@ -1,12 +1,12 @@
 {
 	"main": "./src/main.ts",
 	"dependencies": {
-		"@nativescript-community/ui-canvas": "^4.4.0",
+		"@nativescript-community/ui-canvas": "^4.4.1",
 		"@nativescript-community/ui-neumorphiclayout": "file:../../dist/packages/ui-neumorphiclayout",
 		"@nativescript/core": "file:../../node_modules/@nativescript/core"
 	},
 	"devDependencies": {
 		"@nativescript/android": "8.2.2",
-		"@nativescript/ios": "8.2.2"
+		"@nativescript/ios": "8.2.3"
 	}
 }

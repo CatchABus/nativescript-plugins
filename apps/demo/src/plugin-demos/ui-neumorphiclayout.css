@@ -1,0 +1,9 @@
+.neumorphism {
+	corner-radius: 26;
+	dark-shadow-color: #bebfc1;
+	fill-color: #e0e1e3;
+	height: 110;
+	light-shadow-color: #ffffff;
+	margin-top: 30;
+	width: 220;
+}

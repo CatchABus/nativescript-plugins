@@ -1,7 +1,7 @@
 import { LayoutBase, Screen } from '@nativescript/core';
 import * as commons from './common';
 
-export { State } from './common';
+export * from './common';
 
 function getNeumorphicDrawable(view: LayoutBase): NeumorphicDrawable {
 	const background = view.nativeViewProtected.getBackground();
@@ -9,6 +9,13 @@ function getNeumorphicDrawable(view: LayoutBase): NeumorphicDrawable {
 		return null;
 	}
 	return background;
+}
+
+function refresh(value) {
+	const drawable = getNeumorphicDrawable(this);
+	if (drawable != null) {
+		drawable.invalidateSelf();
+	}
 }
 
 function toggleViewClipping(view, clipChildren: boolean): void {
@@ -19,46 +26,16 @@ function toggleViewClipping(view, clipChildren: boolean): void {
 	}
 }
 
-LayoutBase.prototype[commons.brightIntensityProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		this.brightColor = drawable.getAugmentedCanvas().manipulateColor(this.neumorphicColor, 1 + value);
-		drawable.invalidateSelf();
-	}
-};
+LayoutBase.prototype[commons.cornerRadiusProperty.setNative] = refresh;
+LayoutBase.prototype[commons.isTouchedProperty.setNative] = refresh;
+LayoutBase.prototype[commons.lightShadowColorProperty.setNative] = refresh;
+LayoutBase.prototype[commons.darkShadowColorProperty.setNative] = refresh;
+LayoutBase.prototype[commons.fillColorProperty.setNative] = refresh;
+LayoutBase.prototype[commons.touchStateProperty.setNative] = refresh;
+LayoutBase.prototype[commons.shadowDistanceProperty.setNative] = refresh;
+LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = refresh;
 
-LayoutBase.prototype[commons.cornerRadiusProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		drawable.invalidateSelf();
-	}
-};
-
-LayoutBase.prototype[commons.darkIntensityProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		this.darkColor = drawable.getAugmentedCanvas().manipulateColor(this.neumorphicColor, 1 - value);
-		drawable.invalidateSelf();
-	}
-};
-
-LayoutBase.prototype[commons.isTouchedProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		drawable.invalidateSelf();
-	}
-};
-
-LayoutBase.prototype[commons.neumorphicColorProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		this.brightColor = drawable.getAugmentedCanvas().manipulateColor(value, 1 + this.brightIntensity);
-		this.darkColor = drawable.getAugmentedCanvas().manipulateColor(value, 1 - this.darkIntensity);
-		drawable.invalidateSelf();
-	}
-};
-
-LayoutBase.prototype[commons.neumorphicStateProperty.setNative] = function (value) {
+LayoutBase.prototype[commons.neumorphismProperty.setNative] = function (value) {
 	const drawable = getNeumorphicDrawable(this);
 	if (value) {
 		if (drawable != null) {
@@ -73,34 +50,6 @@ LayoutBase.prototype[commons.neumorphicStateProperty.setNative] = function (valu
 			toggleViewClipping(this.parent, true);
 			this.nativeViewProtected.setBackground(null);
 		}
-	}
-};
-
-LayoutBase.prototype[commons.neumorphicTouchStateProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		drawable.invalidateSelf();
-	}
-};
-
-LayoutBase.prototype[commons.overlayColorProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		drawable.invalidateSelf();
-	}
-};
-
-LayoutBase.prototype[commons.shadowDistanceProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		drawable.invalidateSelf();
-	}
-};
-
-LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = function (value) {
-	const drawable = getNeumorphicDrawable(this);
-	if (drawable != null) {
-		drawable.invalidateSelf();
 	}
 };
 

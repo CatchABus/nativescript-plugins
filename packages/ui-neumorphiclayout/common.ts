@@ -2,13 +2,13 @@ import { backgroundInternalProperty, booleanConverter, AbsoluteLayout, LayoutBas
 import { White } from '@nativescript/core/color/known-colors';
 import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style, TileMode } from '@nativescript-community/ui-canvas';
 
-export enum State {
-	FLAT = 'FLAT',
-	CONCAVE = 'CONCAVE',
-	CONVEX = 'CONVEX',
-	PRESSED = 'PRESSED',
-	PRESSED_IN_OUT = 'PRESSED_IN_OUT',
-}
+export const STATE_FLAT = 'flat';
+export const STATE_CONCAVE = 'concave';
+export const STATE_CONVEX = 'convex';
+export const STATE_PRESSED = 'pressed';
+export const STATE_PRESSED_IN_OUT = 'pressed-in-out';
+
+const NEUMORPHISM_STATES = [STATE_FLAT, STATE_CONCAVE, STATE_CONVEX, STATE_PRESSED, STATE_PRESSED_IN_OUT];
 
 function toggleTouchState(args: TouchGestureEventData) {
 	const view: any = args.view;
@@ -23,17 +23,11 @@ function toggleTouchState(args: TouchGestureEventData) {
 	}
 }
 
-export const brightColorProperty = new Property<LayoutBase, Color>({
-	name: 'brightColor',
+export const lightShadowColorProperty = new Property<LayoutBase, Color>({
+	name: 'lightShadowColor',
 	defaultValue: new Color('#ffffff'),
 	equalityComparer: Color.equals,
 	valueConverter: (value) => new Color(value),
-});
-
-export const brightIntensityProperty = new Property<LayoutBase, number>({
-	name: 'brightIntensity',
-	defaultValue: 0.15,
-	valueConverter: parseFloat,
 });
 
 export const cornerRadiusProperty = new Property<LayoutBase, number>({
@@ -41,17 +35,11 @@ export const cornerRadiusProperty = new Property<LayoutBase, number>({
 	valueConverter: parseFloat,
 });
 
-export const darkColorProperty = new Property<LayoutBase, Color>({
-	name: 'darkColor',
+export const darkShadowColorProperty = new Property<LayoutBase, Color>({
+	name: 'darkShadowColor',
 	defaultValue: new Color('#d9d9d9'),
 	equalityComparer: Color.equals,
 	valueConverter: (value) => new Color(value),
-});
-
-export const darkIntensityProperty = new Property<LayoutBase, number>({
-	name: 'darkIntensity',
-	defaultValue: 0.15,
-	valueConverter: parseFloat,
 });
 
 export const isTouchedProperty = new Property<LayoutBase, boolean>({
@@ -60,33 +48,31 @@ export const isTouchedProperty = new Property<LayoutBase, boolean>({
 	valueConverter: booleanConverter,
 });
 
-export const neumorphicColorProperty = new Property<LayoutBase, Color>({
-	name: 'neumorphicColor',
+export const fillColorProperty = new Property<LayoutBase, Color>({
+	name: 'fillColor',
 	defaultValue: new Color(White),
 	equalityComparer: Color.equals,
 	valueConverter: (value) => new Color(value),
 });
 
-export const neumorphicStateProperty = new Property<LayoutBase, State>({
-	name: 'neumorphicState',
+export const neumorphismProperty = new Property<LayoutBase, string>({
+	name: 'neumorphism',
 	defaultValue: null,
 	valueConverter: (value) => {
-		const formattedValue = State[value];
-		return formattedValue;
+		if (value && !NEUMORPHISM_STATES.includes(value)) {
+			throw new Error('Invalid neumorphism state!');
+		}
+		return value;
 	},
 });
 
-export const neumorphicTouchStateProperty = new Property<LayoutBase, State>({
-	name: 'neumorphicTouchState',
+export const touchStateProperty = new Property<LayoutBase, string>({
+	name: 'touchState',
 	valueConverter: (value) => {
-		let formattedValue = null;
-		if (value) {
-			formattedValue = State[value];
-			if (formattedValue == null) {
-				throw new Error('Invalid type of touch state!');
-			}
+		if (value && !NEUMORPHISM_STATES.includes(value)) {
+			throw new Error('Invalid touch state!');
 		}
-		return formattedValue;
+		return value;
 	},
 	valueChanged: (target: any, oldValue, newValue) => {
 		if (!!newValue !== !!oldValue) {
@@ -99,12 +85,6 @@ export const neumorphicTouchStateProperty = new Property<LayoutBase, State>({
 			target.isTouched = false;
 		}
 	},
-});
-
-export const overlayColorProperty = new Property<LayoutBase, Color>({
-	name: 'overlayColor',
-	equalityComparer: Color.equals,
-	valueConverter: (value) => new Color(value),
 });
 
 export const shadowDistanceProperty = new Property<LayoutBase, number>({
@@ -124,7 +104,7 @@ export class NeumorphicCanvas extends Canvas {
 	private path: Path = new Path();
 	private innerShadowPath: Path = new Path();
 	private paintBase: Paint;
-	private paintBright: Paint;
+	private paintLight: Paint;
 	private paintDark: Paint;
 
 	constructor(view: WeakRef<any>) {
@@ -142,39 +122,43 @@ export class NeumorphicCanvas extends Canvas {
 
 	public onDraw() {
 		const view = this.view && this.view.get();
-		const state = view.isTouched ? view.neumorphicTouchState : view.neumorphicState;
+		const state = view.isTouched ? view.touchState : view.neumorphism;
+
+		if (!state) {
+			throw new Error('No neumorphism state found!');
+		}
 
 		this.initDefaults();
 
-		if (state == State.PRESSED_IN_OUT) {
+		if (state == STATE_PRESSED_IN_OUT) {
 			if (global.isAndroid) {
-				this.initShape(State.FLAT);
-				this.initPaints(State.FLAT);
+				this.initShape(STATE_FLAT);
+				this.initPaints(STATE_FLAT);
 
-				this.drawPath(this.path, this.paintBright);
+				this.drawPath(this.path, this.paintLight);
 				this.drawPath(this.path, this.paintDark);
 				this.drawPath(this.path, this.paintBase);
 			}
 
-			this.initShape(State.PRESSED);
-			this.initPaints(State.PRESSED);
+			this.initShape(STATE_PRESSED);
+			this.initPaints(STATE_PRESSED);
 
 			this.clipPath(this.path);
 			this.drawPath(this.path, this.paintBase);
-			this.drawPath(this.innerShadowPath, this.paintBright);
+			this.drawPath(this.innerShadowPath, this.paintLight);
 			this.drawPath(this.innerShadowPath, this.paintDark);
 		} else {
 			this.initShape(state);
 			this.initPaints(state);
 
-			if (state == State.PRESSED) {
+			if (state == STATE_PRESSED) {
 				this.clipPath(this.path);
 				this.drawPath(this.path, this.paintBase);
-				this.drawPath(this.innerShadowPath, this.paintBright);
+				this.drawPath(this.innerShadowPath, this.paintLight);
 				this.drawPath(this.innerShadowPath, this.paintDark);
 			} else {
 				if (global.isAndroid) {
-					this.drawPath(this.path, this.paintBright);
+					this.drawPath(this.path, this.paintLight);
 					this.drawPath(this.path, this.paintDark);
 				}
 				this.drawPath(this.path, this.paintBase);
@@ -185,16 +169,10 @@ export class NeumorphicCanvas extends Canvas {
 	private initDefaults() {
 		const view = this.view && this.view.get();
 
-		if (view.brightColor == null) {
-			view.brightColor = this.manipulateColor(view.neumorphicColor, 1 + view.brightIntensity);
-		}
-		if (view.darkColor == null) {
-			view.darkColor = this.manipulateColor(view.neumorphicColor, 1 - view.darkIntensity);
-		}
 		this.paintBase = new Paint();
 		this.paintBase.setAntiAlias(global.isAndroid);
-		this.paintBright = new Paint();
-		this.paintBright.setAntiAlias(global.isAndroid);
+		this.paintLight = new Paint();
+		this.paintLight.setAntiAlias(global.isAndroid);
 		this.paintDark = new Paint();
 		this.paintDark.setAntiAlias(global.isAndroid);
 	}
@@ -205,33 +183,22 @@ export class NeumorphicCanvas extends Canvas {
 		const actualSize = view.getActualSize();
 		const width = actualSize.width;
 		const height = actualSize.height;
-		const bgColor = view.overlayColor || view.neumorphicColor;
 
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
-		const isPressable = state == State.PRESSED || state == State.PRESSED_IN_OUT;
+		const isPressable = state == STATE_PRESSED || state == STATE_PRESSED_IN_OUT;
 		const gradientColors = [];
 
 		switch (state) {
-			case State.CONCAVE:
-				if (view.overlayColor != null) {
-					gradientColors.push(this.manipulateColor(view.overlayColor, 1 - view.darkIntensity));
-					gradientColors.push(this.manipulateColor(view.overlayColor, 1 + view.brightIntensity));
-				} else {
-					gradientColors.push(view.darkColor);
-					gradientColors.push(view.brightColor);
-				}
+			case STATE_CONCAVE:
+				gradientColors.push(view.darkShadowColor);
+				gradientColors.push(view.lightShadowColor);
 				break;
-			case State.CONVEX:
-				if (view.overlayColor != null) {
-					gradientColors.push(this.manipulateColor(view.overlayColor, 1 + view.brightIntensity));
-					gradientColors.push(this.manipulateColor(view.overlayColor, 1 - view.darkIntensity));
-				} else {
-					gradientColors.push(view.brightColor);
-					gradientColors.push(view.darkColor);
-				}
+			case STATE_CONVEX:
+				gradientColors.push(view.lightShadowColor);
+				gradientColors.push(view.darkShadowColor);
 				break;
 			default:
-				this.paintBase.setColor(bgColor);
+				this.paintBase.setColor(view.fillColor);
 				break;
 		}
 
@@ -240,21 +207,21 @@ export class NeumorphicCanvas extends Canvas {
 		}
 
 		if (isPressable) {
-			this.paintBright.strokeWidth = shadowRadius;
-			this.paintBright.style = Style.STROKE;
+			this.paintLight.strokeWidth = shadowRadius;
+			this.paintLight.style = Style.STROKE;
 			this.paintDark.strokeWidth = shadowRadius;
 			this.paintDark.style = Style.STROKE;
 		} else {
-			this.paintBright.strokeWidth = 0;
-			this.paintBright.style = Style.FILL;
+			this.paintLight.strokeWidth = 0;
+			this.paintLight.style = Style.FILL;
 			this.paintDark.strokeWidth = 0;
 			this.paintDark.style = Style.FILL;
 		}
 
-		this.paintBright.setColor(bgColor);
-		this.paintDark.setColor(bgColor);
-		this.paintBright.setShadowLayer(shadowRadius, -view.shadowDistance, -view.shadowDistance, view.brightColor);
-		this.paintDark.setShadowLayer(shadowRadius, view.shadowDistance, view.shadowDistance, view.darkColor);
+		this.paintLight.setColor(view.fillColor);
+		this.paintDark.setColor(view.fillColor);
+		this.paintLight.setShadowLayer(shadowRadius, -view.shadowDistance, -view.shadowDistance, view.lightShadowColor);
+		this.paintDark.setShadowLayer(shadowRadius, view.shadowDistance, view.shadowDistance, view.darkShadowColor);
 	}
 
 	private initShape(state) {
@@ -277,20 +244,17 @@ export class NeumorphicCanvas extends Canvas {
 // Disable 'backgroundInternal' as it also uses 'setBackground' to apply a drawable
 const backgroundInternalOrigin = LayoutBase.prototype[backgroundInternalProperty.setNative];
 LayoutBase.prototype[backgroundInternalProperty.setNative] = function (value) {
-	if (!this.neumorphicState) {
+	if (!this.neumorphism) {
 		backgroundInternalOrigin.call(this, value);
 	}
 };
 
-brightColorProperty.register(LayoutBase);
-brightIntensityProperty.register(LayoutBase);
+lightShadowColorProperty.register(LayoutBase);
 cornerRadiusProperty.register(LayoutBase);
-darkColorProperty.register(LayoutBase);
-darkIntensityProperty.register(LayoutBase);
+darkShadowColorProperty.register(LayoutBase);
 isTouchedProperty.register(LayoutBase);
-neumorphicColorProperty.register(LayoutBase);
-neumorphicStateProperty.register(LayoutBase);
-neumorphicTouchStateProperty.register(LayoutBase);
-overlayColorProperty.register(LayoutBase);
+fillColorProperty.register(LayoutBase);
+neumorphismProperty.register(LayoutBase);
+touchStateProperty.register(LayoutBase);
 shadowDistanceProperty.register(LayoutBase);
 shadowRadiusProperty.register(LayoutBase);
