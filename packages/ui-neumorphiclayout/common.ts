@@ -1,5 +1,4 @@
 import { backgroundInternalProperty, booleanConverter, Color, LayoutBase, GestureTypes, Property, TouchAction, TouchGestureEventData } from '@nativescript/core';
-import { White } from '@nativescript/core/color/known-colors';
 import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style, TileMode } from '@nativescript-community/ui-canvas';
 
 export const STATE_FLAT = 'flat';
@@ -51,7 +50,7 @@ export const isTouchedProperty = new Property<LayoutBase, boolean>({
 
 export const fillColorProperty = new Property<LayoutBase, Color>({
 	name: 'fillColor',
-	defaultValue: new Color(White),
+	defaultValue: new Color('#ffffff'),
 	equalityComparer: Color.equals,
 	valueConverter: (value) => new Color(value),
 });
