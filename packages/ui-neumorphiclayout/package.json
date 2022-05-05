@@ -32,5 +32,8 @@
 	"license": "Apache-2.0",
 	"homepage": "https://github.com/CatchABus/nativescript-plugins/tree/master/packages/ui-neumorphiclayout",
 	"readmeFilename": "README.md",
-	"bootstrapper": "@nativescript/plugin-seed"
+	"bootstrapper": "@nativescript/plugin-seed",
+	"dependencies": {
+		"@nativescript-community/ui-canvas": "^4.4.1"
+	}
 }
