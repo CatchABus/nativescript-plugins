@@ -47,8 +47,6 @@ XML
 </Page>
 ```
 
-`#ffffff`
-
 ## API
 ### Properties
 | Name | Type | Default | Description |
