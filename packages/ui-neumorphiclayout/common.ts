@@ -101,8 +101,8 @@ export const shadowRadiusProperty = new Property<LayoutBase, number>({
 export class NeumorphicCanvas extends Canvas {
 	private view: WeakRef<any>;
 
-	private path: Path = new Path();
-	private innerShadowPath: Path = new Path();
+	private path: Path;
+	private innerShadowPath: Path;
 	private paintBase: Paint;
 	private paintLight: Paint;
 	private paintDark: Paint;
@@ -234,8 +234,8 @@ export class NeumorphicCanvas extends Canvas {
 
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 
-		this.path.reset();
-		this.innerShadowPath.reset();
+		this.path = new Path();
+		this.innerShadowPath = new Path();
 
 		this.path.addRoundRect(createRectF(0, 0, width, height), cornerRadius, cornerRadius, Direction.CW);
 		this.innerShadowPath.addRoundRect(createRectF(-(shadowRadius / 2), -(shadowRadius / 2), width + shadowRadius, height + shadowRadius), cornerRadius, cornerRadius, Direction.CW);
