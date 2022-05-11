@@ -1,5 +1,5 @@
-import { backgroundInternalProperty, booleanConverter, Color, LayoutBase, GestureTypes, Property, TouchAction, TouchGestureEventData } from '@nativescript/core';
-import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style, TileMode } from '@nativescript-community/ui-canvas';
+import { backgroundInternalProperty, booleanConverter, Color, CssProperty, LayoutBase, GestureTypes, Property, Style, TouchAction, TouchGestureEventData } from '@nativescript/core';
+import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style as drawStyle, TileMode } from '@nativescript-community/ui-canvas';
 
 export const STATE_FLAT = 'flat';
 export const STATE_CONCAVE = 'concave';
@@ -8,6 +8,8 @@ export const STATE_PRESSED = 'pressed';
 export const STATE_PRESSED_IN_OUT = 'pressed-in-out';
 
 const NEUMORPHISM_STATES = [STATE_FLAT, STATE_CONCAVE, STATE_CONVEX, STATE_PRESSED, STATE_PRESSED_IN_OUT];
+
+const stylePropertiesMap = new Map();
 
 function toggleTouchState(args: TouchGestureEventData) {
 	const view: any = args.view;
@@ -22,80 +24,121 @@ function toggleTouchState(args: TouchGestureEventData) {
 	}
 }
 
-export const lightShadowColorProperty = new Property<LayoutBase, Color>({
-	name: 'lightShadowColor',
-	defaultValue: new Color('#ffffff'),
-	equalityComparer: Color.equals,
-	valueConverter: (value) => new Color(value),
-});
+stylePropertiesMap.set(
+	'lightShadowColor',
+	new CssProperty<Style, Color>({
+		name: 'lightShadowColor',
+		cssName: 'light-shadow-color',
+		defaultValue: new Color('#ffffff'),
+		equalityComparer: Color.equals,
+		valueConverter: (value) => new Color(value),
+	})
+);
+export const lightShadowColorProperty = stylePropertiesMap.get('lightShadowColor');
 
-export const cornerRadiusProperty = new Property<LayoutBase, number>({
-	name: 'cornerRadius',
-	defaultValue: 0,
-	valueConverter: parseFloat,
-});
+stylePropertiesMap.set(
+	'cornerRadius',
+	new CssProperty<Style, number>({
+		name: 'cornerRadius',
+		cssName: 'corner-radius',
+		defaultValue: 0,
+		valueConverter: parseFloat,
+	})
+);
+export const cornerRadiusProperty = stylePropertiesMap.get('cornerRadius');
 
-export const darkShadowColorProperty = new Property<LayoutBase, Color>({
-	name: 'darkShadowColor',
-	defaultValue: new Color('#d9d9d9'),
-	equalityComparer: Color.equals,
-	valueConverter: (value) => new Color(value),
-});
+stylePropertiesMap.set(
+	'darkShadowColor',
+	new CssProperty<Style, Color>({
+		name: 'darkShadowColor',
+		cssName: 'dark-shadow-color',
+		defaultValue: new Color('#d9d9d9'),
+		equalityComparer: Color.equals,
+		valueConverter: (value) => new Color(value),
+	})
+);
+export const darkShadowColorProperty = stylePropertiesMap.get('darkShadowColor');
+
+stylePropertiesMap.set(
+	'fillColor',
+	new CssProperty<Style, Color>({
+		name: 'fillColor',
+		cssName: 'fill-color',
+		defaultValue: new Color('#ffffff'),
+		equalityComparer: Color.equals,
+		valueConverter: (value) => new Color(value),
+	})
+);
+export const fillColorProperty = stylePropertiesMap.get('fillColor');
+
+stylePropertiesMap.set(
+	'neumorphism',
+	new CssProperty<Style, string>({
+		name: 'neumorphism',
+		cssName: 'neumorphism',
+		defaultValue: null,
+		valueConverter: (value) => {
+			if (value && !NEUMORPHISM_STATES.includes(value)) {
+				throw new Error('Invalid neumorphism state!');
+			}
+			return value;
+		},
+	})
+);
+export const neumorphismProperty = stylePropertiesMap.get('neumorphism');
+
+stylePropertiesMap.set(
+	'touchState',
+	new CssProperty<Style, string>({
+		name: 'touchState',
+		cssName: 'touch-state',
+		valueConverter: (value) => {
+			if (value && !NEUMORPHISM_STATES.includes(value)) {
+				throw new Error('Invalid touch state!');
+			}
+			return value;
+		},
+		valueChanged: (target: any, oldValue, newValue) => {
+			const view = target.view;
+			if (!!newValue !== !!oldValue) {
+				if (newValue != null) {
+					view.off(GestureTypes.touch, toggleTouchState);
+					view.on(GestureTypes.touch, toggleTouchState);
+				} else {
+					view.off(GestureTypes.touch, toggleTouchState);
+				}
+				view.isTouched = false;
+			}
+		},
+	})
+);
+export const touchStateProperty = stylePropertiesMap.get('touchState');
+
+stylePropertiesMap.set(
+	'shadowDistance',
+	new CssProperty<Style, number>({
+		name: 'shadowDistance',
+		cssName: 'shadow-distance',
+		defaultValue: 10,
+		valueConverter: parseFloat,
+	})
+);
+export const shadowDistanceProperty = stylePropertiesMap.get('shadowDistance');
+
+stylePropertiesMap.set(
+	'shadowRadius',
+	new CssProperty<Style, number>({
+		name: 'shadowRadius',
+		cssName: 'shadow-radius',
+		valueConverter: parseFloat,
+	})
+);
+export const shadowRadiusProperty = stylePropertiesMap.get('shadowRadius');
 
 export const isTouchedProperty = new Property<LayoutBase, boolean>({
 	name: 'isTouched',
 	defaultValue: false,
 	valueConverter: booleanConverter,
-});
-
-export const fillColorProperty = new Property<LayoutBase, Color>({
-	name: 'fillColor',
-	defaultValue: new Color('#ffffff'),
-	equalityComparer: Color.equals,
-	valueConverter: (value) => new Color(value),
-});
-
-export const neumorphismProperty = new Property<LayoutBase, string>({
-	name: 'neumorphism',
-	defaultValue: null,
-	valueConverter: (value) => {
-		if (value && !NEUMORPHISM_STATES.includes(value)) {
-			throw new Error('Invalid neumorphism state!');
-		}
-		return value;
-	},
-});
-
-export const touchStateProperty = new Property<LayoutBase, string>({
-	name: 'touchState',
-	valueConverter: (value) => {
-		if (value && !NEUMORPHISM_STATES.includes(value)) {
-			throw new Error('Invalid touch state!');
-		}
-		return value;
-	},
-	valueChanged: (target: any, oldValue, newValue) => {
-		if (!!newValue !== !!oldValue) {
-			if (newValue != null) {
-				target.off(GestureTypes.touch, toggleTouchState);
-				target.on(GestureTypes.touch, toggleTouchState);
-			} else {
-				target.off(GestureTypes.touch, toggleTouchState);
-			}
-			target.isTouched = false;
-		}
-	},
-});
-
-export const shadowDistanceProperty = new Property<LayoutBase, number>({
-	name: 'shadowDistance',
-	defaultValue: 10,
-	valueConverter: parseFloat,
-});
-
-export const shadowRadiusProperty = new Property<LayoutBase, number>({
-	name: 'shadowRadius',
-	valueConverter: parseFloat,
 });
 
 export class NeumorphicCanvas extends Canvas {
@@ -208,14 +251,14 @@ export class NeumorphicCanvas extends Canvas {
 
 		if (isPressable) {
 			this.paintLight.strokeWidth = shadowRadius;
-			this.paintLight.style = Style.STROKE;
+			this.paintLight.style = drawStyle.STROKE;
 			this.paintDark.strokeWidth = shadowRadius;
-			this.paintDark.style = Style.STROKE;
+			this.paintDark.style = drawStyle.STROKE;
 		} else {
 			this.paintLight.strokeWidth = 0;
-			this.paintLight.style = Style.FILL;
+			this.paintLight.style = drawStyle.FILL;
 			this.paintDark.strokeWidth = 0;
-			this.paintDark.style = Style.FILL;
+			this.paintDark.style = drawStyle.FILL;
 		}
 
 		this.paintLight.setColor(view.fillColor);
@@ -250,12 +293,18 @@ LayoutBase.prototype[backgroundInternalProperty.setNative] = function (value) {
 	}
 };
 
-lightShadowColorProperty.register(LayoutBase);
-cornerRadiusProperty.register(LayoutBase);
-darkShadowColorProperty.register(LayoutBase);
+// Style properties
+for (let [key, value] of stylePropertiesMap) {
+	Object.defineProperty(LayoutBase.prototype, key, {
+		get() {
+			return this.style[key];
+		},
+		set(value) {
+			this.style[key] = value;
+		},
+		enumerable: true,
+	});
+	value.register(Style);
+}
+
 isTouchedProperty.register(LayoutBase);
-fillColorProperty.register(LayoutBase);
-neumorphismProperty.register(LayoutBase);
-touchStateProperty.register(LayoutBase);
-shadowDistanceProperty.register(LayoutBase);
-shadowRadiusProperty.register(LayoutBase);

@@ -16,25 +16,25 @@
 	},
 	"private": true,
 	"devDependencies": {
-		"@angular/animations": "^13.3.5",
-		"@angular/common": "^13.3.5",
-		"@angular/compiler": "^13.3.5",
-		"@angular/compiler-cli": "^13.3.5",
-		"@angular/core": "^13.3.5",
-		"@angular/forms": "^13.3.5",
-		"@angular/platform-browser": "^13.3.5",
-		"@angular/platform-browser-dynamic": "^13.3.5",
-		"@angular/router": "^13.3.5",
-		"@angular-devkit/build-angular": "~13.3.4",
+		"@angular/animations": "^13.3.6",
+		"@angular/common": "^13.3.6",
+		"@angular/compiler": "^13.3.6",
+		"@angular/compiler-cli": "^13.3.6",
+		"@angular/core": "^13.3.6",
+		"@angular/forms": "^13.3.6",
+		"@angular/platform-browser": "^13.3.6",
+		"@angular/platform-browser-dynamic": "^13.3.6",
+		"@angular/router": "^13.3.6",
+		"@angular-devkit/build-angular": "~13.3.5",
 		"@nativescript/angular": "^13.0.3",
 		"@nativescript/core": "^8.2.3",
 		"@nativescript/plugin-tools": "3.0.3",
 		"@nativescript/types": "^8.2.0",
 		"@nativescript/webpack": "5.0.6",
-		"@ngtools/webpack": "^13.3.4",
-		"@typescript-eslint/eslint-plugin": "^5.22.0",
+		"@ngtools/webpack": "^13.3.5",
+		"@typescript-eslint/eslint-plugin": "^5.23.0",
 		"eslint-config-prettier": "^8.5.0",
-		"husky": "^7.0.4",
+		"husky": "^8.0.1",
 		"nativescript-vue": "~2.9.1",
 		"nativescript-vue-template-compiler": "~2.9.1",
 		"ng-packagr": "^13.3.1",
@@ -50,6 +50,6 @@
 		]
 	},
 	"dependencies": {
-		"@nativescript-community/ui-canvas": "^4.4.1"
+		"@nativescript-community/ui-canvas": "^4.4.3"
 	}
 }
