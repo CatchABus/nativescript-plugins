@@ -100,6 +100,7 @@ LayoutBase.prototype[commons.neumorphismProperty.setNative] = function (value) {
 			this.nativeViewProtected.layer.insertSublayerAbove(topLayer, bottomLayer);
 
 			updateSublayerShadows(this, [bottomLayer, topLayer]);
+			updateSublayerBounds({ object: this });
 
 			this.on(LayoutBase.layoutChangedEvent, updateSublayerBounds);
 		}
