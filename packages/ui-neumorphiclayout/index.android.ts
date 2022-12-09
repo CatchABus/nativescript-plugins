@@ -19,10 +19,12 @@ function refresh(value) {
 }
 
 function toggleViewClipping(view, clipChildren: boolean): void {
-	// Removing clipping from all breaks the ui
-	if (view != null && view instanceof LayoutBase) {
-		view.nativeViewProtected.setClipChildren(clipChildren);
-		view.nativeViewProtected.setClipToPadding(clipChildren);
+	const nativeView = view?.nativeViewProtected;
+
+	// Removing clipping from native views that extend org.nativescript.widgets.LayoutBase (this includes ContentView)
+	if (nativeView != null && nativeView instanceof org.nativescript.widgets.LayoutBase) {
+		nativeView.setClipChildren(clipChildren);
+		nativeView.setClipToPadding(clipChildren);
 	}
 }
 
