@@ -23,14 +23,14 @@
 			}
 		},
 		"build.all": {
-			"executor": "@nrwl/workspace:run-commands",
+			"executor": "nx:run-commands",
 			"options": {
 				"commands": ["nx run ui-neumorphiclayout:build", "node tools/scripts/build-finish.ts ui-neumorphiclayout"],
 				"parallel": false
 			}
 		},
 		"focus": {
-			"executor": "@nrwl/workspace:run-commands",
+			"executor": "nx:run-commands",
 			"options": {
 				"commands": ["nx g @nativescript/plugin-tools:focus-packages ui-neumorphiclayout"],
 				"parallel": false
