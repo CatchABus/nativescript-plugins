@@ -1,10 +1,13 @@
 import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
+import { Observable } from '@nativescript/core';
 
-class NSHTMLCanvasElement {
+class NSHTMLCanvasElement extends Observable {
 	private readonly _canvasViewRef: WeakRef<CanvasView>;
 	private readonly _contextRef: WeakRef<Canvas>;
 
 	constructor(canvasView?: CanvasView, canvasContext?: Canvas) {
+		super();
+
 		this._canvasViewRef = new WeakRef(canvasView);
 		this._contextRef = new WeakRef(canvasContext);
 	}
