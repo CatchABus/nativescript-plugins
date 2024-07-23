@@ -75,13 +75,6 @@ module.exports = {
 					description: '@nativescript-community/ui-htmlcanvasapi: Build',
 				},
 			},
-			// @nativescript-community/ui-htmlcanvasapi
-			'ui-htmlcanvasapi': {
-				build: {
-					script: 'nx run ui-htmlcanvasapi:build.all',
-					description: '@nativescript-community/ui-htmlcanvasapi: Build',
-				},
-			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -95,10 +88,6 @@ module.exports = {
 			'ui-neumorphiclayout': {
 				script: 'nx run ui-neumorphiclayout:focus',
 				description: 'Focus on @nativescript-community/ui-neumorphiclayout',
-			},
-			'ui-htmlcanvasapi': {
-				script: 'nx run ui-htmlcanvasapi:focus',
-				description: 'Focus on @nativescript-community/ui-htmlcanvasapi',
 			},
 			'ui-htmlcanvasapi': {
 				script: 'nx run ui-htmlcanvasapi:focus',
