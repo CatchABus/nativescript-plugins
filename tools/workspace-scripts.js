@@ -55,17 +55,17 @@ module.exports = {
 			},
 		},
 		'⚙️': {
-			script: `npx cowsay "@nativescript-community-community/* packages will keep your ⚙️ cranking"`,
-			description: '_____________  @nativescript-community-community/*  _____________',
+			script: `npx cowsay "@nativescript-community/* packages will keep your ⚙️ cranking"`,
+			description: '_____________  @nativescript-community/*  _____________',
 		},
 		// packages
 		// build output is always in dist/packages
-		'@nativescript-community-community': {
-			// @nativescript-community-community/ui-neumorphiclayout
+		'@nativescript-community': {
+			// @nativescript-community/ui-neumorphiclayout
 			'ui-neumorphiclayout': {
 				build: {
 					script: 'nx run ui-neumorphiclayout:build.all',
-					description: '@nativescript-community-community/ui-neumorphiclayout: Build',
+					description: '@nativescript-community/ui-neumorphiclayout: Build',
 				},
 			},
 			// @nativescript-community/ui-htmlcanvasapi
@@ -94,7 +94,7 @@ module.exports = {
 		focus: {
 			'ui-neumorphiclayout': {
 				script: 'nx run ui-neumorphiclayout:focus',
-				description: 'Focus on @nativescript-community-community/ui-neumorphiclayout',
+				description: 'Focus on @nativescript-community/ui-neumorphiclayout',
 			},
 			'ui-htmlcanvasapi': {
 				script: 'nx run ui-htmlcanvasapi:focus',
