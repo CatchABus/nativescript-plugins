@@ -1,3 +1,4 @@
+- [@nativescript-community/ui-htmlcanvasapi](packages/ui-htmlcanvasapi/README.md)
 - [@nativescript-community/ui-neumorphiclayout](packages/ui-neumorphiclayout/README.md)
 
 # How to use?

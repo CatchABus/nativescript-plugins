@@ -1,24 +1,23 @@
 {
-	"name": "@nativescript-community/ui-neumorphiclayout",
+	"name": "@nativescript-community/ui-htmlcanvasapi",
 	"$schema": "../../node_modules/nx/schemas/project-schema.json",
 	"projectType": "library",
-	"sourceRoot": "packages/ui-neumorphiclayout",
-	"tags": [],
+	"sourceRoot": "packages/ui-htmlcanvasapi",
 	"targets": {
 		"build": {
 			"executor": "@nx/js:tsc",
 			"options": {
-				"outputPath": "dist/packages/ui-neumorphiclayout",
-				"tsConfig": "packages/ui-neumorphiclayout/tsconfig.json",
-				"packageJson": "packages/ui-neumorphiclayout/package.json",
-				"main": "packages/ui-neumorphiclayout/index.d.ts",
+				"outputPath": "dist/packages/ui-htmlcanvasapi",
+				"tsConfig": "packages/ui-htmlcanvasapi/tsconfig.json",
+				"packageJson": "packages/ui-htmlcanvasapi/package.json",
+				"main": "packages/ui-htmlcanvasapi/index.d.ts",
 				"assets": [
-					"packages/ui-neumorphiclayout/*.md",
-					"packages/ui-neumorphiclayout/index.d.ts",
+					"packages/ui-htmlcanvasapi/*.md",
+					"packages/ui-htmlcanvasapi/index.d.ts",
 					"LICENSE",
 					{
 						"glob": "**/*",
-						"input": "packages/ui-neumorphiclayout/platforms/",
+						"input": "packages/ui-htmlcanvasapi/platforms/",
 						"output": "./platforms/"
 					}
 				],
@@ -33,10 +32,10 @@
 		"build.all": {
 			"executor": "nx:run-commands",
 			"options": {
-				"commands": ["node tools/scripts/build-finish.ts ui-neumorphiclayout"],
+				"commands": ["node tools/scripts/build-finish.ts ui-htmlcanvasapi"],
 				"parallel": false
 			},
-			"outputs": ["{workspaceRoot}/dist/packages/ui-neumorphiclayout"],
+			"outputs": ["{workspaceRoot}/dist/packages/ui-htmlcanvasapi"],
 			"dependsOn": [
 				{
 					"target": "build.all",
@@ -51,15 +50,16 @@
 		"focus": {
 			"executor": "nx:run-commands",
 			"options": {
-				"commands": ["nx g @nativescript/plugin-tools:focus-packages ui-neumorphiclayout"],
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages ui-htmlcanvasapi"],
 				"parallel": false
 			}
 		},
 		"lint": {
 			"executor": "@nx/eslint:eslint",
 			"options": {
-				"lintFilePatterns": ["packages/ui-neumorphiclayout/**/*.ts"]
+				"lintFilePatterns": ["packages/ui-htmlcanvasapi/**/*.ts"]
 			}
 		}
-	}
+	},
+	"tags": []
 }

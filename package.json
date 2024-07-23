@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"scripts": {
 		"postinstall": "husky install && npx ts-patch install",
-		"setup": "npx rimraf **/node_modules package-lock.json dist tmp && ns package-manager set npm && npm install --legacy-peer-deps && nx run all:build",
+		"setup": "rm -rf **/node_modules package-lock.json dist tmp && ns package-manager set npm && npm install --legacy-peer-deps && nx run all:build",
 		"start": "nps",
 		"add": "nx g @nativescript/plugin-tools:add-package",
 		"add-angular": "nx g @nativescript/plugin-tools:add-angular",
@@ -28,7 +28,7 @@
 		"@angular-devkit/build-angular": "~15.1.4",
 		"@nativescript/angular": "^15.0.1",
 		"@nativescript/core": "^8.4.7",
-		"@nativescript/plugin-tools": "5.0.3",
+		"@nativescript/plugin-tools": "5.3.0",
 		"@nativescript/types": "^8.4.0",
 		"@nativescript/webpack": "5.0.13",
 		"@ngtools/webpack": "^15.1.4",

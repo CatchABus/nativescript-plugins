@@ -1,26 +1,14 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "rootDirs": [
-      ".",
-      "../.."
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "~/*": [
-        "src/*"
-      ],
-      "@demo/shared": [
-        "../../tools/demo/index.ts"
-      ],
-      "@nativescript-community/*": [
-        "../../dist/packages/*"
-      ]
-    }
-  },
-  "files": [
-    "./references.d.ts",
-    "./src/main.ts",
-    "./src/polyfills.ts"
-  ]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDirs": [".", "../.."],
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["src/*"],
+			"@demo/shared": ["../../tools/demo/index.ts"],
+			"@nativescript-community/*": ["../../dist/packages/*"],
+			"@nativescript-community/ui-htmlcanvasapi": ["../../packages/ui-htmlcanvasapi/index.d.ts"]
+		}
+	},
+	"files": ["./references.d.ts", "./src/main.ts", "./src/polyfills.ts"]
 }

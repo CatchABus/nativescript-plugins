@@ -6,7 +6,8 @@
 	"dependencies": {
 		"@nativescript-community/ui-canvas": "^4.4.11",
 		"@nativescript-community/ui-neumorphiclayout": "file:../../packages/ui-neumorphiclayout",
-		"@nativescript/core": "file:../../node_modules/@nativescript/core"
+		"@nativescript/core": "file:../../node_modules/@nativescript/core",
+		"@nativescript-community/ui-htmlcanvasapi": "file:../../packages/ui-htmlcanvasapi"
 	},
 	"devDependencies": {
 		"@nativescript/android": "8.4.0",

@@ -1,32 +1,40 @@
 {
-	"npmScope": "nativescript-community",
-	"affected": {
-		"defaultBase": "master"
-	},
-	"implicitDependencies": {
-		"workspace.json": "*",
-		"package.json": {
-			"dependencies": "*",
-			"devDependencies": "*"
-		},
-		"tsconfig.base.json": "*",
-		"tslint.json": "*",
-		"nx.json": "*"
-	},
 	"workspaceLayout": {
 		"appsDir": "apps",
 		"libsDir": "packages"
 	},
 	"tasksRunnerOptions": {
 		"default": {
-			"runner": "nx/tasks-runners/default",
 			"options": {
-				"cacheableOperations": ["build", "build.all", "lint", "test", "e2e"],
-				"runtimeCacheInputs": ["node -v"],
-				"parallel": 1,
-				"useDaemonProcess": false
+				"runtimeCacheInputs": ["node -v"]
 			}
 		}
 	},
-	"$schema": "./node_modules/nx/schemas/nx-schema.json"
+	"$schema": "./node_modules/nx/schemas/nx-schema.json",
+	"useDaemonProcess": false,
+	"parallel": 1,
+	"targetDefaults": {
+		"build": {
+			"cache": true
+		},
+		"build.all": {
+			"cache": true
+		},
+		"lint": {
+			"cache": true
+		},
+		"test": {
+			"cache": true
+		},
+		"e2e": {
+			"cache": true
+		}
+	},
+	"useInferencePlugins": false,
+	"defaultBase": "master",
+	"namedInputs": {
+		"default": ["{projectRoot}/**/*", "sharedGlobals"],
+		"sharedGlobals": [],
+		"production": ["default", "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)", "!{projectRoot}/tsconfig.spec.json", "!{projectRoot}/jest.config.[jt]s", "!{projectRoot}/.eslintrc.json"]
+	}
 }

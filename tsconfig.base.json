@@ -21,7 +21,8 @@
 		],
 		"paths": {
 			"@demo/shared": ["tools/demo/index.ts"],
-			"@nativescript-community/*": ["packages/*"]
+			"@nativescript-community/*": ["packages/*"],
+			"@nativescript-community/ui-htmlcanvasapi": ["packages/ui-htmlcanvasapi/index.d.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

@@ -1,23 +1,24 @@
 {
-	"root": ".",
+	"name": "plugins",
+	"$schema": "node_modules/nx/schemas/project-schema.json",
 	"projectType": "library",
+	"tags": [],
 	"targets": {
 		"build": {
 			"executor": "nx:run-commands",
-			"outputs": ["dist/packages"],
+			"outputs": ["{projectRoot}/dist/packages"],
 			"options": {
 				"commands": ["nx run ui-neumorphiclayout:build.all"],
 				"parallel": false
 			}
 		},
 		"focus": {
-			"outputs": ["dist/packages"],
+			"outputs": ["{projectRoot}/dist/packages"],
 			"options": {
 				"commands": ["nx g @nativescript/plugin-tools:focus-packages"],
 				"parallel": false
 			},
 			"executor": "nx:run-commands"
 		}
-	},
-	"tags": []
+	}
 }

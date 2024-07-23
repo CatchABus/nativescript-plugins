@@ -7,7 +7,8 @@ import { HomeComponent } from './home.component';
 const routes: Routes = [
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent },
-	{ path: 'ui-neumorphiclayout', loadChildren: () => import('./plugin-demos/ui-neumorphiclayout.module').then((m) => m.UiNeumorphicLayoutModule) },
+	{ path: 'ui-htmlcanvasapi', loadChildren: () => import('./plugin-demos/ui-htmlcanvasapi.module').then((m) => m.UiHtmlcanvasapiModule) },
+	{ path: 'ui-neumorphiclayout', loadChildren: () => import('./plugin-demos/ui-neumorphiclayout.module').then((m) => m.UiNeumorphiclayoutModule) },
 ];
 
 @NgModule({
