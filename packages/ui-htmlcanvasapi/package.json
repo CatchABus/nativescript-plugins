@@ -19,7 +19,9 @@
 		"JavaScript",
 		"TypeScript",
 		"iOS",
-		"Android"
+		"Android",
+		"Canvas",
+		"Canvas2D"
 	],
 	"author": {
 		"name": "CatchABus",
