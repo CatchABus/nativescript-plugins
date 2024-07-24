@@ -1,13 +1,14 @@
 import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
 import { EventData, Page, View } from '@nativescript/core';
-import { getOrCreate2DContext } from '@nativescript-community/ui-htmlcanvasapi';
+import { getOrCreateHTMLCanvasElement } from '@nativescript-community/ui-htmlcanvasapi';
 
 export function navigatingTo(args: EventData) {
 	const page = <Page>args.object;
 }
 
 export function onDraw(args: { object: CanvasView; canvas: Canvas }) {
-	const ctx = getOrCreate2DContext(args.object, args.canvas);
+	const htmlcanvas = getOrCreateHTMLCanvasElement(args.object, args.canvas);
+	const ctx = htmlcanvas.getContext('2d');
 
 	ctx.save();
 
@@ -55,7 +56,7 @@ export function onDraw(args: { object: CanvasView; canvas: Canvas }) {
 
 	// Stroked text
 	ctx.strokeStyle = 'purple';
-	ctx.letterSpacing = 10;
+	ctx.letterSpacing = '10px';
 	ctx.strokeText('Hello World', 10, 460);
 
 	ctx.restore();

@@ -2,6 +2,7 @@ import { ImageSource } from '@nativescript/core';
 import { CanvasGradient } from './lib/CanvasGradient';
 import { CanvasPattern } from './lib/CanvasPattern';
 
+type CanvasContextType = '2d' | 'bitmaprenderer';
 type LineCap = 'butt' | 'round' | 'square';
 type LineJoin = 'round' | 'bevel' | 'miter';
 type CanvasCompositeOperation = 'source-over' | 'source-in' | 'source-out' | 'source-atop' | 'destination-over' | 'destination-in' | 'destination-out' | 'destination-atop' | 'lighter' | 'copy' | 'xor' | 'multiply' | 'screen' | 'overlay' | 'darken' | 'lighten' | 'color-dodge' | 'color-burn' | 'hard-light' | 'soft-light' | 'difference' | 'exclusion' | 'hue' | 'saturation' | 'color' | 'luminosity';
@@ -74,4 +75,4 @@ interface RadialGradientParams {
 	r1: number;
 }
 
-export { LineCap, LineJoin, CanvasCompositeOperation, FillRule, TextAlignment, TextBaseline, TextDirection, ImageSmoothingQuality, FontKerning, FontStretch, FontVariantCaps, TextRendering, PatternRepetition, CanvasContextRestorables, CanvasRenderingContextDefaults, PatternData, GradientData, LinearGradientParams, RadialGradientParams };
+export { CanvasContextType, LineCap, LineJoin, CanvasCompositeOperation, FillRule, TextAlignment, TextBaseline, TextDirection, ImageSmoothingQuality, FontKerning, FontStretch, FontVariantCaps, TextRendering, PatternRepetition, CanvasContextRestorables, CanvasRenderingContextDefaults, PatternData, GradientData, LinearGradientParams, RadialGradientParams };

@@ -1,14 +1,15 @@
 import { BitmapShader, Canvas, CanvasView, createRect, createRectF, DashPathEffect, FillType, LinearGradient, Matrix, Paint, Path, PorterDuffMode, PorterDuffXfermode, RadialGradient, Rect, Shader, Style, TileMode } from '@nativescript-community/ui-canvas';
 import { Font, ImageSource, Screen, View } from '@nativescript/core';
-import { DOMMatrix } from './DOMMatrix';
-import { Path2D } from './Path2D';
-import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, radiansToDegrees } from './helpers';
-import { CanvasCompositeOperation, CanvasContextRestorables, CanvasRenderingContextDefaults, FillRule, FontKerning, FontStretch, FontVariantCaps, GradientData, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, RadialGradientParams, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../CanvasTypes';
+import { DOMMatrix } from '../DOMMatrix';
+import { Path2D } from '../Path2D';
+import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, radiansToDegrees } from '../helpers';
+import { CanvasCompositeOperation, CanvasContextRestorables, CanvasRenderingContextDefaults, FillRule, FontKerning, FontStretch, FontVariantCaps, GradientData, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, RadialGradientParams, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../../CanvasTypes';
 import { parseFont } from '@nativescript/core/ui/styling/font';
-import { TextMetrics } from './TextMetrics';
-import { CanvasGradient } from './CanvasGradient';
-import { CanvasPattern } from './CanvasPattern';
-import { HTMLCanvasElement } from './HTMLCanvasElement';
+import { TextMetrics } from '../TextMetrics';
+import { CanvasGradient } from '../CanvasGradient';
+import { CanvasPattern } from '../CanvasPattern';
+import { HTMLCanvasElement } from '../HTMLCanvasElement';
+import { AbstractRenderingContext } from './AbstractRenderingContext';
 
 const defaults: CanvasRenderingContextDefaults = {
 	strokeStyle: '#000',
@@ -38,7 +39,7 @@ const defaults: CanvasRenderingContextDefaults = {
 	wordSpacing: '0px',
 };
 
-class CanvasRenderingContext2D {
+class CanvasRenderingContext2D extends AbstractRenderingContext {
 	/**
 	 * Not implemented
 	 */
@@ -50,8 +51,6 @@ class CanvasRenderingContext2D {
 	public textRendering: TextRendering;
 	public wordSpacing: string;
 
-	private _canvasElement: HTMLCanvasElement;
-	private _context: WeakRef<Canvas>;
 	private _path: Path2D;
 	private _stylePaint: Paint;
 	private _domMatrix: DOMMatrix;
@@ -86,8 +85,8 @@ class CanvasRenderingContext2D {
 
 	private readonly _clearPaint: Paint;
 
-	constructor(canvasView: CanvasView, canvasContext: Canvas) {
-		this._canvasElement = new HTMLCanvasElement(canvasView, canvasContext);
+	constructor(element?: HTMLCanvasElement) {
+		super(element);
 
 		this._stylePaint = new Paint();
 		this._domMatrix = new DOMMatrix();
@@ -209,7 +208,7 @@ class CanvasRenderingContext2D {
 	}
 
 	public isContextLost(): boolean {
-		return this._canvasElement.nativeContext == null;
+		return false;
 	}
 
 	public get nativeContext(): Canvas {

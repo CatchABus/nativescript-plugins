@@ -48,8 +48,5 @@
 		"**/*.{js,ts,scss,json,html}": [
 			"npx prettier --write"
 		]
-	},
-	"dependencies": {
-		"@nativescript-community/ui-canvas": "^4.6.28"
 	}
 }

@@ -1,7 +1,7 @@
 export { CanvasGradient } from './lib/CanvasGradient';
 export { CanvasPattern } from './lib/CanvasPattern';
-export { CanvasRenderingContext2D } from './lib/CanvasRenderingContext2D';
-export { get2DContextByView, getOrCreate2DContext } from './lib/context';
+export { CanvasRenderingContext2D } from './lib/contexts/CanvasRenderingContext2D';
+export { getOrCreateHTMLCanvasElement } from './lib/contextMapping';
 export { DOMMatrix } from './lib/DOMMatrix';
 export { DOMPoint } from './lib/DOMPoint';
 export { HTMLCanvasElement } from './lib/HTMLCanvasElement';

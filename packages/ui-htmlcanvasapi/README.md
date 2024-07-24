@@ -21,10 +21,11 @@ npm install @nativescript-community/ui-htmlcanvasapi
 
 ```ts
 import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
-import { getOrCreate2DContext } from '@nativescript-community/ui-htmlcanvasapi';
+import { getOrCreateHTMLCanvasElement } from '@nativescript-community/ui-htmlcanvasapi';
 
 export function onDraw(args: { object: CanvasView; canvas: Canvas }) {
-	const ctx = getOrCreate2DContext(args.object, args.canvas);
+	const htmlCanvas = getOrCreateHTMLCanvasElement(args.object, args.canvas);
+	const ctx = htmlCanvas.getContext('2d');
 
 	ctx.save();
 
