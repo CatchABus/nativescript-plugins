@@ -76,7 +76,7 @@ module.exports = {
 				},
 			},
 			'build-all': {
-				script: 'nx run all:build',
+				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
 			},
 		},
