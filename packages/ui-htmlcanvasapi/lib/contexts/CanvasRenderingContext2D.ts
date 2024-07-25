@@ -683,7 +683,7 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 		}
 
 		const matrix = new Matrix();
-
+		// @ts-ignore
 		context.setMatrix(matrix);
 		this._domMatrix._reset();
 
@@ -735,6 +735,7 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 		values[8] = 1;
 
 		matrix.setValues(values);
+		// @ts-ignore
 		context.setMatrix(matrix);
 
 		if (__ANDROID__) {
