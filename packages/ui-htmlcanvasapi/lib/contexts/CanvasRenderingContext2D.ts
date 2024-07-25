@@ -3,7 +3,7 @@ import { Font, ImageSource, Screen, View } from '@nativescript/core';
 import { DOMMatrix } from '../DOMMatrix';
 import { Path2D } from '../Path2D';
 import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, radiansToDegrees } from '../helpers';
-import { CanvasCompositeOperation, CanvasContextRestorables, CanvasRenderingContextDefaults, FillRule, FontKerning, FontStretch, FontVariantCaps, GradientData, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, RadialGradientParams, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../../CanvasTypes';
+import { CanvasCompositeOperation, CanvasContextProperties, CanvasContextRestorables, FillRule, FontKerning, FontStretch, FontVariantCaps, GradientData, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, RadialGradientParams, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../../CanvasTypes';
 import { parseFont } from '@nativescript/core/ui/styling/font';
 import { TextMetrics } from '../TextMetrics';
 import { CanvasGradient } from '../CanvasGradient';
@@ -11,7 +11,7 @@ import { CanvasPattern } from '../CanvasPattern';
 import { HTMLCanvasElement } from '../HTMLCanvasElement';
 import { AbstractRenderingContext } from './AbstractRenderingContext';
 
-const defaults: CanvasRenderingContextDefaults = {
+const defaults: CanvasContextProperties = {
 	strokeStyle: '#000',
 	fillStyle: '#000',
 	globalAlpha: 1.0,
@@ -53,7 +53,6 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 
 	private _path: Path2D;
 	private _stylePaint: Paint;
-	private _domMatrix: DOMMatrix;
 	private _font: Font;
 
 	private _letterSpacing: string;
@@ -77,6 +76,7 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 		textBaseline: defaults.textBaseline,
 		direction: defaults.direction,
 		imageSmoothingEnabled: defaults.imageSmoothingEnabled,
+		_domMatrix: new DOMMatrix(),
 		setLineDash: undefined,
 	};
 
@@ -89,7 +89,6 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 		super(element);
 
 		this._stylePaint = new Paint();
-		this._domMatrix = new DOMMatrix();
 
 		this._clearPaint = new Paint();
 		this._clearPaint.setXfermode(new PorterDuffXfermode(PorterDuffMode.CLEAR));
@@ -106,7 +105,10 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 		}
 		this._savedStates.push(this._restorableProps);
 
-		this._restorableProps = Object.assign({}, this._restorableProps);
+		this._restorableProps = {
+			...this._restorableProps,
+			_domMatrix: new DOMMatrix(this._domMatrix._getValues()),
+		};
 	}
 
 	private _applyStyleDefaults(): void {
@@ -201,6 +203,14 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 		}
 
 		return shader;
+	}
+
+	private get _domMatrix(): DOMMatrix {
+		return this._restorableProps._domMatrix;
+	}
+
+	private set _domMatrix(matrix: DOMMatrix) {
+		this._restorableProps._domMatrix = matrix;
 	}
 
 	public get canvas(): any {
@@ -616,18 +626,6 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 					}
 				}
 
-				const matrix = new Matrix();
-				// @ts-ignore
-				matrix.set(context.getMatrix());
-				matrix.getValues(this._domMatrix._getValues());
-
-				if (__ANDROID__) {
-					// dp to dip conversion
-					const deviceScale = Screen.mainScreen.scale - 1;
-					this._domMatrix.a -= deviceScale;
-					this._domMatrix.d -= deviceScale;
-				}
-
 				if (this._savedStates.length === 0) {
 					this._savedStates = null;
 				}
@@ -680,7 +678,6 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 
 		const matrix = new Matrix();
 
-		// @ts-ignore
 		context.setMatrix(matrix);
 		this._domMatrix._reset();
 
@@ -732,7 +729,6 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 		values[8] = 1;
 
 		matrix.setValues(values);
-		// @ts-ignore
 		context.setMatrix(matrix);
 
 		if (__ANDROID__) {

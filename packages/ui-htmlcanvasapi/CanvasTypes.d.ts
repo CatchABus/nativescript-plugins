@@ -1,6 +1,7 @@
 import { ImageSource } from '@nativescript/core';
 import { CanvasGradient } from './lib/CanvasGradient';
 import { CanvasPattern } from './lib/CanvasPattern';
+import { DOMMatrix } from './lib/DOMMatrix';
 
 type CanvasContextType = '2d' | 'bitmaprenderer';
 type LineCap = 'butt' | 'round' | 'square';
@@ -17,7 +18,7 @@ type FontVariantCaps = 'normal' | 'small-caps' | 'all-small-caps' | 'petite-caps
 type TextRendering = 'auto' | 'optimizeSpeed' | 'optimizeLegibility' | 'geometricPrecision';
 type PatternRepetition = 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat';
 
-type CanvasRenderingContextDefaults = CanvasContextRestorables & {
+type CanvasContextProperties = CanvasContextRestorableProperties & {
 	letterSpacing: string;
 	imageSmoothingQuality: ImageSmoothingQuality;
 	fontKerning: FontKerning;
@@ -27,7 +28,7 @@ type CanvasRenderingContextDefaults = CanvasContextRestorables & {
 	wordSpacing: string;
 };
 
-interface CanvasContextRestorables {
+type CanvasContextRestorableProperties = {
 	strokeStyle: string | CanvasGradient | CanvasPattern;
 	fillStyle: string | CanvasGradient | CanvasPattern;
 	globalAlpha: number;
@@ -46,8 +47,12 @@ interface CanvasContextRestorables {
 	textBaseline: TextBaseline;
 	direction: TextDirection;
 	imageSmoothingEnabled: boolean;
-	setLineDash?: number[];
-}
+};
+
+type CanvasContextRestorables = CanvasContextRestorableProperties & {
+	setLineDash: number[];
+	_domMatrix: DOMMatrix;
+};
 
 interface PatternData {
 	image: ImageSource | any;
@@ -75,4 +80,4 @@ interface RadialGradientParams {
 	r1: number;
 }
 
-export { CanvasContextType, LineCap, LineJoin, CanvasCompositeOperation, FillRule, TextAlignment, TextBaseline, TextDirection, ImageSmoothingQuality, FontKerning, FontStretch, FontVariantCaps, TextRendering, PatternRepetition, CanvasContextRestorables, CanvasRenderingContextDefaults, PatternData, GradientData, LinearGradientParams, RadialGradientParams };
+export { CanvasContextType, LineCap, LineJoin, CanvasCompositeOperation, FillRule, TextAlignment, TextBaseline, TextDirection, ImageSmoothingQuality, FontKerning, FontStretch, FontVariantCaps, TextRendering, PatternRepetition, CanvasContextRestorables, CanvasContextProperties, PatternData, GradientData, LinearGradientParams, RadialGradientParams };

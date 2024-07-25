@@ -19,7 +19,7 @@ class DOMMatrix {
 
 	private _values: Float32Array;
 
-	constructor(init?: number[]) {
+	constructor(init?: number[] | Float32Array) {
 		this._values = new Float32Array(matrixDefaults.length);
 		this._reset();
 
