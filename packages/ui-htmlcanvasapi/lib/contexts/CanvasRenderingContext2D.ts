@@ -386,6 +386,8 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 			return;
 		}
 
+		text += '';
+
 		this._stylePaint.setStyle(Style.FILL);
 
 		if (this.fillStyle instanceof CanvasGradient || this.fillStyle instanceof CanvasPattern) {
@@ -419,6 +421,8 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 		if (!context) {
 			return;
 		}
+
+		text += '';
 
 		this._stylePaint.setStyle(Style.STROKE);
 
@@ -529,6 +533,8 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 	}
 
 	public measureText(text: string): TextMetrics {
+		text += '';
+
 		const width = this._stylePaint.measureText(text);
 		const fontMetrics = this._stylePaint.getFontMetrics();
 		const textBounds = new Rect(0, 0, 0, 0);
@@ -871,7 +877,11 @@ class CanvasRenderingContext2D extends AbstractRenderingContext {
 	public set shadowColor(val: string) {
 		this._restorableProps.shadowColor = val;
 
-		this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, val);
+		if (val != null) {
+			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, val);
+		} else {
+			this._stylePaint.setShadowLayer(0, 0, 0, '#000');
+		}
 	}
 
 	public get globalCompositeOperation(): CanvasCompositeOperation {
