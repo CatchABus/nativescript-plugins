@@ -1,4 +1,4 @@
-import { Matrix, Path, RectF } from '@nativescript-community/ui-canvas';
+import { Direction, Matrix, Path, RectF } from '@nativescript-community/ui-canvas';
 import { DOMMatrix } from './DOMMatrix';
 import { getVectorAngle, normalizeVector, radiansToDegrees } from './helpers';
 
@@ -198,7 +198,7 @@ class Path2D {
 		const right = x + width;
 		const bottom = y + height;
 
-		this._path.addRect(new RectF(x, y, right, bottom), android.graphics.Path.Direction.CW);
+		this._path.addRect(new RectF(x, y, right, bottom), Direction.CW);
 		this._lastPoint = { x: right, y: bottom };
 	}
 
@@ -242,7 +242,7 @@ class Path2D {
 			}
 		}
 
-		this._path.addRoundRect(new RectF(x, y, right, bottom), nativeRadii, android.graphics.Path.Direction.CW);
+		this._path.addRoundRect(new RectF(x, y, right, bottom), nativeRadii, Direction.CW);
 		this._lastPoint = { x: right, y: bottom };
 	}
 
