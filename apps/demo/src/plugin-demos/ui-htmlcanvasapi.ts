@@ -65,9 +65,17 @@ export function onDraw(args: { object: CanvasView; canvas: Canvas }) {
 	ctx.globalCompositeOperation = 'xor';
 
 	ctx.fillStyle = 'blue';
-	ctx.fillRect(110, 510, 100, 100);
+	ctx.fillRect(20, 510, 100, 100);
 
 	ctx.fillStyle = 'red';
-	ctx.fillRect(150, 550, 100, 100);
+	ctx.fillRect(60, 550, 100, 100);
+	ctx.restore();
+
+	ctx.save();
+	ctx.strokeStyle = 'blue';
+	ctx.lineWidth = 3;
+	ctx.beginPath();
+	ctx.roundRect(200, 530, 150, 100, [40]);
+	ctx.stroke();
 	ctx.restore();
 }
