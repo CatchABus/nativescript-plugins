@@ -4,6 +4,10 @@ import { HTMLCanvasElement } from './HTMLCanvasElement';
 
 const canvasElementMap = new WeakMap<CanvasView, HTMLCanvasElement>();
 
+function getHTMLCanvasElementByView(view: CanvasView): HTMLCanvasElement {
+	return canvasElementMap.get(view);
+}
+
 function getOrCreateHTMLCanvasElement(view: CanvasView, canvas: Canvas): HTMLCanvasElement {
 	if (canvasElementMap.has(view)) {
 		return canvasElementMap.get(view);
@@ -15,4 +19,4 @@ function getOrCreateHTMLCanvasElement(view: CanvasView, canvas: Canvas): HTMLCan
 	return element;
 }
 
-export { getOrCreateHTMLCanvasElement };
+export { getHTMLCanvasElementByView, getOrCreateHTMLCanvasElement };
