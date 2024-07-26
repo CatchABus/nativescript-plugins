@@ -72,7 +72,9 @@ class Path2D {
 			}
 		}
 
-		this._path.addArc(rect, startAngleDeg, sweepAngleDeg);
+		// We use arcTo as this is how CanvasRenderingContext2D.arc() acts
+		// See https://developer.android.com/reference/android/graphics/Path#arcTo(android.graphics.RectF,%20float,%20float)
+		this._path.arcTo(rect, startAngleDeg, sweepAngleDeg);
 		this._lastPoint = { x: endX, y: endY };
 	}
 
