@@ -56,18 +56,6 @@ class NSHTMLCanvasElement extends Observable {
 		return this._contextRef.deref();
 	}
 
-	public get style(): Style {
-		const view = this.view;
-		return view != null ? view.style : null;
-	}
-
-	public set style(val: Style) {
-		const view = this.view;
-		if (view) {
-			view.style = val;
-		}
-	}
-
 	get width(): number {
 		const context = this.nativeContext;
 		return context != null ? context.getWidth() : 0;
