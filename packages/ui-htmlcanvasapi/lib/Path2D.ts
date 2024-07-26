@@ -244,7 +244,8 @@ class Path2D {
 			}
 		}
 
-		this._path.addRoundRect(new RectF(x, y, right, bottom), nativeRadii, Direction.CW);
+		// iOS does not support multiple radii
+		this._path.addRoundRect(new RectF(x, y, right, bottom), __ANDROID__ ? nativeRadii : [nativeRadii[0], nativeRadii[1]], Direction.CW);
 		this._lastPoint = { x: right, y: bottom };
 	}
 
