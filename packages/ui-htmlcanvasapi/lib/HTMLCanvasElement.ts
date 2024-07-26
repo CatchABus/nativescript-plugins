@@ -1,5 +1,5 @@
 import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
-import { Observable } from '@nativescript/core';
+import { Observable, Style } from '@nativescript/core';
 import { CanvasRenderingContext2D } from './contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from './contexts/ImageBitmapRenderingContext';
 import { CanvasContextType } from '../CanvasTypes';
@@ -54,6 +54,18 @@ class NSHTMLCanvasElement extends Observable {
 
 	public get nativeContext(): Canvas {
 		return this._contextRef.deref();
+	}
+
+	public get style(): Style {
+		const view = this.view;
+		return view != null ? view.style : null;
+	}
+
+	public set style(val: Style) {
+		const view = this.view;
+		if (view) {
+			view.style = val;
+		}
 	}
 
 	get width(): number {
