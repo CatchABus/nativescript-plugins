@@ -3,6 +3,7 @@ import { Observable, Style } from '@nativescript/core';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
 import { CanvasContextType } from '../../CanvasTypes';
+import { OffscreenCanvas } from './OffscreenCanvas';
 
 class NSHTMLCanvasElement extends Observable {
 	private readonly _canvasViewRef: WeakRef<CanvasView>;
@@ -10,6 +11,7 @@ class NSHTMLCanvasElement extends Observable {
 
 	private _offscreenContext: Canvas;
 	private _context: CanvasRenderingContext2D | ImageBitmapRenderingContext;
+	private _isControlledByOffscreen: boolean;
 
 	constructor(canvasView?: CanvasView, canvasContext?: Canvas) {
 		super();
@@ -22,6 +24,10 @@ class NSHTMLCanvasElement extends Observable {
 	public getContext(contextId: 'bitmaprenderer'): ImageBitmapRenderingContext | null;
 
 	public getContext(contextId: CanvasContextType): any {
+		if (this._isControlledByOffscreen) {
+			throw new Error(`Failed to execute 'getContext' on 'HTMLCanvasElement': Cannot get context from a canvas that has transferred its control to offscreen.`);
+		}
+
 		const self = this;
 
 		let cl;
@@ -79,6 +85,19 @@ class NSHTMLCanvasElement extends Observable {
 		const nativeContext = this._nativeContextRef.deref();
 		const rect = createRectF(0, 0, this._offscreenContext.getWidth(), this._offscreenContext.getHeight());
 		nativeContext.drawBitmap(this._offscreenContext.getImage(), null, rect, null);
+	}
+
+	public transferControlToOffscreen(): OffscreenCanvas {
+		if (this._context != null) {
+			throw new Error(`Failed to execute 'transferControlToOffscreen' on 'HTMLCanvasElement': Cannot transfer control from a canvas that has a rendering context.`);
+		}
+
+		if (this._isControlledByOffscreen) {
+			throw new Error(`Failed to execute 'transferControlToOffscreen' on 'HTMLCanvasElement': Cannot transfer control from a canvas for more than one time.`);
+		}
+
+		this._isControlledByOffscreen = true;
+		return new OffscreenCanvas(this.width, this.height);
 	}
 
 	public get view(): CanvasView {
