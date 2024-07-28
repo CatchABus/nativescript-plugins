@@ -1,6 +1,6 @@
 import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
 import { CanvasRenderingContext2D } from './contexts/CanvasRenderingContext2D';
-import { HTMLCanvasElement } from './HTMLCanvasElement';
+import { HTMLCanvasElement } from './elements/HTMLCanvasElement';
 
 const canvasElementMap = new WeakMap<CanvasView, HTMLCanvasElement>();
 

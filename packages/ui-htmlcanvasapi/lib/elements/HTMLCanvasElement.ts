@@ -1,13 +1,12 @@
 import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
 import { Observable, Style } from '@nativescript/core';
-import { CanvasRenderingContext2D } from './contexts/CanvasRenderingContext2D';
-import { ImageBitmapRenderingContext } from './contexts/ImageBitmapRenderingContext';
-import { CanvasContextType } from '../CanvasTypes';
-import { AbstractRenderingContext } from './contexts/AbstractRenderingContext';
+import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
+import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
+import { CanvasContextType } from '../../CanvasTypes';
 
 class NSHTMLCanvasElement extends Observable {
 	private readonly _canvasViewRef: WeakRef<CanvasView>;
-	private readonly _contextRef: WeakRef<Canvas>;
+	private readonly _nativeContextRef: WeakRef<Canvas>;
 
 	private _offscreenContext: Canvas;
 	private _context: CanvasRenderingContext2D | ImageBitmapRenderingContext;
@@ -16,14 +15,16 @@ class NSHTMLCanvasElement extends Observable {
 		super();
 
 		this._canvasViewRef = new WeakRef(canvasView);
-		this._contextRef = new WeakRef(canvasContext);
+		this._nativeContextRef = new WeakRef(canvasContext);
 	}
 
 	public getContext(contextId: '2d'): CanvasRenderingContext2D | null;
 	public getContext(contextId: 'bitmaprenderer'): ImageBitmapRenderingContext | null;
 
 	public getContext(contextId: CanvasContextType): any {
-		let cl: typeof AbstractRenderingContext;
+		const self = this;
+
+		let cl;
 
 		switch (contextId) {
 			case '2d':
@@ -45,7 +46,14 @@ class NSHTMLCanvasElement extends Observable {
 			return this._context;
 		}
 
-		this._context = new cl(this) as any;
+		const context = new cl();
+		Object.defineProperty(context, 'canvas', {
+			get() {
+				return self;
+			},
+		});
+
+		this._context = context;
 		return this._context;
 	}
 
@@ -68,7 +76,7 @@ class NSHTMLCanvasElement extends Observable {
 			return;
 		}
 
-		const nativeContext = this._contextRef.deref();
+		const nativeContext = this._nativeContextRef.deref();
 		const rect = createRectF(0, 0, this._offscreenContext.getWidth(), this._offscreenContext.getHeight());
 		nativeContext.drawBitmap(this._offscreenContext.getImage(), null, rect, null);
 	}
@@ -78,7 +86,7 @@ class NSHTMLCanvasElement extends Observable {
 	}
 
 	public get nativeContext(): Canvas {
-		return this._offscreenContext != null ? this._offscreenContext : this._contextRef.deref();
+		return this._offscreenContext != null ? this._offscreenContext : this._nativeContextRef.deref();
 	}
 
 	get width(): number {

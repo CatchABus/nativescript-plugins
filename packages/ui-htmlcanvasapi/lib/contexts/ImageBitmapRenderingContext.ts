@@ -1,16 +1,18 @@
 import { ImageSource } from '@nativescript/core';
-import type { HTMLCanvasElement } from '../HTMLCanvasElement';
-import { AbstractRenderingContext } from './AbstractRenderingContext';
+import type { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
+import { OffscreenCanvas } from '../elements/OffscreenCanvas';
+import { createRectF } from '@nativescript-community/ui-canvas';
 
-class NSImageBitmapRenderingContext extends AbstractRenderingContext {
-	constructor(element?: HTMLCanvasElement) {
-		super(element);
+class NSImageBitmapRenderingContext {
+	private get canvas(): any {
+		throw new TypeError('Illegal invocation');
 	}
 
 	public transferFromImageBitmap(imageSource: ImageSource | any): void {
-		const nativeContext = this._canvasElement.nativeContext;
+		const nativeContext = this.canvas.nativeContext;
 		if (nativeContext) {
-			nativeContext.drawBitmap(imageSource, 0, 0, null as any);
+			const rect = createRectF(0, 0, nativeContext.getWidth(), nativeContext.getHeight());
+			nativeContext.drawBitmap(imageSource, null, rect, null);
 		}
 	}
 }
