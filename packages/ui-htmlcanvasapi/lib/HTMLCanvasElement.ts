@@ -1,4 +1,4 @@
-import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
+import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
 import { Observable, Style } from '@nativescript/core';
 import { CanvasRenderingContext2D } from './contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from './contexts/ImageBitmapRenderingContext';
@@ -9,6 +9,7 @@ class NSHTMLCanvasElement extends Observable {
 	private readonly _canvasViewRef: WeakRef<CanvasView>;
 	private readonly _contextRef: WeakRef<Canvas>;
 
+	private _offscreenContext: Canvas;
 	private _context: CanvasRenderingContext2D | ImageBitmapRenderingContext;
 
 	constructor(canvasView?: CanvasView, canvasContext?: Canvas) {
@@ -48,12 +49,36 @@ class NSHTMLCanvasElement extends Observable {
 		return this._context;
 	}
 
+	public enableOffscreenBuffer(): void {
+		if (this._offscreenContext == null) {
+			this._offscreenContext = new Canvas(this.width, this.height);
+		}
+	}
+
+	public disableOffscreenBuffer(): void {
+		if (this._offscreenContext != null) {
+			this._offscreenContext.release();
+			this._offscreenContext = null;
+		}
+	}
+
+	public drawOffscreenBuffer(): void {
+		if (this._offscreenContext == null) {
+			console.warn('This element does not have an offscreen buffer to draw');
+			return;
+		}
+
+		const nativeContext = this._contextRef.deref();
+		const rect = createRectF(0, 0, this._offscreenContext.getWidth(), this._offscreenContext.getHeight());
+		nativeContext.drawBitmap(this._offscreenContext.getImage(), null, rect, null);
+	}
+
 	public get view(): CanvasView {
 		return this._canvasViewRef.deref();
 	}
 
 	public get nativeContext(): Canvas {
-		return this._contextRef.deref();
+		return this._offscreenContext != null ? this._offscreenContext : this._contextRef.deref();
 	}
 
 	get width(): number {
