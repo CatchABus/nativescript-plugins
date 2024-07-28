@@ -1,5 +1,5 @@
-import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
-import { ImageSource, Observable, Style } from '@nativescript/core';
+import { Canvas } from '@nativescript-community/ui-canvas';
+import { ImageSource, Observable, Screen } from '@nativescript/core';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
 import { CanvasContextType } from '../../CanvasTypes';
 import { OffscreenCanvasRenderingContext2D } from '../contexts/OffscreenCanvasRenderingContext2D';
@@ -12,7 +12,8 @@ class NSOffscreenCanvas extends Observable {
 	constructor(width: number, height: number) {
 		super();
 
-		this._nativeContext = new Canvas(width, height);
+		const scale = Screen.mainScreen.scale;
+		this._nativeContext = new Canvas(width * scale, height * scale);
 	}
 
 	public getContext(contextId: '2d'): OffscreenCanvasRenderingContext2D | null;

@@ -1,5 +1,5 @@
 import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
-import { Observable, Style } from '@nativescript/core';
+import { Observable, Screen } from '@nativescript/core';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
 import { CanvasContextType } from '../../CanvasTypes';
@@ -65,7 +65,8 @@ class NSHTMLCanvasElement extends Observable {
 
 	public enableOffscreenBuffer(): void {
 		if (this._offscreenContext == null) {
-			this._offscreenContext = new Canvas(this.width, this.height);
+			const scale = Screen.mainScreen.scale;
+			this._offscreenContext = new Canvas(this.width * scale, this.height * scale);
 		}
 	}
 
