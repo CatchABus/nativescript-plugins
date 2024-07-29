@@ -5,15 +5,29 @@ import { CanvasContextType } from '../../CanvasTypes';
 import { OffscreenCanvasRenderingContext2D } from '../contexts/OffscreenCanvasRenderingContext2D';
 
 class NSOffscreenCanvas extends Observable {
-	private readonly _nativeContext: Canvas;
-
+	private _nativeContext: Canvas;
 	private _context: OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext;
+	private _width: number;
+	private _height: number;
 
 	constructor(width: number, height: number) {
 		super();
 
+		this._width = width;
+		this._height = height;
+
 		const scale = Screen.mainScreen.scale;
 		this._nativeContext = new Canvas(width * scale, height * scale);
+	}
+
+	private _updateNativeContext(): void {
+		const scale = Screen.mainScreen.scale;
+
+		if (this._nativeContext != null) {
+			this._nativeContext.release();
+		}
+
+		this._nativeContext = new Canvas(this._width * scale, this._height * scale);
 	}
 
 	public getContext(contextId: '2d'): OffscreenCanvasRenderingContext2D | null;
@@ -59,16 +73,41 @@ class NSOffscreenCanvas extends Observable {
 		return new ImageSource(this._nativeContext.getImage());
 	}
 
+	public convertToBlob(options: any): Blob {
+		console.warn('Method convertToBlob is not implemented');
+		return null;
+	}
+
 	public get nativeContext(): Canvas {
 		return this._nativeContext;
 	}
 
 	get width(): number {
-		return this._nativeContext != null ? this._nativeContext.getWidth() : 0;
+		return this._width;
+	}
+
+	set width(val: number) {
+		const oldVal = this._width;
+
+		this._width = val;
+
+		if (this._width !== oldVal) {
+			this._updateNativeContext();
+		}
 	}
 
 	get height(): number {
-		return this._nativeContext != null ? this._nativeContext.getHeight() : 0;
+		return this._height;
+	}
+
+	set height(val: number) {
+		const oldVal = this._height;
+
+		this._height = val;
+
+		if (this._height !== oldVal) {
+			this._updateNativeContext();
+		}
 	}
 }
 

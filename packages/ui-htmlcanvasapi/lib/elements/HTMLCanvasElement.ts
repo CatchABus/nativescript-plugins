@@ -1,5 +1,5 @@
 import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
-import { Observable, Screen } from '@nativescript/core';
+import { Observable, Screen, Utils } from '@nativescript/core';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
 import { CanvasContextType } from '../../CanvasTypes';
@@ -84,7 +84,7 @@ class NSHTMLCanvasElement extends Observable {
 		}
 
 		const nativeContext = this._nativeContextRef.deref();
-		const rect = createRectF(0, 0, this._offscreenContext.getWidth(), this._offscreenContext.getHeight());
+		const rect = createRectF(0, 0, this.width, this.height);
 		nativeContext.drawBitmap(this._offscreenContext.getImage(), null, rect, null);
 	}
 
@@ -110,8 +110,8 @@ class NSHTMLCanvasElement extends Observable {
 	}
 
 	get width(): number {
-		const context = this.nativeContext;
-		return context != null ? context.getWidth() : 0;
+		const view = this.view;
+		return view != null ? Utils.layout.toDeviceIndependentPixels(view.getMeasuredWidth()) : 0;
 	}
 
 	set width(val: number) {
@@ -122,8 +122,8 @@ class NSHTMLCanvasElement extends Observable {
 	}
 
 	get height(): number {
-		const context = this.nativeContext;
-		return context != null ? context.getHeight() : 0;
+		const view = this.view;
+		return view != null ? Utils.layout.toDeviceIndependentPixels(view.getMeasuredHeight()) : 0;
 	}
 
 	set height(val: number) {
