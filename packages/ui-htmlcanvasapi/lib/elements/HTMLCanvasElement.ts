@@ -1,9 +1,10 @@
 import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
-import { Observable, Screen, Utils } from '@nativescript/core';
+import { ImageSource, Observable, Screen, Utils } from '@nativescript/core';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
 import { CanvasContextType } from '../../CanvasTypes';
 import { OffscreenCanvas } from './OffscreenCanvas';
+import { SUPPORTED_CANVAS_IMAGE_FORMATS } from '../helpers';
 
 class NSHTMLCanvasElement extends Observable {
 	private readonly _canvasViewRef: WeakRef<CanvasView>;
@@ -20,10 +21,10 @@ class NSHTMLCanvasElement extends Observable {
 		this._nativeContextRef = new WeakRef(canvasContext);
 	}
 
-	public getContext(contextId: '2d'): CanvasRenderingContext2D | null;
-	public getContext(contextId: 'bitmaprenderer'): ImageBitmapRenderingContext | null;
+	public getContext(contextId: '2d', contextAttributes?: any): CanvasRenderingContext2D | null;
+	public getContext(contextId: 'bitmaprenderer', contextAttributes?: any): ImageBitmapRenderingContext | null;
 
-	public getContext(contextId: CanvasContextType): any {
+	public getContext(contextId: CanvasContextType, contextAttributes?: any): any {
 		if (this._isControlledByOffscreen) {
 			throw new Error(`Failed to execute 'getContext' on 'HTMLCanvasElement': Cannot get context from a canvas that has transferred its control to offscreen.`);
 		}
@@ -99,6 +100,30 @@ class NSHTMLCanvasElement extends Observable {
 
 		this._isControlledByOffscreen = true;
 		return new OffscreenCanvas(this.width, this.height);
+	}
+
+	public toDataURL(type?: string, encoderOptions?: number): string {
+		if (this._offscreenContext == null) {
+			console.warn(`'Method 'toDataURL' can only be used with offscreen buffer enabled. Please use 'enableOffscreenBuffer' and 'drawOffscreenBuffer' methods`);
+			return null;
+		}
+
+		const prefix = 'data:';
+
+		if (this.width === 0 || this.height === 0) {
+			return prefix;
+		}
+
+		if (type == null || !SUPPORTED_CANVAS_IMAGE_FORMATS.includes(type)) {
+			type = 'image/png';
+		}
+
+		const format = type != null ? type.split('/')[1] : 'png';
+		const quality = encoderOptions ? encoderOptions * 100 : 100;
+		const imgSource = new ImageSource(this._offscreenContext.getImage());
+		const base64String = imgSource.toBase64String(format as any, quality);
+
+		return `${prefix + type};base64,${base64String}`;
 	}
 
 	public get view(): CanvasView {

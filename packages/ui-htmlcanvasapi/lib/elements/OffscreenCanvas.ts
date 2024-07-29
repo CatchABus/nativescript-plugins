@@ -30,10 +30,10 @@ class NSOffscreenCanvas extends Observable {
 		this._nativeContext = new Canvas(this._width * scale, this._height * scale);
 	}
 
-	public getContext(contextId: '2d'): OffscreenCanvasRenderingContext2D | null;
-	public getContext(contextId: 'bitmaprenderer'): ImageBitmapRenderingContext | null;
+	public getContext(contextId: '2d', contextAttributes?: any): OffscreenCanvasRenderingContext2D | null;
+	public getContext(contextId: 'bitmaprenderer', contextAttributes?: any): ImageBitmapRenderingContext | null;
 
-	public getContext(contextId: CanvasContextType): any {
+	public getContext(contextId: CanvasContextType, contextAttributes?: any): any {
 		const self = this;
 
 		let cl;
