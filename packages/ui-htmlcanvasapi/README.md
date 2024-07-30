@@ -22,6 +22,17 @@ npm install @nativescript-community/ui-htmlcanvasapi
 ```
 
 ## Usage
+Install polyfills (optional)
+```ts
+import { Application } from '@nativescript/core';
+import { installPolyfills } from '@nativescript-community/ui-htmlcanvasapi';
+
+installPolyfills();
+
+Application.run({ moduleName: 'app-root' });
+```
+
+Then, set up your view
 ```xml
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:canvas="@nativescript-community/ui-canvas">
   <Page.actionBar>
@@ -29,7 +40,7 @@ npm install @nativescript-community/ui-htmlcanvasapi
     </ActionBar>
   </Page.actionBar>
   <StackLayout class="p-20">
-    <canvas:CanvasView width="400" height="400" hardwareAccelerated="true" draw="onDraw"/>
+    <canvas:CanvasView width="400" height="400" hardwareAccelerated="false" draw="onDraw"/>
   </StackLayout>
 </Page>
 ```
@@ -79,6 +90,36 @@ function updateGraph(canvasView: CanvasView) {
 }
 ```
 
+Sometimes, there might be a need to draw things offscreen but keep reference to the view and eventually want to draw everything there.  
+`HTMLCanvasElement` includes these custom methods:
+- enableOffscreenBuffer
+- drawOffscreenBuffer
+- disableOffscreenBuffer
+
+
+```ts
+const htmlcanvas = getOrCreateHTMLCanvasElement(args.object, args.canvas);
+const ctx = htmlcanvas.getContext('2d');
+
+htmlcanvas.enableOffscreenBuffer();
+
+ctx.save();
+ctx.fillStyle = 'yellow';
+ctx.fillRect(10, 10, 200, 100);
+ctx.transform(1, 0.5, -0.5, 1, 30, 10);
+ctx.fillStyle = 'red';
+ctx.fillRect(10, 10, 200, 100);
+ctx.transform(1, 0.5, -0.5, 1, 30, 10);
+ctx.fillStyle = 'blue';
+ctx.fillRect(10, 10, 200, 100);
+ctx.restore();
+
+htmlcanvas.drawOffscreenBuffer();
+// If buffer is no longer needed, just discard it
+htmlcanvas.disableOffscreenBuffer();
+```
+
+Note: This state is required to perform actions like `toDataURL`.
 
 ## License
 

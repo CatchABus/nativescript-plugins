@@ -1,6 +1,7 @@
 import { Direction, Matrix, Path, RectF } from '@nativescript-community/ui-canvas';
 import { DOMMatrix } from './DOMMatrix';
 import { getVectorAngle, normalizeVector, radiansToDegrees } from './helpers';
+import { SVGPathData } from 'svg-pathdata';
 
 interface Point {
 	x: number;
@@ -8,9 +9,63 @@ interface Point {
 }
 
 class Path2D {
-	private readonly _path: Path = new Path();
+	private readonly _path: Path;
 
-	private _lastPoint: Point;
+	private _lastPoint: Point = { x: 0, y: 0 };
+
+	constructor(path?: Path2D | string) {
+		if (path instanceof Path2D) {
+			this._path = new Path(path.native);
+
+			if (path._lastPoint) {
+				this._lastPoint = path._lastPoint;
+			}
+		} else if (typeof path === 'string') {
+			this._path = new Path();
+			this._drawSVGPath(path);
+		} else {
+			this._path = new Path();
+		}
+	}
+
+	private _drawSVGPath(path: string) {
+		const pathData = new SVGPathData(path).toAbs();
+
+		for (const command of pathData.commands) {
+			switch (command.type) {
+				case SVGPathData.LINE_TO:
+					this.lineTo(command.x, command.y);
+					break;
+				case SVGPathData.HORIZ_LINE_TO:
+					this.lineTo(command.x, this._lastPoint.y);
+					break;
+				case SVGPathData.VERT_LINE_TO:
+					this.lineTo(this._lastPoint.x, command.y);
+					break;
+				case SVGPathData.MOVE_TO:
+					this.moveTo(command.x, command.y);
+					break;
+				case SVGPathData.CURVE_TO:
+					this.bezierCurveTo(command.x1, command.y1, command.x2, command.y2, command.x, command.y);
+					break;
+				case SVGPathData.QUAD_TO:
+					this.quadraticCurveTo(command.x1, command.y1, command.x, command.y);
+					break;
+				case SVGPathData.SMOOTH_QUAD_TO:
+					console.warn('SVG smooth quad curve is not currently implemented');
+					break;
+				case SVGPathData.SMOOTH_CURVE_TO:
+					console.warn('SVG smooth curve is not currently implemented');
+					break;
+				case SVGPathData.CLOSE_PATH:
+					this.closePath();
+					break;
+				case SVGPathData.ARC:
+					console.warn('SVG elliptic arc is not currently implemented');
+					break;
+			}
+		}
+	}
 
 	public addPath(path: Path2D, matrix?: DOMMatrix): void {
 		if (path == null) {
