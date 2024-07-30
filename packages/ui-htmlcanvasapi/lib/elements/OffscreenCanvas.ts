@@ -16,8 +16,7 @@ class NSOffscreenCanvas extends Observable {
 		this._width = width;
 		this._height = height;
 
-		const scale = Screen.mainScreen.scale;
-		this._nativeContext = new Canvas(width * scale, height * scale);
+		this._updateNativeContext();
 	}
 
 	private _updateNativeContext(): void {
@@ -28,6 +27,7 @@ class NSOffscreenCanvas extends Observable {
 		}
 
 		this._nativeContext = new Canvas(this._width * scale, this._height * scale);
+		this._nativeContext.scale(scale, scale);
 	}
 
 	public getContext(contextId: '2d', contextAttributes?: any): OffscreenCanvasRenderingContext2D | null;

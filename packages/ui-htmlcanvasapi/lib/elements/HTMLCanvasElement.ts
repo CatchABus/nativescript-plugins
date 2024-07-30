@@ -68,6 +68,7 @@ class NSHTMLCanvasElement extends Observable {
 		if (this._offscreenContext == null) {
 			const scale = Screen.mainScreen.scale;
 			this._offscreenContext = new Canvas(this.width * scale, this.height * scale);
+			this._offscreenContext.scale(scale, scale);
 		}
 	}
 
