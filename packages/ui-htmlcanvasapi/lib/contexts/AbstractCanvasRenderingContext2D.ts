@@ -211,7 +211,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		this._restorableProps._domMatrix = matrix;
 	}
 
-	public get canvas(): any {
+	public get canvas(): HTMLCanvasElement | OffscreenCanvas {
 		throw new TypeError('Illegal invocation');
 	}
 
@@ -676,7 +676,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		context.setMatrix(new Matrix());
 		this._domMatrix._reset();
 
-		if (__ANDROID__) {
+		if (__ANDROID__ || this.canvas.isOffscreenBufferEnabled()) {
 			// dp to dip conversion
 			const { scale } = Screen.mainScreen;
 			context.scale(scale, scale);
@@ -726,7 +726,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		matrix.setValues(values);
 		context.setMatrix(matrix);
 
-		if (__ANDROID__) {
+		if (__ANDROID__ || this.canvas.isOffscreenBufferEnabled()) {
 			// dp to dip conversion
 			const { scale } = Screen.mainScreen;
 			context.scale(scale, scale);

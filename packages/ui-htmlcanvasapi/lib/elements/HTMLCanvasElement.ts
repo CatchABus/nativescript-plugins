@@ -79,6 +79,10 @@ class NSHTMLCanvasElement extends Observable {
 		}
 	}
 
+	public isOffscreenBufferEnabled(): boolean {
+		return !!this._offscreenContext;
+	}
+
 	public drawOffscreenBuffer(): void {
 		if (this._offscreenContext == null) {
 			console.warn('This element does not have an offscreen buffer to draw');

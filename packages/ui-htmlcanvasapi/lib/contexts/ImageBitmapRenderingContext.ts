@@ -1,10 +1,10 @@
 import { ImageSource } from '@nativescript/core';
-import type { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
+import { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
 import { OffscreenCanvas } from '../elements/OffscreenCanvas';
 import { createRectF } from '@nativescript-community/ui-canvas';
 
 class NSImageBitmapRenderingContext {
-	private get canvas(): any {
+	private get canvas(): HTMLCanvasElement | OffscreenCanvas {
 		throw new TypeError('Illegal invocation');
 	}
 

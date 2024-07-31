@@ -78,6 +78,10 @@ class NSOffscreenCanvas extends Observable {
 		return null;
 	}
 
+	public isOffscreenBufferEnabled(): boolean {
+		return true;
+	}
+
 	public get nativeContext(): Canvas {
 		return this._nativeContext;
 	}

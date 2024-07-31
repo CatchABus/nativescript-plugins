@@ -93,8 +93,9 @@ function updateGraph(canvasView: CanvasView) {
 Sometimes, there might be a need to draw things offscreen but keep reference to the view and eventually want to draw everything there.  
 `HTMLCanvasElement` includes these custom methods:
 - enableOffscreenBuffer
-- drawOffscreenBuffer
 - disableOffscreenBuffer
+- isOffscreenBufferEnabled
+- drawOffscreenBuffer
 
 
 ```ts
