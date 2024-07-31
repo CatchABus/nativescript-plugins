@@ -144,7 +144,6 @@ abstract class AbstractCanvasRenderingContext2D {
 	private _createNativeShader(drawStyle: CanvasGradient | CanvasPattern): Shader {
 		let shader: Shader;
 
-		console.log(drawStyle);
 		if (drawStyle instanceof CanvasGradient) {
 			const { type, params } = drawStyle._getGradientData();
 
