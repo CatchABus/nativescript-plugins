@@ -215,7 +215,7 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public isContextLost(): boolean {
-		return false;
+		return this.nativeContext == null;
 	}
 
 	public get nativeContext(): Canvas {
