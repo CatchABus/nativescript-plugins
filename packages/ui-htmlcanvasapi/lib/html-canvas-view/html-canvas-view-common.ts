@@ -4,19 +4,6 @@ import { CanvasContextType } from '../../CanvasTypes';
 import { SUPPORTED_CANVAS_IMAGE_FORMATS } from '../helpers';
 
 const styleProxyHandler: ProxyHandler<Style> = {
-	get(target: Style, name: string, receiver) {
-		const view = target.view as HTMLCanvasViewBase;
-		if (view != null) {
-			if (name === 'width') {
-				return Utils.layout.toDeviceIndependentPixels(view.getMeasuredWidth());
-			}
-
-			if (name === 'height') {
-				return Utils.layout.toDeviceIndependentPixels(view.getMeasuredHeight());
-			}
-		}
-		return Reflect.get(target, name, receiver);
-	},
 	set(target: Style, name: string, value: any) {
 		if (name === 'width' || name === 'height') {
 			target[name] = typeof value === 'string' && value.endsWith('px') ? parseFloat(value) : value;
@@ -170,6 +157,24 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 
 	override set style(val: Style) {
 		this._mStyle = new Proxy(val, styleProxyHandler);
+	}
+
+	// @ts-ignore
+	get width(): number {
+		return Utils.layout.toDeviceIndependentPixels(this.getMeasuredWidth());
+	}
+
+	set width(val: number) {
+		this.style.width = val;
+	}
+
+	// @ts-ignore
+	get height(): number {
+		return Utils.layout.toDeviceIndependentPixels(this.getMeasuredHeight());
+	}
+
+	set height(val: number) {
+		this.style.height = val;
 	}
 }
 
