@@ -12,7 +12,7 @@ const styleProxyHandler: ProxyHandler<Style> = {
 			}
 
 			if (name === 'height') {
-				return Utils.layout.toDeviceIndependentPixels(view.getMeasuredWidth());
+				return Utils.layout.toDeviceIndependentPixels(view.getMeasuredHeight());
 			}
 		}
 		return Reflect.get(target, name, receiver);
@@ -106,7 +106,7 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 
 	public drawOffscreenBuffer(): void {
 		if (this._offscreenContext == null) {
-			console.warn('This element does not have an offscreen buffer to draw');
+			console.warn(`Offscreen buffer is currently disable. Please call 'enableOffscreenBuffer()' and try again`);
 			return;
 		}
 
@@ -155,7 +155,7 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 	}
 
 	public get nativeContext(): Canvas {
-		return this._lastCanvas;
+		return this._offscreenContext != null ? this._offscreenContext : this._lastCanvas;
 	}
 
 	public override onDraw(canvas: Canvas) {
