@@ -30,7 +30,6 @@ const styleProxyHandler: ProxyHandler<Style> = {
 
 abstract class HTMLCanvasViewBase extends CanvasView {
 	private _mStyle: Style;
-	private readonly _nativeContextRef: WeakRef<Canvas>;
 
 	private _lastCanvas: Canvas;
 	private _offscreenContext: Canvas;
@@ -111,13 +110,15 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 			return;
 		}
 
-		const nativeContext = this._nativeContextRef.deref();
-		const rect = createRectF(0, 0, this.width as number, this.height as number);
-		nativeContext.drawBitmap(this._offscreenContext.getImage(), null, rect, null);
+		const nativeContext = this._lastCanvas;
+		if (nativeContext) {
+			const rect = createRectF(0, 0, this.width as number, this.height as number);
+			nativeContext.drawBitmap(this._offscreenContext.getImage(), null, rect, null);
+		}
 	}
 
 	public transferControlToOffscreen(): OffscreenCanvas {
-		if (this._context != null) {
+		if (this._context2D != null) {
 			throw new Error(`Failed to execute 'transferControlToOffscreen' on 'HTMLCanvasElement': Cannot transfer control from a canvas that has a rendering context.`);
 		}
 
