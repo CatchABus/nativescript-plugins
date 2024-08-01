@@ -8,7 +8,6 @@ import { parseFont } from '@nativescript/core/ui/styling/font';
 import { TextMetrics } from '../TextMetrics';
 import { CanvasGradient } from '../CanvasGradient';
 import { CanvasPattern } from '../CanvasPattern';
-import { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
 import { AbstractCanvasRenderingContext2D } from './AbstractCanvasRenderingContext2D';
 import { OffscreenCanvas } from '../elements/OffscreenCanvas';
 

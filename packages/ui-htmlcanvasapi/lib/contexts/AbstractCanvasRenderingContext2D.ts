@@ -8,8 +8,8 @@ import { parseFont } from '@nativescript/core/ui/styling/font';
 import { TextMetrics } from '../TextMetrics';
 import { CanvasGradient } from '../CanvasGradient';
 import { CanvasPattern } from '../CanvasPattern';
-import { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
 import { OffscreenCanvas } from '../elements/OffscreenCanvas';
+import { HTMLCanvasView } from '../html-canvas-view';
 
 const defaults: CanvasContextProperties = {
 	strokeStyle: '#000',
@@ -210,7 +210,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		this._restorableProps._domMatrix = matrix;
 	}
 
-	public get canvas(): HTMLCanvasElement | OffscreenCanvas {
+	public get canvas(): HTMLCanvasView | OffscreenCanvas {
 		throw new TypeError('Illegal invocation');
 	}
 

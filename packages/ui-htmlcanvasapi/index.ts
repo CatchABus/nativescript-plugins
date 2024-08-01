@@ -1,10 +1,9 @@
 export { CanvasGradient } from './lib/CanvasGradient';
 export { CanvasPattern } from './lib/CanvasPattern';
-export { getOrCreateHTMLCanvasElement } from './lib/contextMapping';
 export { CanvasRenderingContext2D } from './lib/contexts/CanvasRenderingContext2D';
 export { DOMMatrix } from './lib/DOMMatrix';
 export { DOMPoint } from './lib/DOMPoint';
-export { HTMLCanvasElement } from './lib/elements/HTMLCanvasElement';
+export { HTMLCanvasView } from './lib/html-canvas-view';
 export { Path2D } from './lib/Path2D';
 export { installPolyfills } from './lib/polyfills';
 export { TextMetrics } from './lib/TextMetrics';

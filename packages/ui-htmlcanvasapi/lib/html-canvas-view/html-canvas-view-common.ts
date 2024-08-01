@@ -1,24 +1,46 @@
 import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
-import { ImageSource, Observable, Screen, Utils } from '@nativescript/core';
-import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
-import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
+import { ImageSource, Screen, Style, Utils } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
-import { OffscreenCanvas } from './OffscreenCanvas';
 import { SUPPORTED_CANVAS_IMAGE_FORMATS } from '../helpers';
 
-class NSHTMLCanvasElement extends Observable {
-	private readonly _canvasViewRef: WeakRef<CanvasView>;
+const styleProxyHandler: ProxyHandler<Style> = {
+	get(target: Style, name: string, receiver) {
+		const view = target.view as HTMLCanvasViewBase;
+		if (view != null) {
+			if (name === 'width') {
+				return Utils.layout.toDeviceIndependentPixels(view.getMeasuredWidth());
+			}
+
+			if (name === 'height') {
+				return Utils.layout.toDeviceIndependentPixels(view.getMeasuredWidth());
+			}
+		}
+		return Reflect.get(target, name, receiver);
+	},
+	set(target: Style, name: string, value: any) {
+		if (name === 'width' || name === 'height') {
+			target[name] = typeof value === 'string' && value.endsWith('px') ? parseFloat(value) : value;
+		} else {
+			target[name] = value;
+		}
+
+		return true;
+	},
+};
+
+abstract class HTMLCanvasViewBase extends CanvasView {
+	private _mStyle: Style;
 	private readonly _nativeContextRef: WeakRef<Canvas>;
 
+	private _lastCanvas: Canvas;
 	private _offscreenContext: Canvas;
-	private _context: CanvasRenderingContext2D | ImageBitmapRenderingContext;
+	private _context2D: CanvasRenderingContext2D | ImageBitmapRenderingContext;
 	private _isControlledByOffscreen: boolean;
 
-	constructor(canvasView?: CanvasView, canvasContext?: Canvas) {
+	constructor() {
 		super();
 
-		this._canvasViewRef = new WeakRef(canvasView);
-		this._nativeContextRef = new WeakRef(canvasContext);
+		this._mStyle = new Proxy(super.style, styleProxyHandler);
 	}
 
 	public getContext(contextId: '2d', contextAttributes?: any): CanvasRenderingContext2D | null;
@@ -26,7 +48,7 @@ class NSHTMLCanvasElement extends Observable {
 
 	public getContext(contextId: CanvasContextType, contextAttributes?: any): any {
 		if (this._isControlledByOffscreen) {
-			throw new Error(`Failed to execute 'getContext' on 'HTMLCanvasElement': Cannot get context from a canvas that has transferred its control to offscreen.`);
+			throw new Error(`Failed to execute 'getContext' on 'HTMLCanvasView': Cannot get context from a canvas that has transferred its control to offscreen.`);
 		}
 
 		const self = this;
@@ -49,8 +71,8 @@ class NSHTMLCanvasElement extends Observable {
 			return null;
 		}
 
-		if (this._context != null && this._context instanceof cl) {
-			return this._context;
+		if (this._context2D != null && this._context2D instanceof cl) {
+			return this._context2D;
 		}
 
 		const context = new cl();
@@ -60,14 +82,14 @@ class NSHTMLCanvasElement extends Observable {
 			},
 		});
 
-		this._context = context;
-		return this._context;
+		this._context2D = context;
+		return this._context2D;
 	}
 
 	public enableOffscreenBuffer(): void {
 		if (this._offscreenContext == null) {
 			const scale = Screen.mainScreen.scale;
-			this._offscreenContext = new Canvas(this.width * scale, this.height * scale);
+			this._offscreenContext = new Canvas((this.width as number) * scale, (this.height as number) * scale);
 			this._offscreenContext.scale(scale, scale);
 		}
 	}
@@ -90,7 +112,7 @@ class NSHTMLCanvasElement extends Observable {
 		}
 
 		const nativeContext = this._nativeContextRef.deref();
-		const rect = createRectF(0, 0, this.width, this.height);
+		const rect = createRectF(0, 0, this.width as number, this.height as number);
 		nativeContext.drawBitmap(this._offscreenContext.getImage(), null, rect, null);
 	}
 
@@ -104,7 +126,7 @@ class NSHTMLCanvasElement extends Observable {
 		}
 
 		this._isControlledByOffscreen = true;
-		return new OffscreenCanvas(this.width, this.height);
+		return new OffscreenCanvas(this.width as number, this.height as number);
 	}
 
 	public toDataURL(type?: string, encoderOptions?: number): string {
@@ -131,37 +153,23 @@ class NSHTMLCanvasElement extends Observable {
 		return `${prefix + type};base64,${base64String}`;
 	}
 
-	public get view(): CanvasView {
-		return this._canvasViewRef.deref();
-	}
-
 	public get nativeContext(): Canvas {
-		return this._offscreenContext != null ? this._offscreenContext : this._nativeContextRef.deref();
+		return this._lastCanvas;
 	}
 
-	get width(): number {
-		const view = this.view;
-		return view != null ? Utils.layout.toDeviceIndependentPixels(view.getMeasuredWidth()) : 0;
+	public override onDraw(canvas: Canvas) {
+		this._lastCanvas = canvas;
+
+		super.onDraw(canvas);
 	}
 
-	set width(val: number) {
-		const view = this.view;
-		if (view) {
-			view.width = val;
-		}
+	public override get style(): Style {
+		return this._mStyle ?? super.style;
 	}
 
-	get height(): number {
-		const view = this.view;
-		return view != null ? Utils.layout.toDeviceIndependentPixels(view.getMeasuredHeight()) : 0;
-	}
-
-	set height(val: number) {
-		const view = this.view;
-		if (view) {
-			view.height = val;
-		}
+	override set style(val: Style) {
+		this._mStyle = new Proxy(val, styleProxyHandler);
 	}
 }
 
-export { NSHTMLCanvasElement as HTMLCanvasElement };
+export { HTMLCanvasViewBase };

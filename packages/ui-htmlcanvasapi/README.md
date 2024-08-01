@@ -3,7 +3,6 @@
 An HTML Canvas implementation on top of [@nativescript-community/ui-canvas](https://github.com/nativescript-community/ui-canvas).
  
 Supported classes:
-- HTMLCanvasElement
 - OffscreenCanvas
 - CanvasRenderingContext2D
 - ImageBitmapRenderingContext
@@ -34,24 +33,23 @@ Application.run({ moduleName: 'app-root' });
 
 Then, set up your view
 ```xml
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:canvas="@nativescript-community/ui-canvas">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:canvas="@nativescript-community/ui-htmlcanvasapi">
   <Page.actionBar>
     <ActionBar title="ui-htmlcanvasapi" icon="" class="action-bar">
     </ActionBar>
   </Page.actionBar>
   <StackLayout class="p-20">
-    <canvas:CanvasView width="400" height="400" hardwareAccelerated="false" draw="onDraw"/>
+    <canvas:HTMLCanvasView width="400" height="400" hardwareAccelerated="false" draw="onDraw"/>
   </StackLayout>
 </Page>
 ```
 
 ```ts
-import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
-import { getOrCreateHTMLCanvasElement } from '@nativescript-community/ui-htmlcanvasapi';
+import { Canvas } from '@nativescript-community/ui-canvas';
+import { HTMLCanvasView } from '@nativescript-community/ui-htmlcanvasapi';
 
-export function onDraw(args: { object: CanvasView; canvas: Canvas }) {
-	const htmlCanvas = getOrCreateHTMLCanvasElement(args.object, args.canvas);
-	const ctx = htmlCanvas.getContext('2d');
+export function onDraw(args: { object: HTMLCanvasView; canvas: Canvas }) {
+	const ctx = args.object.getContext('2d');
 
 	ctx.save();
 
@@ -72,14 +70,12 @@ export function onDraw(args: { object: CanvasView; canvas: Canvas }) {
 }
 ```
 
-Note: If you wish to draw outside of draw listener context, you should call `CanvasView` `invalidate()` method in order to request view to redraw itself.
+Note: If you wish to draw outside of draw listener context, you should call `HTMLCanvasView` `invalidate()` method in order to request view to redraw itself.
 ```ts
-import { CanvasView } from '@nativescript-community/ui-canvas';
-import { getHTMLCanvasElementByView } from '@nativescript-community/ui-htmlcanvasapi';
+import { HTMLCanvasView } from '@nativescript-community/ui-htmlcanvasapi';
 
-function updateGraph(canvasView: CanvasView) {
-	const htmlCanvas = getHTMLCanvasElementByView(canvasView);
-	const ctx = htmlCanvas.getContext('2d');
+function updateGraph(canvasView: HTMLCanvasView) {
+	const ctx = canvasView.getContext('2d');
 
 	ctx.save();
 	ctx.fillStyle = 'yellow';
@@ -91,7 +87,7 @@ function updateGraph(canvasView: CanvasView) {
 ```
 
 Sometimes, there might be a need to draw things offscreen but keep reference to the view and eventually want to draw everything there.  
-`HTMLCanvasElement` includes these custom methods:
+`HTMLCanvasView` includes these custom methods:
 - enableOffscreenBuffer
 - disableOffscreenBuffer
 - isOffscreenBufferEnabled
@@ -99,10 +95,10 @@ Sometimes, there might be a need to draw things offscreen but keep reference to 
 
 
 ```ts
-const htmlcanvas = getOrCreateHTMLCanvasElement(args.object, args.canvas);
-const ctx = htmlcanvas.getContext('2d');
+const view = args.object;
+const ctx = view.getContext('2d');
 
-htmlcanvas.enableOffscreenBuffer();
+view.enableOffscreenBuffer();
 
 ctx.save();
 ctx.fillStyle = 'yellow';
@@ -115,9 +111,9 @@ ctx.fillStyle = 'blue';
 ctx.fillRect(10, 10, 200, 100);
 ctx.restore();
 
-htmlcanvas.drawOffscreenBuffer();
+view.drawOffscreenBuffer();
 // If buffer is no longer needed, just discard it
-htmlcanvas.disableOffscreenBuffer();
+view.disableOffscreenBuffer();
 ```
 
 Note: This state is required to perform actions like `toDataURL`.

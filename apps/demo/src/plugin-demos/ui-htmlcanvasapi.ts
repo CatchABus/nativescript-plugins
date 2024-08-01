@@ -1,14 +1,13 @@
-import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
+import { Canvas } from '@nativescript-community/ui-canvas';
+import { HTMLCanvasView } from '@nativescript-community/ui-htmlcanvasapi';
 import { EventData, Page, View } from '@nativescript/core';
-import { getOrCreateHTMLCanvasElement } from '@nativescript-community/ui-htmlcanvasapi';
 
 export function navigatingTo(args: EventData) {
 	const page = <Page>args.object;
 }
 
-export function onDraw(args: { object: CanvasView; canvas: Canvas }) {
-	const htmlcanvas = getOrCreateHTMLCanvasElement(args.object, args.canvas);
-	const ctx = htmlcanvas.getContext('2d');
+export function onDraw(args: { object: HTMLCanvasView; canvas: Canvas }) {
+	const ctx = args.object.getContext('2d');
 
 	ctx.save();
 
