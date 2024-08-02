@@ -156,7 +156,8 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 	}
 
 	override set style(val: Style) {
-		this._mStyle = new Proxy(val, styleProxyHandler);
+		super.style = val;
+		this._mStyle = new Proxy(super.style, styleProxyHandler);
 	}
 
 	// @ts-ignore
