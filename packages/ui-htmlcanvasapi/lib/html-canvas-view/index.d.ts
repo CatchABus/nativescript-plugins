@@ -2,8 +2,10 @@ import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
 import { OffscreenCanvas } from '../elements/OffscreenCanvas';
 
 class HTMLCanvasView extends CanvasView {
-	public width: number | string;
-	public height: number | string;
+	public get width(): number;
+	public set width(val: number | string);
+	public get height(): number;
+	public set height(val: number | string);
 
 	public getContext(contextId: '2d', contextAttributes?: any): CanvasRenderingContext2D | null;
 	public getContext(contextId: 'bitmaprenderer', contextAttributes?: any): ImageBitmapRenderingContext | null;

@@ -6,7 +6,7 @@ import { OffscreenCanvasRenderingContext2D } from '../contexts/OffscreenCanvasRe
 
 class NSOffscreenCanvas extends Observable {
 	private _nativeContext: Canvas;
-	private _context: OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext;
+	private _contexts: Map<CanvasContextType, OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext>;
 	private _width: number;
 	private _height: number;
 
@@ -36,36 +36,34 @@ class NSOffscreenCanvas extends Observable {
 	public getContext(contextId: CanvasContextType, contextAttributes?: any): any {
 		const self = this;
 
-		let cl;
+		if (!this._contexts) {
+			this._contexts = new Map();
+		}
+
+		if (this._contexts.has(contextId)) {
+			return this._contexts.get(contextId);
+		}
+
+		let context: OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext;
 
 		switch (contextId) {
 			case '2d':
-				cl = OffscreenCanvasRenderingContext2D;
+				context = new OffscreenCanvasRenderingContext2D();
 				break;
 			case 'bitmaprenderer':
-				cl = ImageBitmapRenderingContext;
+				context = new ImageBitmapRenderingContext();
 				break;
 			default:
-				cl = null;
-				break;
+				return null;
 		}
 
-		if (cl == null) {
-			return null;
-		}
-
-		if (this._context != null && this._context instanceof cl) {
-			return this._context;
-		}
-
-		const context = new cl();
 		Object.defineProperty(context, 'canvas', {
 			get() {
 				return self;
 			},
 		});
 
-		this._context = context;
+		this._contexts.set(contextId, context);
 		return context;
 	}
 

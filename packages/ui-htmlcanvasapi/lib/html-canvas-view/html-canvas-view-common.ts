@@ -20,7 +20,7 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 
 	private _lastCanvas: Canvas;
 	private _offscreenContext: Canvas;
-	private _context2D: CanvasRenderingContext2D | ImageBitmapRenderingContext;
+	private _contexts: Map<CanvasContextType, CanvasRenderingContext2D | ImageBitmapRenderingContext>;
 	private _isControlledByOffscreen: boolean;
 
 	constructor() {
@@ -39,37 +39,35 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 
 		const self = this;
 
-		let cl;
+		if (!this._contexts) {
+			this._contexts = new Map();
+		}
+
+		if (this._contexts.has(contextId)) {
+			return this._contexts.get(contextId);
+		}
+
+		let context: CanvasRenderingContext2D | ImageBitmapRenderingContext;
 
 		switch (contextId) {
 			case '2d':
-				cl = CanvasRenderingContext2D;
+				context = new CanvasRenderingContext2D();
 				break;
 			case 'bitmaprenderer':
-				cl = ImageBitmapRenderingContext;
+				context = new ImageBitmapRenderingContext();
 				break;
 			default:
-				cl = null;
-				break;
+				return null;
 		}
 
-		if (cl == null) {
-			return null;
-		}
-
-		if (this._context2D != null && this._context2D instanceof cl) {
-			return this._context2D;
-		}
-
-		const context = new cl();
 		Object.defineProperty(context, 'canvas', {
 			get() {
 				return self;
 			},
 		});
 
-		this._context2D = context;
-		return this._context2D;
+		this._contexts.set(contextId, context);
+		return context;
 	}
 
 	public enableOffscreenBuffer(): void {
@@ -105,7 +103,7 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 	}
 
 	public transferControlToOffscreen(): OffscreenCanvas {
-		if (this._context2D != null) {
+		if (this._contexts != null) {
 			throw new Error(`Failed to execute 'transferControlToOffscreen' on 'HTMLCanvasElement': Cannot transfer control from a canvas that has a rendering context.`);
 		}
 
@@ -165,8 +163,8 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		return Utils.layout.toDeviceIndependentPixels(this.getMeasuredWidth());
 	}
 
-	set width(val: number) {
-		this.style.width = val;
+	set width(val: number | string) {
+		this.style.width = val as any;
 	}
 
 	// @ts-ignore
@@ -174,8 +172,8 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		return Utils.layout.toDeviceIndependentPixels(this.getMeasuredHeight());
 	}
 
-	set height(val: number) {
-		this.style.height = val;
+	set height(val: number | string) {
+		this.style.height = val as any;
 	}
 }
 
