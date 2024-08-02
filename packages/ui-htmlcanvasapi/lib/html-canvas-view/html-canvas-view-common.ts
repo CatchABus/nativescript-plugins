@@ -3,6 +3,7 @@ import { ImageSource, Screen, Style, Utils } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
+import { OffscreenCanvas } from '../elements/OffscreenCanvas';
 import { SUPPORTED_CANVAS_IMAGE_FORMATS } from '../helpers';
 
 const styleProxyHandler: ProxyHandler<Style> = {

@@ -32,17 +32,17 @@ function installPolyfills() {
 
 	_isInstalled = true;
 
-	if (typeof window === 'undefined') {
-		(global as any).window = {};
+	if (typeof global.window === 'undefined') {
+		global.window = {};
 	}
 
-	if (!window.requestAnimationFrame) {
-		window.requestAnimationFrame = (callback) => global.requestAnimationFrame(callback);
+	if (!global.window.requestAnimationFrame) {
+		global.window.requestAnimationFrame = (callback) => global.requestAnimationFrame(callback);
 	}
 
 	for (const key in polyfills) {
 		global[key] = polyfills[key];
-		window[key] = polyfills[key];
+		global.window[key] = polyfills[key];
 	}
 }
 

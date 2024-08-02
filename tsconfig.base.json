@@ -9,7 +9,7 @@
 		"noEmitHelpers": true,
 		"target": "es2020",
 		"module": "esnext",
-		"lib": ["esnext", "dom"],
+		"lib": ["esnext"],
 		"skipLibCheck": true,
 		"skipDefaultLibCheck": true,
 		"baseUrl": ".",
