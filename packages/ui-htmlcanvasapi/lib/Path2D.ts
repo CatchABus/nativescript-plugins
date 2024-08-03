@@ -96,7 +96,7 @@ class Path2D {
 	}
 
 	public lineTo(x: number, y: number): void {
-		// This is how it works in HTML canvas
+		// Android canvas automatically sets default point to 0,0 while html canvas behaves differently
 		if (this._lastPoint != null) {
 			this._path.lineTo(x, y);
 		} else {
@@ -106,11 +106,21 @@ class Path2D {
 	}
 
 	public bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): void {
+		// Android canvas automatically sets default point to 0,0 while html canvas behaves differently
+		if (this._lastPoint == null) {
+			this._path.moveTo(cp1x, cp1y);
+		}
+
 		this._path.cubicTo(cp1x, cp1y, cp2x, cp2y, x, y);
 		this._lastPoint = { x, y };
 	}
 
 	public quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void {
+		// Android canvas automatically sets default point to 0,0 while html canvas behaves differently
+		if (this._lastPoint == null) {
+			this._path.moveTo(cpx, cpy);
+		}
+
 		this._path.quadTo(cpx, cpy, x, y);
 		this._lastPoint = { x, y };
 	}
