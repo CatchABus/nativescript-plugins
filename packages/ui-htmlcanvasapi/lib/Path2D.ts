@@ -143,6 +143,10 @@ class Path2D {
 			startAngleDeg -= 1;
 			sweepAngleDeg = 360;
 		}
+		if (sweepAngleDeg <= -360) {
+			startAngleDeg += 1;
+			sweepAngleDeg = -360;
+		}
 
 		if (counterclockwise) {
 			if (sweepAngleDeg > 0 && sweepAngleDeg < 360) {
