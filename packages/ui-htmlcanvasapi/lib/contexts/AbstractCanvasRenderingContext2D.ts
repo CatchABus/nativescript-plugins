@@ -526,25 +526,63 @@ abstract class AbstractCanvasRenderingContext2D {
 		text += '';
 
 		const width = this._stylePaint.measureText(text);
-		const fontMetrics = this._stylePaint.getFontMetrics();
-		const textBounds = new Rect(0, 0, 0, 0);
+		const nativeFontMetrics = this._stylePaint.getFontMetrics();
+		const nativeTextBounds = new Rect(0, 0, 0, 0);
 
 		// Populate text bounds
-		this._stylePaint.getTextBounds(text, 0, text.length, textBounds);
+		this._stylePaint.getTextBounds(text, 0, text.length, nativeTextBounds);
 
-		return new TextMetrics({
+		const actualBoundingBoxLeft = nativeTextBounds.left * -1;
+		const actualBoundingBoxAscent = nativeTextBounds.top * -1;
+
+		const metrics = {
 			width,
-			actualBoundingBoxLeft: textBounds.left * -1,
-			actualBoundingBoxRight: textBounds.right,
-			actualBoundingBoxAscent: textBounds.top * -1,
-			actualBoundingBoxDescent: textBounds.bottom,
-			fontBoundingBoxAscent: fontMetrics.ascent * -1,
-			fontBoundingBoxDescent: fontMetrics.descent,
+			actualBoundingBoxLeft: actualBoundingBoxLeft,
+			actualBoundingBoxRight: nativeTextBounds.right,
+			actualBoundingBoxAscent: 0,
+			actualBoundingBoxDescent: 0,
+			fontBoundingBoxAscent: 0,
+			fontBoundingBoxDescent: 0,
 			// Not currently supported
 			hangingBaseline: 0,
 			ideographicBaseline: 0,
 			emHeightAscent: 0,
-		});
+		};
+
+		// TODO: Calculate baseline-accurate values based on original TextMetrics formula
+		switch (this.textBaseline) {
+			case 'top':
+			case 'hanging':
+				metrics.actualBoundingBoxAscent = nativeTextBounds.bottom;
+				metrics.actualBoundingBoxDescent = actualBoundingBoxAscent;
+				metrics.fontBoundingBoxAscent = nativeFontMetrics.bottom;
+				metrics.fontBoundingBoxDescent = nativeFontMetrics.top * -1;
+				break;
+			case 'middle':
+				const actualBoundingBoxMiddle = (nativeTextBounds.top * -1 - nativeTextBounds.bottom) / 2;
+				const fontBoundingBoxMiddle = (nativeFontMetrics.top * -1 - nativeFontMetrics.bottom) / 2;
+
+				metrics.actualBoundingBoxAscent = actualBoundingBoxMiddle;
+				metrics.actualBoundingBoxDescent = actualBoundingBoxMiddle;
+				metrics.fontBoundingBoxAscent = fontBoundingBoxMiddle;
+				metrics.fontBoundingBoxDescent = fontBoundingBoxMiddle;
+				break;
+			case 'bottom':
+			case 'ideographic':
+				metrics.actualBoundingBoxAscent = actualBoundingBoxAscent;
+				metrics.actualBoundingBoxDescent = nativeTextBounds.bottom;
+				metrics.fontBoundingBoxAscent = nativeFontMetrics.top * -1;
+				metrics.fontBoundingBoxDescent = nativeFontMetrics.bottom;
+				break;
+			default:
+				metrics.actualBoundingBoxAscent = actualBoundingBoxAscent;
+				metrics.actualBoundingBoxDescent = nativeTextBounds.bottom;
+				metrics.fontBoundingBoxAscent = nativeFontMetrics.ascent * -1;
+				metrics.fontBoundingBoxDescent = nativeFontMetrics.descent;
+				break;
+		}
+
+		return new TextMetrics(metrics);
 	}
 
 	public scale(x: number, y: number): void {
