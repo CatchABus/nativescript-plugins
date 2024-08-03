@@ -133,10 +133,16 @@ class Path2D {
 		const rect = new RectF(x - radius, y - radius, x + radius, y + radius);
 		const endX = x + radius * Math.cos(endAngle);
 		const endY = y + radius * Math.sin(endAngle);
-		const startAngleDeg = radiansToDegrees(startAngle);
 		const endAngleDeg = radiansToDegrees(endAngle);
 
+		let startAngleDeg = radiansToDegrees(startAngle);
 		let sweepAngleDeg = endAngleDeg - startAngleDeg;
+
+		// Note: Path arcTo sweep angle is treated modulo 360, so we trick it by reducing start angle by 1
+		if (sweepAngleDeg >= 360) {
+			startAngleDeg -= 1;
+			sweepAngleDeg = 360;
+		}
 
 		if (counterclockwise) {
 			if (sweepAngleDeg > 0 && sweepAngleDeg < 360) {
