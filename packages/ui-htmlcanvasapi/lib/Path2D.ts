@@ -11,7 +11,7 @@ interface Point {
 class Path2D {
 	private readonly _path: Path;
 
-	private _lastPoint: Point = { x: 0, y: 0 };
+	private _lastPoint: Point;
 
 	constructor(path?: Path2D | string) {
 		if (path instanceof Path2D) {
@@ -30,6 +30,8 @@ class Path2D {
 
 	private _drawSVGPath(path: string) {
 		const pathData = new SVGPathData(path).toAbs();
+		const lastX = this._lastPoint?.x ?? 0;
+		const lastY = this._lastPoint?.y ?? 0;
 
 		for (const command of pathData.commands) {
 			switch (command.type) {
@@ -37,10 +39,10 @@ class Path2D {
 					this.lineTo(command.x, command.y);
 					break;
 				case SVGPathData.HORIZ_LINE_TO:
-					this.lineTo(command.x, this._lastPoint.y);
+					this.lineTo(command.x, lastY);
 					break;
 				case SVGPathData.VERT_LINE_TO:
-					this.lineTo(this._lastPoint.x, command.y);
+					this.lineTo(lastX, command.y);
 					break;
 				case SVGPathData.MOVE_TO:
 					this.moveTo(command.x, command.y);
@@ -94,7 +96,12 @@ class Path2D {
 	}
 
 	public lineTo(x: number, y: number): void {
-		this._path.lineTo(x, y);
+		// This is how it works in HTML canvas
+		if (this._lastPoint != null) {
+			this._path.lineTo(x, y);
+		} else {
+			this._path.moveTo(x, y);
+		}
 		this._lastPoint = { x, y };
 	}
 
@@ -149,8 +156,8 @@ class Path2D {
 		}
 
 		// Let the point (x0, y0) be the last point in the subpath.
-		const x0 = this._lastPoint.x;
-		const y0 = this._lastPoint.y;
+		const x0 = this._lastPoint?.x ?? 0;
+		const y0 = this._lastPoint?.y ?? 0;
 
 		// First ensure there is a subpath for (x1, y1).
 		if (x0 == null || y0 == null) {
