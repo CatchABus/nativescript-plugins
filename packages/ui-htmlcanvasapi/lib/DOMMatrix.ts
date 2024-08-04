@@ -2,7 +2,7 @@ import { Matrix } from '@nativescript-community/ui-canvas';
 
 const matrixDefaults = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
-class DOMMatrix {
+class NSDOMMatrix {
 	/**
 	 * Not supported
 	 */
@@ -179,4 +179,4 @@ class DOMMatrix {
 	}
 }
 
-export { DOMMatrix };
+export { NSDOMMatrix as DOMMatrix };

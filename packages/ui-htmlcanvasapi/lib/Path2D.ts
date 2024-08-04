@@ -8,13 +8,13 @@ interface Point {
 	y: number;
 }
 
-class Path2D {
+class NSPath2D {
 	private readonly _path: Path;
 
 	private _lastPoint: Point;
 
-	constructor(path?: Path2D | string) {
-		if (path instanceof Path2D) {
+	constructor(path?: NSPath2D | string) {
+		if (path instanceof NSPath2D) {
 			this._path = new Path(path.native);
 
 			if (path._lastPoint) {
@@ -71,7 +71,7 @@ class Path2D {
 		}
 	}
 
-	public addPath(path: Path2D, matrix?: DOMMatrix): void {
+	public addPath(path: NSPath2D, matrix?: DOMMatrix): void {
 		if (path == null) {
 			return;
 		}
@@ -338,4 +338,4 @@ class Path2D {
 	}
 }
 
-export { Path2D };
+export { NSPath2D as Path2D };
