@@ -30,10 +30,12 @@ class Path2D {
 
 	private _drawSVGPath(path: string) {
 		const pathData = new SVGPathData(path).toAbs();
-		const lastX = this._lastPoint?.x ?? 0;
-		const lastY = this._lastPoint?.y ?? 0;
 
 		for (const command of pathData.commands) {
+			// These values can be different during each iteration
+			const lastX = this._lastPoint?.x ?? 0;
+			const lastY = this._lastPoint?.y ?? 0;
+
 			switch (command.type) {
 				case SVGPathData.LINE_TO:
 					this.lineTo(command.x, command.y);
