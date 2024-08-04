@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"rootDirs": [".", "../.."],
 		"baseUrl": ".",
+		"lib": ["esnext", "dom"],
 		"paths": {
 			"~/*": ["src/*"],
 			"@demo/shared": ["../../tools/demo/index.ts"],
