@@ -140,13 +140,13 @@ class Path2D {
 		let startAngleDeg = radiansToDegrees(startAngle);
 		let sweepAngleDeg = endAngleDeg - startAngleDeg;
 
-		// Note: Path arcTo sweep angle is treated modulo 360, so we trick it by reducing start angle by 1
+		// Note: Path arcTo sweep angle is treated with modulo 360, so update start and sweep angle to fixed values to create a full circle
 		if (sweepAngleDeg >= 360) {
-			startAngleDeg -= 1;
+			startAngleDeg = -1;
 			sweepAngleDeg = 360;
 		}
 		if (sweepAngleDeg <= -360) {
-			startAngleDeg += 1;
+			startAngleDeg = 1;
 			sweepAngleDeg = -360;
 		}
 
