@@ -1,4 +1,6 @@
 import { Canvas, CanvasView } from '@nativescript-community/ui-canvas';
+import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
+import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
 import { OffscreenCanvas } from '../elements/OffscreenCanvas';
 
 class HTMLCanvasView extends CanvasView {
