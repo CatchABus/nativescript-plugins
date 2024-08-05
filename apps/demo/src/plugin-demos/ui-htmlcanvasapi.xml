@@ -6,7 +6,7 @@
     <StackLayout class="p-20">
         <ScrollView class="h-full">
           <StackLayout>
-            <canvas:HTMLCanvasView width="100%" height="800" hardwareAccelerated="false" draw="onDraw"/>
+            <canvas:HTMLCanvasView width="100%" height="800" hardwareAccelerated="true" draw="onDraw"/>
           </StackLayout>
         </ScrollView>
     </StackLayout>

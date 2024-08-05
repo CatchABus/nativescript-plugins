@@ -39,7 +39,7 @@ Then, set up your view
     </ActionBar>
   </Page.actionBar>
   <StackLayout class="p-20">
-    <canvas:HTMLCanvasView width="400" height="400" hardwareAccelerated="false" draw="onDraw"/>
+    <canvas:HTMLCanvasView width="400" height="400" hardwareAccelerated="true" draw="onDraw"/>
   </StackLayout>
 </Page>
 ```

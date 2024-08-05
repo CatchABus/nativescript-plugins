@@ -1,5 +1,5 @@
 import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
-import { ImageSource, Screen, Style, Utils } from '@nativescript/core';
+import { EventData, ImageSource, Screen, Style, Utils } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
@@ -18,6 +18,18 @@ const styleProxyHandler: ProxyHandler<Style> = {
 	},
 };
 
+function onLayoutChange(args: EventData): void {
+	const view = args.object as HTMLCanvasViewBase;
+
+	if (view.width != 0 && view.height != 0) {
+		// During resize, a new blank bitmap is created using new dimensions
+		if (view.isOffscreenBufferEnabled()) {
+			view.disableOffscreenBuffer();
+			view.enableOffscreenBuffer();
+		}
+	}
+}
+
 abstract class HTMLCanvasViewBase extends CanvasView {
 	private _mStyle: Style;
 
@@ -30,6 +42,8 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		super();
 
 		this._mStyle = new Proxy(super.style, styleProxyHandler);
+
+		this.on(CanvasView.layoutChangedEvent, onLayoutChange);
 	}
 
 	public getContext(contextId: '2d', contextAttributes?: any): CanvasRenderingContext2D | null;
