@@ -11,6 +11,10 @@ function radiansToDegrees(rad: number): number {
 	return rad / (Math.PI / 180);
 }
 
+function isEmptyValue(value: any) {
+	return value == null || value == '';
+}
+
 function normalizeVector(vector: number[]): number[] {
 	const len = Math.sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
 	return [vector[0] / len, vector[1] / len];
@@ -168,4 +172,4 @@ function getNativeLineJoin(lineJoin: LineJoin): Join {
 	return join;
 }
 
-export { SUPPORTED_CANVAS_IMAGE_FORMATS, degreesToRadians, radiansToDegrees, normalizeVector, getVectorAngle, getNativeCompositeOperation, getNativeFillRule, getNativeTextAlignment, getNativeLineCap, getNativeLineJoin };
+export { SUPPORTED_CANVAS_IMAGE_FORMATS, degreesToRadians, radiansToDegrees, isEmptyValue, normalizeVector, getVectorAngle, getNativeCompositeOperation, getNativeFillRule, getNativeTextAlignment, getNativeLineCap, getNativeLineJoin };

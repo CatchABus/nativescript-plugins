@@ -2,7 +2,7 @@ import { BitmapShader, Canvas, CanvasView, createRect, createRectF, DashPathEffe
 import { Font, ImageSource, Screen, View } from '@nativescript/core';
 import { DOMMatrix } from '../DOMMatrix';
 import { Path2D } from '../Path2D';
-import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, radiansToDegrees } from '../helpers';
+import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, isEmptyValue, radiansToDegrees } from '../helpers';
 import { CanvasCompositeOperation, CanvasContextProperties, CanvasContextRestorables, FillRule, FontKerning, FontStretch, FontVariantCaps, GradientData, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, RadialGradientParams, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../../CanvasTypes';
 import { parseFont } from '@nativescript/core/ui/styling/font';
 import { TextMetrics } from '../TextMetrics';
@@ -779,9 +779,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public setLineDash(segments: number[]): void {
-		this._restorableProps.setLineDash = segments;
+		this._restorableProps.setLineDash = Array.isArray(segments) ? segments : [];
 
-		this._stylePaint.setPathEffect(segments?.length ? new DashPathEffect(segments, this.lineDashOffset) : null);
+		this._stylePaint.setPathEffect(this.getLineDash().length ? new DashPathEffect(this.getLineDash(), this.lineDashOffset) : null);
 	}
 
 	public get strokeStyle(): string | CanvasGradient | CanvasPattern {
@@ -789,7 +789,7 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set strokeStyle(val: string | CanvasGradient | CanvasPattern) {
-		this._restorableProps.strokeStyle = val;
+		this._restorableProps.strokeStyle = isEmptyValue(val) ? defaults.strokeStyle : val;
 	}
 
 	public get fillStyle(): string | CanvasGradient | CanvasPattern {
@@ -797,7 +797,7 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set fillStyle(val: string | CanvasGradient | CanvasPattern) {
-		this._restorableProps.fillStyle = val;
+		this._restorableProps.fillStyle = isEmptyValue(val) ? defaults.fillStyle : val;
 	}
 
 	public get globalAlpha(): number {
@@ -805,7 +805,7 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set globalAlpha(val: number) {
-		this._restorableProps.globalAlpha = val;
+		this._restorableProps.globalAlpha = typeof val === 'number' ? val : defaults.globalAlpha;
 
 		this._stylePaint.setAlpha(this.globalAlpha * 255);
 	}
@@ -815,9 +815,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set lineWidth(val: number) {
-		this._restorableProps.lineWidth = val;
+		this._restorableProps.lineWidth = typeof val === 'number' ? val : defaults.lineWidth;
 
-		this._stylePaint.setStrokeWidth(val);
+		this._stylePaint.setStrokeWidth(this.lineWidth);
 	}
 
 	public get lineCap(): LineCap {
@@ -825,9 +825,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set lineCap(val: LineCap) {
-		this._restorableProps.lineCap = val;
+		this._restorableProps.lineCap = isEmptyValue(val) ? defaults.lineCap : val;
 
-		this._stylePaint.setStrokeCap(getNativeLineCap(val));
+		this._stylePaint.setStrokeCap(getNativeLineCap(this.lineCap));
 	}
 
 	public get lineJoin(): LineJoin {
@@ -835,9 +835,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set lineJoin(val: LineJoin) {
-		this._restorableProps.lineJoin = val;
+		this._restorableProps.lineJoin = isEmptyValue(val) ? defaults.lineJoin : val;
 
-		this._stylePaint.setStrokeJoin(getNativeLineJoin(val));
+		this._stylePaint.setStrokeJoin(getNativeLineJoin(this.lineJoin));
 	}
 
 	public get miterLimit(): number {
@@ -845,9 +845,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set miterLimit(val: number) {
-		this._restorableProps.miterLimit = val;
+		this._restorableProps.miterLimit = typeof val === 'number' ? val : defaults.miterLimit;
 
-		this._stylePaint.setStrokeMiter(val);
+		this._stylePaint.setStrokeMiter(this.miterLimit);
 	}
 
 	public get lineDashOffset(): number {
@@ -855,9 +855,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set lineDashOffset(val: number) {
-		this._restorableProps.lineDashOffset = val;
+		this._restorableProps.lineDashOffset = typeof val === 'number' ? val : defaults.lineDashOffset;
 
-		this._stylePaint.setPathEffect(this.getLineDash()?.length ? new DashPathEffect(this.getLineDash(), val) : null);
+		this._stylePaint.setPathEffect(this.getLineDash()?.length ? new DashPathEffect(this.getLineDash(), this.lineDashOffset) : null);
 	}
 
 	public get shadowOffsetX(): number {
@@ -865,10 +865,10 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set shadowOffsetX(val: number) {
-		this._restorableProps.shadowOffsetX = val;
+		this._restorableProps.shadowOffsetX = typeof val === 'number' ? val : defaults.shadowOffsetX;
 
 		if (this.shadowColor != null) {
-			this._stylePaint.setShadowLayer(this.shadowBlur, val, this.shadowOffsetY, this.shadowColor);
+			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
 		}
 	}
 
@@ -877,10 +877,10 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set shadowOffsetY(val: number) {
-		this._restorableProps.shadowOffsetY = val;
+		this._restorableProps.shadowOffsetY = typeof val === 'number' ? val : defaults.shadowOffsetY;
 
 		if (this.shadowColor != null) {
-			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, val, this.shadowColor);
+			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
 		}
 	}
 
@@ -889,10 +889,10 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set shadowBlur(val: number) {
-		this._restorableProps.shadowBlur = val;
+		this._restorableProps.shadowBlur = typeof val === 'number' ? val : defaults.shadowBlur;
 
 		if (this.shadowColor != null) {
-			this._stylePaint.setShadowLayer(val, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
+			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
 		}
 	}
 
@@ -901,13 +901,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set shadowColor(val: string) {
-		this._restorableProps.shadowColor = val;
+		this._restorableProps.shadowColor = isEmptyValue(val) ? defaults.shadowColor : val;
 
-		if (val != null) {
-			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, val);
-		} else {
-			this._stylePaint.setShadowLayer(0, 0, 0, '#000');
-		}
+		this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
 	}
 
 	public get globalCompositeOperation(): CanvasCompositeOperation {
@@ -915,9 +911,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set globalCompositeOperation(val: CanvasCompositeOperation) {
-		this._restorableProps.globalCompositeOperation = val;
+		this._restorableProps.globalCompositeOperation = isEmptyValue(val) ? defaults.globalCompositeOperation : val;
 
-		this._stylePaint.setXfermode(val != null ? new PorterDuffXfermode(getNativeCompositeOperation(val)) : null);
+		this._stylePaint.setXfermode(new PorterDuffXfermode(getNativeCompositeOperation(this.globalCompositeOperation)));
 	}
 
 	public get font(): string {
@@ -927,9 +923,15 @@ abstract class AbstractCanvasRenderingContext2D {
 	public set font(val: string) {
 		this._restorableProps.font = val;
 
-		const parsedFont = parseFont(val);
-		const fontSize = parseFloat(parsedFont.fontSize);
-		const font = new Font(parsedFont.fontFamily, fontSize, parsedFont.fontStyle, parsedFont.fontWeight);
+		let font: Font;
+
+		if (val) {
+			const parsedFont = parseFont(val);
+			const fontSize = parseFloat(parsedFont.fontSize);
+			font = new Font(parsedFont.fontFamily, fontSize, parsedFont.fontStyle, parsedFont.fontWeight);
+		} else {
+			font = null;
+		}
 
 		this._stylePaint.setFont(font);
 		this._font = font;
@@ -943,9 +945,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set textAlign(val: TextAlignment) {
-		this._restorableProps.textAlign = val;
+		this._restorableProps.textAlign = isEmptyValue(val) ? defaults.textAlign : val;
 
-		this._stylePaint.setTextAlign(getNativeTextAlignment(val, this.direction));
+		this._stylePaint.setTextAlign(getNativeTextAlignment(this.textAlign, this.direction));
 	}
 
 	public get textBaseline(): TextBaseline {
@@ -971,7 +973,7 @@ abstract class AbstractCanvasRenderingContext2D {
 	public set imageSmoothingEnabled(val: boolean) {
 		this._restorableProps.imageSmoothingEnabled = val;
 
-		this._stylePaint.setAntiAlias(val);
+		this._stylePaint.setAntiAlias(!!val);
 	}
 
 	public get letterSpacing(): string {
@@ -979,9 +981,9 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set letterSpacing(val: string) {
-		this._letterSpacing = val;
+		this._letterSpacing = isEmptyValue(val) ? defaults.letterSpacing : val;
 
-		const letterSpacingValue = parseFloat(val) / (this._font.fontSize || 1);
+		const letterSpacingValue = parseFloat(this.letterSpacing) / (this._font.fontSize || 1);
 		this._stylePaint.setLetterSpacing(letterSpacingValue);
 	}
 }
