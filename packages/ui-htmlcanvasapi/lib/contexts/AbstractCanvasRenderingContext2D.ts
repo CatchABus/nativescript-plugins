@@ -87,8 +87,10 @@ abstract class AbstractCanvasRenderingContext2D {
 
 	constructor() {
 		this._stylePaint = new Paint();
+		this._stylePaint.setAntiAlias(true);
 
 		this._clearPaint = new Paint();
+		this._clearPaint.setAntiAlias(true);
 		this._clearPaint.setXfermode(new PorterDuffXfermode(PorterDuffMode.CLEAR));
 
 		this._saveState();
@@ -510,6 +512,10 @@ abstract class AbstractCanvasRenderingContext2D {
 
 		const imageSource: ImageSource = args[0];
 
+		if (!this.imageSmoothingEnabled) {
+			this._stylePaint.setAntiAlias(false);
+		}
+
 		if (args.length == 3) {
 			context.drawBitmap(imageSource, args[1], args[2], this._stylePaint);
 		} else if (args.length == 5) {
@@ -519,6 +525,11 @@ abstract class AbstractCanvasRenderingContext2D {
 			const src = createRect(args[1], args[2], args[3], args[4]);
 			const dst = createRectF(args[5], args[6], args[7], args[8]);
 			context.drawBitmap(imageSource, src, dst, this._stylePaint);
+		}
+
+		// Set antialias back to default
+		if (!this.imageSmoothingEnabled) {
+			this._stylePaint.setAntiAlias(true);
 		}
 	}
 
@@ -971,9 +982,7 @@ abstract class AbstractCanvasRenderingContext2D {
 	}
 
 	public set imageSmoothingEnabled(val: boolean) {
-		this._restorableProps.imageSmoothingEnabled = val;
-
-		this._stylePaint.setAntiAlias(!!val);
+		this._restorableProps.imageSmoothingEnabled = !!val;
 	}
 
 	public get letterSpacing(): string {
