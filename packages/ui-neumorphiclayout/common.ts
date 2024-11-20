@@ -138,11 +138,11 @@ export class NeumorphicCanvas extends Canvas {
 		const view = this.view && this.view.get();
 
 		this.paintBase = new Paint();
-		this.paintBase.setAntiAlias(__ANDROID__);
+		this.paintBase.setAntiAlias(true);
 		this.paintLight = new Paint();
-		this.paintLight.setAntiAlias(__ANDROID__);
+		this.paintLight.setAntiAlias(true);
 		this.paintDark = new Paint();
-		this.paintDark.setAntiAlias(__ANDROID__);
+		this.paintDark.setAntiAlias(true);
 	}
 
 	private initPaints(state: NeumorphicType) {
