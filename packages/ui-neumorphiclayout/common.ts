@@ -1,15 +1,16 @@
-import { backgroundInternalProperty, Color, CssProperty, LayoutBase, Style } from '@nativescript/core';
+import { Color, CssProperty, LayoutBase, Length, Style, Utils } from '@nativescript/core';
 import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style as drawStyle, TileMode } from '@nativescript-community/ui-canvas';
-
-export const STATE_FLAT = 'flat';
-export const STATE_CONCAVE = 'concave';
-export const STATE_CONVEX = 'convex';
-export const STATE_PRESSED = 'pressed';
-export const STATE_PRESSED_IN_OUT = 'pressed-in-out';
-
-const NEUMORPHISM_STATES = [STATE_FLAT, STATE_CONCAVE, STATE_CONVEX, STATE_PRESSED, STATE_PRESSED_IN_OUT];
+import { NeumorphicLayout } from '.';
 
 const stylePropertiesMap = new Map();
+
+export enum NeumorphicType {
+	FLAT = 'flat',
+	CONCAVE = 'concave',
+	CONVEX = 'convex',
+	PRESSED = 'pressed',
+	PRESSED_IN_OUT = 'pressed-in-out',
+}
 
 stylePropertiesMap.set(
 	'lightShadowColor',
@@ -24,17 +25,6 @@ stylePropertiesMap.set(
 export const lightShadowColorProperty = stylePropertiesMap.get('lightShadowColor');
 
 stylePropertiesMap.set(
-	'cornerRadius',
-	new CssProperty<Style, number>({
-		name: 'cornerRadius',
-		cssName: 'corner-radius',
-		defaultValue: 0,
-		valueConverter: parseFloat,
-	})
-);
-export const cornerRadiusProperty = stylePropertiesMap.get('cornerRadius');
-
-stylePropertiesMap.set(
 	'darkShadowColor',
 	new CssProperty<Style, Color>({
 		name: 'darkShadowColor',
@@ -47,29 +37,11 @@ stylePropertiesMap.set(
 export const darkShadowColorProperty = stylePropertiesMap.get('darkShadowColor');
 
 stylePropertiesMap.set(
-	'fillColor',
-	new CssProperty<Style, Color>({
-		name: 'fillColor',
-		cssName: 'fill-color',
-		defaultValue: new Color('#ffffff'),
-		equalityComparer: Color.equals,
-		valueConverter: (value) => new Color(value),
-	})
-);
-export const fillColorProperty = stylePropertiesMap.get('fillColor');
-
-stylePropertiesMap.set(
 	'neumorphism',
 	new CssProperty<Style, string>({
 		name: 'neumorphism',
 		cssName: 'neumorphism',
 		defaultValue: null,
-		valueConverter: (value) => {
-			if (value && !NEUMORPHISM_STATES.includes(value)) {
-				throw new Error('Invalid neumorphism state!');
-			}
-			return value;
-		},
 	})
 );
 export const neumorphismProperty = stylePropertiesMap.get('neumorphism');
@@ -96,7 +68,7 @@ stylePropertiesMap.set(
 export const shadowRadiusProperty = stylePropertiesMap.get('shadowRadius');
 
 export class NeumorphicCanvas extends Canvas {
-	private view: WeakRef<any>;
+	private view: WeakRef<NeumorphicLayout>;
 
 	private path: Path;
 	private innerShadowPath: Path;
@@ -104,7 +76,7 @@ export class NeumorphicCanvas extends Canvas {
 	private paintLight: Paint;
 	private paintDark: Paint;
 
-	constructor(view: WeakRef<any>) {
+	constructor(view: WeakRef<NeumorphicLayout>) {
 		super(0, 0);
 		this.view = view;
 	}
@@ -127,18 +99,18 @@ export class NeumorphicCanvas extends Canvas {
 
 		this.initDefaults();
 
-		if (state == STATE_PRESSED_IN_OUT) {
-			if (global.isAndroid) {
-				this.initShape(STATE_FLAT);
-				this.initPaints(STATE_FLAT);
+		if (state == NeumorphicType.PRESSED_IN_OUT) {
+			if (__ANDROID__) {
+				this.initShape(NeumorphicType.FLAT);
+				this.initPaints(NeumorphicType.FLAT);
 
 				this.drawPath(this.path, this.paintLight);
 				this.drawPath(this.path, this.paintDark);
 				this.drawPath(this.path, this.paintBase);
 			}
 
-			this.initShape(STATE_PRESSED);
-			this.initPaints(STATE_PRESSED);
+			this.initShape(NeumorphicType.PRESSED);
+			this.initPaints(NeumorphicType.PRESSED);
 
 			this.clipPath(this.path);
 			this.drawPath(this.path, this.paintBase);
@@ -148,7 +120,7 @@ export class NeumorphicCanvas extends Canvas {
 			this.initShape(state);
 			this.initPaints(state);
 
-			if (state == STATE_PRESSED) {
+			if (state == NeumorphicType.PRESSED) {
 				this.clipPath(this.path);
 				this.drawPath(this.path, this.paintBase);
 				this.drawPath(this.innerShadowPath, this.paintLight);
@@ -182,20 +154,20 @@ export class NeumorphicCanvas extends Canvas {
 		const height = actualSize.height;
 
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
-		const isPressable = state == STATE_PRESSED || state == STATE_PRESSED_IN_OUT;
+		const isPressable = state == NeumorphicType.PRESSED || state == NeumorphicType.PRESSED_IN_OUT;
 		const gradientColors = [];
 
 		switch (state) {
-			case STATE_CONCAVE:
+			case NeumorphicType.CONCAVE:
 				gradientColors.push(view.darkShadowColor);
 				gradientColors.push(view.lightShadowColor);
 				break;
-			case STATE_CONVEX:
+			case NeumorphicType.CONVEX:
 				gradientColors.push(view.lightShadowColor);
 				gradientColors.push(view.darkShadowColor);
 				break;
 			default:
-				this.paintBase.setColor(view.fillColor);
+				this.paintBase.setColor(view.style.backgroundColor);
 				break;
 		}
 
@@ -215,8 +187,8 @@ export class NeumorphicCanvas extends Canvas {
 			this.paintDark.style = drawStyle.FILL;
 		}
 
-		this.paintLight.setColor(view.fillColor);
-		this.paintDark.setColor(view.fillColor);
+		this.paintLight.setColor(view.style.backgroundColor);
+		this.paintDark.setColor(view.style.backgroundColor);
 		this.paintLight.setShadowLayer(shadowRadius, -view.shadowDistance, -view.shadowDistance, view.lightShadowColor);
 		this.paintDark.setShadowLayer(shadowRadius, view.shadowDistance, view.shadowDistance, view.darkShadowColor);
 	}
@@ -227,7 +199,8 @@ export class NeumorphicCanvas extends Canvas {
 		const actualSize = view.getActualSize();
 		const width = actualSize.width;
 		const height = actualSize.height;
-		const cornerRadius = Math.min(Math.min(width, height) / 2, view.cornerRadius);
+		const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
+		const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
 
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 
@@ -238,14 +211,6 @@ export class NeumorphicCanvas extends Canvas {
 		this.innerShadowPath.addRoundRect(createRectF(-(shadowRadius / 2), -(shadowRadius / 2), width + shadowRadius, height + shadowRadius), cornerRadius, cornerRadius, Direction.CW);
 	}
 }
-
-// Disable 'backgroundInternal' as it also uses 'setBackground' to apply a drawable
-const backgroundInternalOrigin = LayoutBase.prototype[backgroundInternalProperty.setNative];
-LayoutBase.prototype[backgroundInternalProperty.setNative] = function (value) {
-	if (!this.neumorphism) {
-		backgroundInternalOrigin.call(this, value);
-	}
-};
 
 // Style properties
 for (let [key, value] of stylePropertiesMap) {

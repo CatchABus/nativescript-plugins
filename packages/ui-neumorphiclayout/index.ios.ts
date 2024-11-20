@@ -1,6 +1,6 @@
-import { EventData, LayoutBase, Screen } from '@nativescript/core';
-import * as commons from './common';
-import { NeumorphicLayout, NeumorphismState } from '.';
+import { backgroundInternalProperty, borderRadiusProperty, borderTopLeftRadiusProperty, EventData, LayoutBase, Length, Screen, Utils } from '@nativescript/core';
+import { NeumorphicLayout } from '.';
+import { darkShadowColorProperty, lightShadowColorProperty, NeumorphicCanvas, NeumorphicType, neumorphismProperty, shadowDistanceProperty, shadowRadiusProperty } from './common';
 
 export * from './common';
 
@@ -8,9 +8,9 @@ const layerNames = ['backgroundDrawable', 'foregroundDrawable'];
 
 @NativeClass
 class CANeumorphicLayer extends CALayer implements CALayerDelegate {
-	private mAugmentedCanvas: commons.NeumorphicCanvas;
+	private mAugmentedCanvas: NeumorphicCanvas;
 
-	public static initWithCanvas(canvas: commons.NeumorphicCanvas): CANeumorphicLayer {
+	public static initWithCanvas(canvas: NeumorphicCanvas): CANeumorphicLayer {
 		const layer = CANeumorphicLayer.layer() as CANeumorphicLayer;
 		layer.mAugmentedCanvas = canvas;
 		return layer;
@@ -26,7 +26,7 @@ class CANeumorphicLayer extends CALayer implements CALayerDelegate {
 		super.drawInContext(ctx);
 	}
 
-	public getAugmentedCanvas(): commons.NeumorphicCanvas {
+	public getAugmentedCanvas(): NeumorphicCanvas {
 		return this.mAugmentedCanvas;
 	}
 }
@@ -49,7 +49,7 @@ function _getDrawableLayers(view: NeumorphicLayout): CALayer[] {
 	return drawableLayers;
 }
 
-function refresh(_value) {
+function _refresh(): void {
 	const drawableLayers = _getDrawableLayers(this);
 
 	if (drawableLayers.length) {
@@ -78,28 +78,29 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	}
 
 	const { width, height } = view.getActualSize();
-	const cornerRadius = Math.min(Math.min(width, height) / 2, view.cornerRadius);
+	const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
+	const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
 
 	bgLayer.cornerRadius = cornerRadius;
-	bgLayer.backgroundColor = view.fillColor.ios.CGColor;
+	bgLayer.backgroundColor = view.style.backgroundColor.ios.CGColor;
 	bgLayer.shadowColor = view.lightShadowColor.ios.CGColor;
 	bgLayer.shadowOffset = CGSizeMake(-view.shadowDistance, -view.shadowDistance);
 	bgLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
-	bgLayer.shadowOpacity = state == commons.STATE_PRESSED ? 0 : 1;
+	bgLayer.shadowOpacity = state == NeumorphicType.PRESSED ? 0 : 1;
 
 	fgLayer.cornerRadius = cornerRadius;
-	fgLayer.backgroundColor = view.fillColor.ios.CGColor;
+	fgLayer.backgroundColor = view.style.backgroundColor.ios.CGColor;
 	fgLayer.contentsScale = Screen.mainScreen.scale;
 	fgLayer.allowsEdgeAntialiasing = true;
 	fgLayer.shadowColor = view.darkShadowColor.ios.CGColor;
 	fgLayer.shadowOffset = CGSizeMake(view.shadowDistance, view.shadowDistance);
 	fgLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
-	fgLayer.shadowOpacity = state == commons.STATE_PRESSED ? 0 : 1;
+	fgLayer.shadowOpacity = state == NeumorphicType.PRESSED ? 0 : 1;
 
 	fgLayer.setNeedsDisplay();
 }
 
-function _updateNeumorphismState(value: NeumorphismState): void {
+function _updateNeumorphismState(value: NeumorphicType): void {
 	const drawableLayers = _getDrawableLayers(this);
 	const layoutChangeListener = (args: EventData) => _updateSublayerBounds(args.object as NeumorphicLayout);
 
@@ -108,7 +109,7 @@ function _updateNeumorphismState(value: NeumorphismState): void {
 			_updateSublayerShadows(this, drawableLayers);
 		} else {
 			const nativeView = this.nativeViewProtected as UIView;
-			const canvas = new commons.NeumorphicCanvas(new WeakRef(this));
+			const canvas = new NeumorphicCanvas(new WeakRef(this));
 
 			const bgLayer = CALayer.layer();
 			bgLayer.name = 'backgroundDrawable';
@@ -137,10 +138,19 @@ function _updateNeumorphismState(value: NeumorphismState): void {
 	}
 }
 
-LayoutBase.prototype[commons.cornerRadiusProperty.setNative] = refresh;
-LayoutBase.prototype[commons.lightShadowColorProperty.setNative] = refresh;
-LayoutBase.prototype[commons.darkShadowColorProperty.setNative] = refresh;
-LayoutBase.prototype[commons.fillColorProperty.setNative] = refresh;
-LayoutBase.prototype[commons.shadowDistanceProperty.setNative] = refresh;
-LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = refresh;
-LayoutBase.prototype[commons.neumorphismProperty.setNative] = _updateNeumorphismState;
+LayoutBase.prototype[borderTopLeftRadiusProperty.setNative] = _refresh;
+LayoutBase.prototype[lightShadowColorProperty.setNative] = _refresh;
+LayoutBase.prototype[darkShadowColorProperty.setNative] = _refresh;
+LayoutBase.prototype[shadowDistanceProperty.setNative] = _refresh;
+LayoutBase.prototype[shadowRadiusProperty.setNative] = _refresh;
+LayoutBase.prototype[neumorphismProperty.setNative] = _updateNeumorphismState;
+
+// Disable 'backgroundInternal' as it also uses 'setBackground' to apply a drawable
+const backgroundInternalOrigin = LayoutBase.prototype[backgroundInternalProperty.setNative];
+LayoutBase.prototype[backgroundInternalProperty.setNative] = function (this: NeumorphicLayout, value) {
+	if (this.neumorphism) {
+		_refresh.call(this, value);
+	} else {
+		backgroundInternalOrigin.call(this, value);
+	}
+};

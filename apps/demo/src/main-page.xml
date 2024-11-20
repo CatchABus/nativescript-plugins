@@ -6,10 +6,8 @@
     <ScrollView class="h-full">
       <StackLayout>
         <Button text="add a package first" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
-<Button text="ui-neumorphiclayout" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
-<Button text="ui-htmlcanvasapi" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
-
-
+        <Button text="ui-neumorphiclayout" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="ui-htmlcanvasapi" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
       </StackLayout>
     </ScrollView>
   </StackLayout>

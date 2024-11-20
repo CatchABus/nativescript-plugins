@@ -1,7 +1,7 @@
 .neumorphism {
-	corner-radius: 26;
+	border-radius: 26;
 	dark-shadow-color: #bebfc1;
-	fill-color: #e0e1e3;
+	background-color: #e0e1e3;
 	height: 110;
 	light-shadow-color: #ffffff;
 	margin-top: 30;
@@ -9,5 +9,5 @@
 }
 
 .neumorphism.circle {
-	corner-radius: 100;
+	border-radius: 100;
 }

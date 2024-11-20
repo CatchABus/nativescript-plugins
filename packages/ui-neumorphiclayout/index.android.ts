@@ -1,14 +1,14 @@
-import { LayoutBase, Screen, ViewBase } from '@nativescript/core';
-import * as commons from './common';
-import { NeumorphismState } from '.';
+import { backgroundInternalProperty, LayoutBase, Screen, ViewBase } from '@nativescript/core';
+import { NeumorphicLayout } from '.';
+import { darkShadowColorProperty, lightShadowColorProperty, NeumorphicCanvas, NeumorphicType, neumorphismProperty, shadowDistanceProperty, shadowRadiusProperty } from './common';
 
 export * from './common';
 
 @NativeClass()
 class NeumorphicDrawable extends android.graphics.drawable.Drawable {
-	private mAugmentedCanvas: commons.NeumorphicCanvas;
+	private mAugmentedCanvas: NeumorphicCanvas;
 
-	constructor(canvas: commons.NeumorphicCanvas) {
+	constructor(canvas: NeumorphicCanvas) {
 		super();
 		this.mAugmentedCanvas = canvas;
 	}
@@ -26,7 +26,7 @@ class NeumorphicDrawable extends android.graphics.drawable.Drawable {
 		}
 	}
 
-	public getAugmentedCanvas(): commons.NeumorphicCanvas {
+	public getAugmentedCanvas(): NeumorphicCanvas {
 		return this.mAugmentedCanvas;
 	}
 
@@ -45,7 +45,7 @@ function _getNeumorphicDrawable(view: LayoutBase): NeumorphicDrawable {
 	return background;
 }
 
-function _refresh(_value) {
+function _refresh(): void {
 	const drawable = _getNeumorphicDrawable(this);
 	if (drawable != null) {
 		drawable.invalidateSelf();
@@ -62,7 +62,7 @@ function _toggleViewClipping(view: ViewBase, clipChildren: boolean): void {
 	}
 }
 
-function _updateNeumorphismState(this: LayoutBase, value: NeumorphismState): void {
+function _updateNeumorphismState(this: LayoutBase, value: NeumorphicType): void {
 	const drawable = _getNeumorphicDrawable(this);
 	const nativeView = this.nativeViewProtected as android.view.View;
 
@@ -71,7 +71,7 @@ function _updateNeumorphismState(this: LayoutBase, value: NeumorphismState): voi
 			drawable.invalidateSelf();
 		} else {
 			_toggleViewClipping(this.parent, false);
-			const canvas = new commons.NeumorphicCanvas(new WeakRef(this));
+			const canvas = new NeumorphicCanvas(new WeakRef(this as NeumorphicLayout));
 			nativeView.setBackground(new NeumorphicDrawable(canvas));
 		}
 	} else {
@@ -82,10 +82,18 @@ function _updateNeumorphismState(this: LayoutBase, value: NeumorphismState): voi
 	}
 }
 
-LayoutBase.prototype[commons.cornerRadiusProperty.setNative] = _refresh;
-LayoutBase.prototype[commons.lightShadowColorProperty.setNative] = _refresh;
-LayoutBase.prototype[commons.darkShadowColorProperty.setNative] = _refresh;
-LayoutBase.prototype[commons.fillColorProperty.setNative] = _refresh;
-LayoutBase.prototype[commons.shadowDistanceProperty.setNative] = _refresh;
-LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = _refresh;
-LayoutBase.prototype[commons.neumorphismProperty.setNative] = _updateNeumorphismState;
+LayoutBase.prototype[lightShadowColorProperty.setNative] = _refresh;
+LayoutBase.prototype[darkShadowColorProperty.setNative] = _refresh;
+LayoutBase.prototype[shadowDistanceProperty.setNative] = _refresh;
+LayoutBase.prototype[shadowRadiusProperty.setNative] = _refresh;
+LayoutBase.prototype[neumorphismProperty.setNative] = _updateNeumorphismState;
+
+// Disable 'backgroundInternal' as it also uses 'setBackground' to apply a drawable
+const backgroundInternalOrigin = LayoutBase.prototype[backgroundInternalProperty.setNative];
+LayoutBase.prototype[backgroundInternalProperty.setNative] = function (value) {
+	if (this.neumorphism) {
+		_refresh();
+	} else {
+		backgroundInternalOrigin.call(this, value);
+	}
+};
