@@ -40,7 +40,7 @@ XML
         </ActionBar>
     </Page.actionBar>
     <StackLayout class="px-20" backgroundColor="#e0e1e3">
-        <StackLayout verticalAlignment="center" width="200" height="200" marginTop="30" neumorphism="convex" backgroundColor="#e0e1e3" lightShadowColor="#ffffff" darkShadowColor="#bebfc1" cornerRadius="100">
+        <StackLayout verticalAlignment="center" width="200" height="200" marginTop="30" neumorphism="flat" backgroundColor="#e0e1e3" lightShadowColor="#ffffff" darkShadowColor="#bebfc1" cornerRadius="100">
             <Label text="Tap me!" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
         </StackLayout>
     </StackLayout>
@@ -51,7 +51,7 @@ XML
 ### Properties
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| neumorphism | string | null | Determines the view neumorphism styling. Possible types: `flat, concave, convex, pressed, pressed-in-out`. |
+| neumorphism | string | null | Determines the view neumorphism styling. Possible types: `flat, pressed, pressed-in-out`. |
 | lightShadowColor | Color | #ffffff | Determines the color that view will use to set light shadow color. |
 | darkShadowColor | Color | #d9d9d9 | Determines the color that view will use to set dark shadow color. |
 | shadowDistance | number | 10 | Determines the offset of the view shadows. The value is subtracted from the offset of the first shadow and added to the offset of the second one. |

@@ -1,13 +1,12 @@
-import { Color, CssProperty, LayoutBase, Length, Style, Utils } from '@nativescript/core';
-import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style as drawStyle, TileMode } from '@nativescript-community/ui-canvas';
+import { Color, CssProperty, LayoutBase, Length, PercentLength, Style, Utils } from '@nativescript/core';
+import { Canvas, createRectF, Direction, Paint, Path, Style as drawStyle, TileMode, LinearGradient } from '@nativescript-community/ui-canvas';
 import { NeumorphicLayout } from '.';
+import { LinearGradient as NSLinearGradient } from '@nativescript/core/ui/styling/linear-gradient';
 
 const stylePropertiesMap = new Map();
 
 export enum NeumorphicType {
 	FLAT = 'flat',
-	CONCAVE = 'concave',
-	CONVEX = 'convex',
 	PRESSED = 'pressed',
 	PRESSED_IN_OUT = 'pressed-in-out',
 }
@@ -126,7 +125,7 @@ export class NeumorphicCanvas extends Canvas {
 				this.drawPath(this.innerShadowPath, this.paintLight);
 				this.drawPath(this.innerShadowPath, this.paintDark);
 			} else {
-				if (global.isAndroid) {
+				if (__ANDROID__) {
 					this.drawPath(this.path, this.paintLight);
 					this.drawPath(this.path, this.paintDark);
 				}
@@ -139,41 +138,19 @@ export class NeumorphicCanvas extends Canvas {
 		const view = this.view && this.view.get();
 
 		this.paintBase = new Paint();
-		this.paintBase.setAntiAlias(global.isAndroid);
+		this.paintBase.setAntiAlias(__ANDROID__);
 		this.paintLight = new Paint();
-		this.paintLight.setAntiAlias(global.isAndroid);
+		this.paintLight.setAntiAlias(__ANDROID__);
 		this.paintDark = new Paint();
-		this.paintDark.setAntiAlias(global.isAndroid);
+		this.paintDark.setAntiAlias(__ANDROID__);
 	}
 
-	private initPaints(state) {
+	private initPaints(state: NeumorphicType) {
 		const view = this.view && this.view.get();
-
-		const actualSize = view.getActualSize();
-		const width = actualSize.width;
-		const height = actualSize.height;
-
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 		const isPressable = state == NeumorphicType.PRESSED || state == NeumorphicType.PRESSED_IN_OUT;
-		const gradientColors = [];
 
-		switch (state) {
-			case NeumorphicType.CONCAVE:
-				gradientColors.push(view.darkShadowColor);
-				gradientColors.push(view.lightShadowColor);
-				break;
-			case NeumorphicType.CONVEX:
-				gradientColors.push(view.lightShadowColor);
-				gradientColors.push(view.darkShadowColor);
-				break;
-			default:
-				this.paintBase.setColor(view.style.backgroundColor);
-				break;
-		}
-
-		if (gradientColors.length) {
-			this.paintBase.setShader(new LinearGradient(0, 0, width, height, gradientColors, null, TileMode.CLAMP));
-		}
+		this._setBackground(view);
 
 		if (isPressable) {
 			this.paintLight.strokeWidth = shadowRadius;
@@ -187,18 +164,16 @@ export class NeumorphicCanvas extends Canvas {
 			this.paintDark.style = drawStyle.FILL;
 		}
 
-		this.paintLight.setColor(view.style.backgroundColor);
-		this.paintDark.setColor(view.style.backgroundColor);
+		this.paintLight.setColor('#ffffff');
+		this.paintDark.setColor('#ffffff');
 		this.paintLight.setShadowLayer(shadowRadius, -view.shadowDistance, -view.shadowDistance, view.lightShadowColor);
 		this.paintDark.setShadowLayer(shadowRadius, view.shadowDistance, view.shadowDistance, view.darkShadowColor);
 	}
 
-	private initShape(state) {
+	private initShape(state: NeumorphicType) {
 		const view = this.view && this.view.get();
 
-		const actualSize = view.getActualSize();
-		const width = actualSize.width;
-		const height = actualSize.height;
+		const { width, height } = view.getActualSize();
 		const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
 		const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
 
@@ -209,6 +184,51 @@ export class NeumorphicCanvas extends Canvas {
 
 		this.path.addRoundRect(createRectF(0, 0, width, height), cornerRadius, cornerRadius, Direction.CW);
 		this.innerShadowPath.addRoundRect(createRectF(-(shadowRadius / 2), -(shadowRadius / 2), width + shadowRadius, height + shadowRadius), cornerRadius, cornerRadius, Direction.CW);
+	}
+
+	private _setBackground(view: NeumorphicLayout): void {
+		const background = view.style.backgroundInternal;
+		if (!background) {
+			return;
+		}
+
+		const { width, height } = view.getActualSize();
+
+		if (background.image) {
+			if (background.image instanceof NSLinearGradient) {
+				const gradient = background.image;
+
+				const colors: Color[] = [];
+				const positions = new Float32Array(gradient.colorStops.length);
+				let isGradientWithStops = false;
+
+				for (let i = 0, length = gradient.colorStops.length; i < length; i++) {
+					const colorStop = gradient.colorStops[i];
+
+					colors[i] = colorStop.color;
+
+					if (colorStop.offset) {
+						isGradientWithStops = true;
+						positions[i] = Utils.layout.toDeviceIndependentPixels(PercentLength.toDevicePixels(colorStop.offset));
+					}
+				}
+
+				const alpha = gradient.angle / (Math.PI * 2);
+				const startX = Math.pow(Math.sin(Math.PI * (alpha + 0.75)), 2);
+				const startY = Math.pow(Math.sin(Math.PI * (alpha + 0.5)), 2);
+				const endX = Math.pow(Math.sin(Math.PI * (alpha + 0.25)), 2);
+				const endY = Math.pow(Math.sin(Math.PI * alpha), 2);
+
+				this.paintBase.setShader(new LinearGradient(startX * width, startY * height, endX * width, endY * height, colors, isGradientWithStops ? positions : null, TileMode.MIRROR));
+			} else {
+				throw new Error('Neumorphism plugin can only draw color and linear gradient backgrounds');
+			}
+		} else {
+			if (this.paintBase.getShader()) {
+				this.paintBase.setShader(null);
+			}
+			this.paintBase.setColor(view.style.backgroundColor);
+		}
 	}
 }
 

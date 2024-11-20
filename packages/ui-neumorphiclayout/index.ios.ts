@@ -49,7 +49,7 @@ function _getDrawableLayers(view: NeumorphicLayout): CALayer[] {
 	return drawableLayers;
 }
 
-function _refresh(): void {
+function _refresh(this: NeumorphicLayout): void {
 	const drawableLayers = _getDrawableLayers(this);
 
 	if (drawableLayers.length) {
@@ -82,14 +82,14 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
 
 	bgLayer.cornerRadius = cornerRadius;
-	bgLayer.backgroundColor = view.style.backgroundColor.ios.CGColor;
+	bgLayer.backgroundColor = UIColor.whiteColor.CGColor;
 	bgLayer.shadowColor = view.lightShadowColor.ios.CGColor;
 	bgLayer.shadowOffset = CGSizeMake(-view.shadowDistance, -view.shadowDistance);
 	bgLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
 	bgLayer.shadowOpacity = state == NeumorphicType.PRESSED ? 0 : 1;
 
 	fgLayer.cornerRadius = cornerRadius;
-	fgLayer.backgroundColor = view.style.backgroundColor.ios.CGColor;
+	fgLayer.backgroundColor = UIColor.whiteColor.CGColor;
 	fgLayer.contentsScale = Screen.mainScreen.scale;
 	fgLayer.allowsEdgeAntialiasing = true;
 	fgLayer.shadowColor = view.darkShadowColor.ios.CGColor;
@@ -100,7 +100,7 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	fgLayer.setNeedsDisplay();
 }
 
-function _updateNeumorphismState(value: NeumorphicType): void {
+function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType): void {
 	const drawableLayers = _getDrawableLayers(this);
 	const layoutChangeListener = (args: EventData) => _updateSublayerBounds(args.object as NeumorphicLayout);
 

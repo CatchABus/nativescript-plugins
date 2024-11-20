@@ -45,7 +45,7 @@ function _getNeumorphicDrawable(view: LayoutBase): NeumorphicDrawable {
 	return background;
 }
 
-function _refresh(): void {
+function _refresh(this: NeumorphicLayout): void {
 	const drawable = _getNeumorphicDrawable(this);
 	if (drawable != null) {
 		drawable.invalidateSelf();
@@ -92,7 +92,7 @@ LayoutBase.prototype[neumorphismProperty.setNative] = _updateNeumorphismState;
 const backgroundInternalOrigin = LayoutBase.prototype[backgroundInternalProperty.setNative];
 LayoutBase.prototype[backgroundInternalProperty.setNative] = function (value) {
 	if (this.neumorphism) {
-		_refresh();
+		_refresh.call(this, value);
 	} else {
 		backgroundInternalOrigin.call(this, value);
 	}
