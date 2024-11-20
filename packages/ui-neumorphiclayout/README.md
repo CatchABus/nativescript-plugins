@@ -19,6 +19,7 @@ npm i @nativescript-community/ui-neumorphiclayout
 
 ## Usage
 Importing plugin at startup is all it takes to add support for neumorphism styling to your application. 
+Even though this plugin overrides NativeScript background drawing step, it still offers support for `background` (color & gradient), `border-color`, `border-width`, and `border-radius` CSS properties.
 
 NOTE: Scrollable views like `ListView` or `ScrollView` must NEVER be direct siblings of a view with neumorphism because of android `clipChildren` effect. 
 Instead, add those views inside a layout container.
@@ -59,6 +60,6 @@ XML
 
 ## About
 
-This plugin adds support for neumorphism styling to NativeScript [layout containers](https://docs.nativescript.org/ui-and-styling.html#layout-containers). It also includes basic gesture support for tap effect. 
+This plugin adds support for neumorphism styling to NativeScript [layout containers](https://docs.nativescript.org/ui-and-styling.html#layout-containers).
 
 Its functionality is inspired by [Neumorphism.io](https://neumorphism.io).
