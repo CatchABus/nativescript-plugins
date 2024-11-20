@@ -72,6 +72,7 @@ export class NeumorphicCanvas extends Canvas {
 	private path: Path;
 	private innerShadowPath: Path;
 	private paintBase: Paint;
+	private paintStroke: Paint;
 	private paintLight: Paint;
 	private paintDark: Paint;
 
@@ -132,6 +133,9 @@ export class NeumorphicCanvas extends Canvas {
 				this.drawPath(this.path, this.paintBase);
 			}
 		}
+
+		this.clipPath(this.path);
+		this.drawPath(this.path, this.paintStroke);
 	}
 
 	private initDefaults() {
@@ -139,6 +143,9 @@ export class NeumorphicCanvas extends Canvas {
 
 		this.paintBase = new Paint();
 		this.paintBase.setAntiAlias(true);
+		this.paintStroke = new Paint();
+		this.paintStroke.setStyle(drawStyle.STROKE);
+		this.paintStroke.setAntiAlias(true);
 		this.paintLight = new Paint();
 		this.paintLight.setAntiAlias(true);
 		this.paintDark = new Paint();
@@ -150,8 +157,15 @@ export class NeumorphicCanvas extends Canvas {
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 		const isPressable = state == NeumorphicType.PRESSED || state == NeumorphicType.PRESSED_IN_OUT;
 		const fillColor = view.style.backgroundColor instanceof Color ? view.style.backgroundColor : '#ffffff';
+		const borderColor = view.style.borderTopColor instanceof Color ? view.style.borderTopColor : '#ffffff';
+
+		// Duplicate width as half of it will be clipped
+		const borderWidth = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.style.borderTopWidth)) * 2;
 
 		this._setBackground(view);
+
+		this.paintStroke.setStrokeWidth(borderWidth);
+		this.paintStroke.setColor(borderColor);
 
 		if (isPressable) {
 			this.paintLight.strokeWidth = shadowRadius;

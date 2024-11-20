@@ -1,4 +1,4 @@
-import { backgroundInternalProperty, borderRadiusProperty, borderTopLeftRadiusProperty, Color, EventData, LayoutBase, Length, Screen, Utils } from '@nativescript/core';
+import { backgroundInternalProperty, borderTopColorProperty, borderTopLeftRadiusProperty, borderTopWidthProperty, Color, EventData, LayoutBase, Length, Screen, Utils } from '@nativescript/core';
 import { NeumorphicLayout } from '.';
 import { darkShadowColorProperty, lightShadowColorProperty, NeumorphicCanvas, NeumorphicType, neumorphismProperty, shadowDistanceProperty, shadowRadiusProperty } from './common';
 
@@ -139,6 +139,8 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 	}
 }
 
+LayoutBase.prototype[borderTopColorProperty.setNative] = _refresh;
+LayoutBase.prototype[borderTopWidthProperty.setNative] = _refresh;
 LayoutBase.prototype[borderTopLeftRadiusProperty.setNative] = _refresh;
 LayoutBase.prototype[lightShadowColorProperty.setNative] = _refresh;
 LayoutBase.prototype[darkShadowColorProperty.setNative] = _refresh;
