@@ -1,4 +1,4 @@
-import { backgroundInternalProperty, borderRadiusProperty, borderTopLeftRadiusProperty, EventData, LayoutBase, Length, Screen, Utils } from '@nativescript/core';
+import { backgroundInternalProperty, borderRadiusProperty, borderTopLeftRadiusProperty, Color, EventData, LayoutBase, Length, Screen, Utils } from '@nativescript/core';
 import { NeumorphicLayout } from '.';
 import { darkShadowColorProperty, lightShadowColorProperty, NeumorphicCanvas, NeumorphicType, neumorphismProperty, shadowDistanceProperty, shadowRadiusProperty } from './common';
 
@@ -80,16 +80,17 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	const { width, height } = view.getActualSize();
 	const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
 	const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
+	const fillColor = view.style.backgroundColor instanceof Color ? view.style.backgroundColor.ios.CGColor : UIColor.whiteColor.CGColor;
 
 	bgLayer.cornerRadius = cornerRadius;
-	bgLayer.backgroundColor = UIColor.whiteColor.CGColor;
+	bgLayer.backgroundColor = fillColor;
 	bgLayer.shadowColor = view.lightShadowColor.ios.CGColor;
 	bgLayer.shadowOffset = CGSizeMake(-view.shadowDistance, -view.shadowDistance);
 	bgLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
 	bgLayer.shadowOpacity = state == NeumorphicType.PRESSED ? 0 : 1;
 
 	fgLayer.cornerRadius = cornerRadius;
-	fgLayer.backgroundColor = UIColor.whiteColor.CGColor;
+	fgLayer.backgroundColor = fillColor;
 	fgLayer.contentsScale = Screen.mainScreen.scale;
 	fgLayer.allowsEdgeAntialiasing = true;
 	fgLayer.shadowColor = view.darkShadowColor.ios.CGColor;

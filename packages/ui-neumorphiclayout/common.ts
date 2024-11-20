@@ -149,6 +149,7 @@ export class NeumorphicCanvas extends Canvas {
 		const view = this.view && this.view.get();
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 		const isPressable = state == NeumorphicType.PRESSED || state == NeumorphicType.PRESSED_IN_OUT;
+		const fillColor = view.style.backgroundColor instanceof Color ? view.style.backgroundColor : '#ffffff';
 
 		this._setBackground(view);
 
@@ -164,8 +165,8 @@ export class NeumorphicCanvas extends Canvas {
 			this.paintDark.style = drawStyle.FILL;
 		}
 
-		this.paintLight.setColor('#ffffff');
-		this.paintDark.setColor('#ffffff');
+		this.paintLight.setColor(fillColor);
+		this.paintDark.setColor(fillColor);
 		this.paintLight.setShadowLayer(shadowRadius, -view.shadowDistance, -view.shadowDistance, view.lightShadowColor);
 		this.paintDark.setShadowLayer(shadowRadius, view.shadowDistance, view.shadowDistance, view.darkShadowColor);
 	}
