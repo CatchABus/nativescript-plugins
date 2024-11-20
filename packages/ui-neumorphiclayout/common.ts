@@ -1,4 +1,4 @@
-import { backgroundInternalProperty, booleanConverter, Color, CssProperty, LayoutBase, GestureTypes, Property, Style, TouchAction, TouchGestureEventData } from '@nativescript/core';
+import { backgroundInternalProperty, Color, CssProperty, LayoutBase, Style } from '@nativescript/core';
 import { Canvas, createRectF, Direction, LinearGradient, Paint, Path, Style as drawStyle, TileMode } from '@nativescript-community/ui-canvas';
 
 export const STATE_FLAT = 'flat';
@@ -10,19 +10,6 @@ export const STATE_PRESSED_IN_OUT = 'pressed-in-out';
 const NEUMORPHISM_STATES = [STATE_FLAT, STATE_CONCAVE, STATE_CONVEX, STATE_PRESSED, STATE_PRESSED_IN_OUT];
 
 const stylePropertiesMap = new Map();
-
-function toggleTouchState(args: TouchGestureEventData) {
-	const view: any = args.view;
-	switch (args.action) {
-		case TouchAction.down:
-			view.isTouched = true;
-			break;
-		case TouchAction.cancel:
-		case TouchAction.up:
-			view.isTouched = false;
-			break;
-	}
-}
 
 stylePropertiesMap.set(
 	'lightShadowColor',
@@ -88,33 +75,6 @@ stylePropertiesMap.set(
 export const neumorphismProperty = stylePropertiesMap.get('neumorphism');
 
 stylePropertiesMap.set(
-	'touchState',
-	new CssProperty<Style, string>({
-		name: 'touchState',
-		cssName: 'touch-state',
-		valueConverter: (value) => {
-			if (value && !NEUMORPHISM_STATES.includes(value)) {
-				throw new Error('Invalid touch state!');
-			}
-			return value;
-		},
-		valueChanged: (target: any, oldValue, newValue) => {
-			const view = target.view;
-			if (!!newValue !== !!oldValue) {
-				if (newValue != null) {
-					view.off(GestureTypes.touch, toggleTouchState);
-					view.on(GestureTypes.touch, toggleTouchState);
-				} else {
-					view.off(GestureTypes.touch, toggleTouchState);
-				}
-				view.isTouched = false;
-			}
-		},
-	})
-);
-export const touchStateProperty = stylePropertiesMap.get('touchState');
-
-stylePropertiesMap.set(
 	'shadowDistance',
 	new CssProperty<Style, number>({
 		name: 'shadowDistance',
@@ -134,12 +94,6 @@ stylePropertiesMap.set(
 	})
 );
 export const shadowRadiusProperty = stylePropertiesMap.get('shadowRadius');
-
-export const isTouchedProperty = new Property<LayoutBase, boolean>({
-	name: 'isTouched',
-	defaultValue: false,
-	valueConverter: booleanConverter,
-});
 
 export class NeumorphicCanvas extends Canvas {
 	private view: WeakRef<any>;
@@ -165,7 +119,7 @@ export class NeumorphicCanvas extends Canvas {
 
 	public onDraw() {
 		const view = this.view && this.view.get();
-		const state = view.isTouched ? view.touchState : view.neumorphism;
+		const state = view.neumorphism;
 
 		if (!state) {
 			throw new Error('No neumorphism state found!');
@@ -306,5 +260,3 @@ for (let [key, value] of stylePropertiesMap) {
 	});
 	value.register(Style);
 }
-
-isTouchedProperty.register(LayoutBase);

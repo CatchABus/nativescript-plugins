@@ -52,14 +52,12 @@ XML
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | neumorphism | string | null | Determines the view neumorphism styling. Possible types: `flat, concave, convex, pressed, pressed-in-out`. |
-| touchState | strubg | null | Determines the view neumorphism styling for tap effect. |
 | fillColor | Color | #ffffff | Determines the color that view will use to set background color. |
 | lightShadowColor | Color | #ffffff | Determines the color that view will use to set light shadow color. |
 | darkShadowColor | Color | #d9d9d9 | Determines the color that view will use to set dark shadow color. |
 | cornerRadius | number | 0 | Determines the rounding of the view corners. |
 | shadowDistance | number | 10 | Determines the offset of the view shadows. The value is subtracted from the offset of the first shadow and added to the offset of the second one. |
 | shadowRadius | number | `shadowDistance*2` | Determines the radius for the view shadows. |
-| isTouched | boolean | false | A flag indicating whether view is currently touched or not. |
 
 ## About
 

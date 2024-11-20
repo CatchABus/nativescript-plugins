@@ -29,11 +29,9 @@ function toggleViewClipping(view, clipChildren: boolean): void {
 }
 
 LayoutBase.prototype[commons.cornerRadiusProperty.setNative] = refresh;
-LayoutBase.prototype[commons.isTouchedProperty.setNative] = refresh;
 LayoutBase.prototype[commons.lightShadowColorProperty.setNative] = refresh;
 LayoutBase.prototype[commons.darkShadowColorProperty.setNative] = refresh;
 LayoutBase.prototype[commons.fillColorProperty.setNative] = refresh;
-LayoutBase.prototype[commons.touchStateProperty.setNative] = refresh;
 LayoutBase.prototype[commons.shadowDistanceProperty.setNative] = refresh;
 LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = refresh;
 

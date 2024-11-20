@@ -6,19 +6,19 @@
     <StackLayout class="px-20 bg-neumorphic">
         <ScrollView class="h-full">
           <StackLayout>
-            <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="flat" touchState="pressed">
+            <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="flat">
                 <Label text="Flat" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
             </StackLayout>
-            <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="pressed" touchState="flat">
+            <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="pressed">
                 <Label text="Pressed" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
             </StackLayout>
-            <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="pressed-in-out" touchState="flat">
+            <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="pressed-in-out">
                 <Label text="Pressed in out" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
             </StackLayout>
-            <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="concave" touchState="convex">
+            <StackLayout class="neumorphism" verticalAlignment="center" neumorphism="concave">
                 <Label text="Concave" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
             </StackLayout>
-            <StackLayout class="neumorphism circle" width="200" height="200" verticalAlignment="center" marginBottom="24" neumorphism="convex" touchState="concave">
+            <StackLayout class="neumorphism circle" width="200" height="200" verticalAlignment="center" marginBottom="24" neumorphism="convex">
                 <Label text="Convex" textAlignment="center" fontSize="24" color="#6d707d" fontWeight="bold"/>
             </StackLayout>
           </StackLayout>

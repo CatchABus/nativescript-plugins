@@ -42,7 +42,7 @@ function updateSublayerShadows(view, sublayers) {
 		throw new Error('No shadow sublayers found!');
 	}
 
-	const state = view.isTouched ? view.touchState : view.neumorphism;
+	const state = view.neumorphism;
 	if (!state) {
 		throw new Error('No neumorphism state found!');
 	}
@@ -72,11 +72,9 @@ function updateSublayerShadows(view, sublayers) {
 }
 
 LayoutBase.prototype[commons.cornerRadiusProperty.setNative] = refresh;
-LayoutBase.prototype[commons.isTouchedProperty.setNative] = refresh;
 LayoutBase.prototype[commons.lightShadowColorProperty.setNative] = refresh;
 LayoutBase.prototype[commons.darkShadowColorProperty.setNative] = refresh;
 LayoutBase.prototype[commons.fillColorProperty.setNative] = refresh;
-LayoutBase.prototype[commons.touchStateProperty.setNative] = refresh;
 LayoutBase.prototype[commons.shadowDistanceProperty.setNative] = refresh;
 LayoutBase.prototype[commons.shadowRadiusProperty.setNative] = refresh;
 
