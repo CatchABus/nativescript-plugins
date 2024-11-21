@@ -6,7 +6,7 @@ export * from './common';
 
 const layerNames = ['backgroundDrawable', 'foregroundDrawable'];
 
-@NativeClass
+@NativeClass()
 class CANeumorphicLayer extends CALayer implements CALayerDelegate {
 	private mAugmentedCanvas: NeumorphicCanvas;
 

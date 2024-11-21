@@ -6,7 +6,7 @@
 	"tags": [],
 	"targets": {
 		"build": {
-			"executor": "@nx/js:tsc",
+			"executor": "@nrwl/js:tsc",
 			"options": {
 				"outputPath": "dist/packages/ui-neumorphiclayout",
 				"tsConfig": "packages/ui-neumorphiclayout/tsconfig.json",

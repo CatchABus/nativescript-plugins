@@ -5,7 +5,7 @@
 	"sourceRoot": "packages/ui-htmlcanvasapi",
 	"targets": {
 		"build": {
-			"executor": "@nx/js:tsc",
+			"executor": "@nrwl/js:tsc",
 			"options": {
 				"outputPath": "dist/packages/ui-htmlcanvasapi",
 				"tsConfig": "packages/ui-htmlcanvasapi/tsconfig.json",
