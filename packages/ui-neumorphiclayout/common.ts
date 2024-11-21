@@ -3,7 +3,8 @@ import { Canvas, createRectF, Direction, Paint, Path, Style as drawStyle, TileMo
 import { NeumorphicLayout } from '.';
 import { LinearGradient as NSLinearGradient } from '@nativescript/core/ui/styling/linear-gradient';
 
-const stylePropertiesMap = new Map();
+const stylePropertiesMap = new Map<string, CssProperty<Style, any>>();
+const defaultColor: string = '#ffffff';
 
 export enum NeumorphicType {
 	FLAT = 'flat',
@@ -16,7 +17,7 @@ stylePropertiesMap.set(
 	new CssProperty<Style, Color>({
 		name: 'lightShadowColor',
 		cssName: 'light-shadow-color',
-		defaultValue: new Color('#ffffff'),
+		defaultValue: new Color(defaultColor),
 		equalityComparer: Color.equals,
 		valueConverter: (value) => new Color(value),
 	})
@@ -156,8 +157,8 @@ export class NeumorphicCanvas extends Canvas {
 		const view = this.view && this.view.get();
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 		const isPressable = state == NeumorphicType.PRESSED || state == NeumorphicType.PRESSED_IN_OUT;
-		const fillColor = view.style.backgroundColor instanceof Color ? view.style.backgroundColor : '#ffffff';
-		const borderColor = view.style.borderTopColor instanceof Color ? view.style.borderTopColor : '#ffffff';
+		const fillColor = view.style.backgroundColor instanceof Color ? view.style.backgroundColor : defaultColor;
+		const borderColor = view.style.borderTopColor instanceof Color ? view.style.borderTopColor : defaultColor;
 
 		// Duplicate width as half of it will be clipped
 		const borderWidth = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.style.borderTopWidth)) * 2;
@@ -207,11 +208,10 @@ export class NeumorphicCanvas extends Canvas {
 			return;
 		}
 
-		const { width, height } = view.getActualSize();
-
 		if (background.image) {
 			if (background.image instanceof NSLinearGradient) {
 				const gradient = background.image;
+				const { width, height } = view.getActualSize();
 
 				const colors: Color[] = [];
 				const positions = new Float32Array(gradient.colorStops.length);
@@ -242,7 +242,7 @@ export class NeumorphicCanvas extends Canvas {
 			if (this.paintBase.getShader()) {
 				this.paintBase.setShader(null);
 			}
-			this.paintBase.setColor(view.style.backgroundColor);
+			this.paintBase.setColor(view.style.backgroundColor || defaultColor);
 		}
 	}
 }
