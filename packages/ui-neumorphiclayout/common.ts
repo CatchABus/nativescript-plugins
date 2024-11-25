@@ -135,8 +135,10 @@ export class NeumorphicCanvas extends Canvas {
 			}
 		}
 
-		this.clipPath(this.path);
-		this.drawPath(this.path, this.paintStroke);
+		if (this.paintStroke != null) {
+			this.clipPath(this.path);
+			this.drawPath(this.path, this.paintStroke);
+		}
 	}
 
 	private initDefaults() {
@@ -144,9 +146,6 @@ export class NeumorphicCanvas extends Canvas {
 
 		this.paintBase = new Paint();
 		this.paintBase.setAntiAlias(true);
-		this.paintStroke = new Paint();
-		this.paintStroke.setStyle(drawStyle.STROKE);
-		this.paintStroke.setAntiAlias(true);
 		this.paintLight = new Paint();
 		this.paintLight.setAntiAlias(true);
 		this.paintDark = new Paint();
@@ -158,15 +157,9 @@ export class NeumorphicCanvas extends Canvas {
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 		const isPressable = state == NeumorphicType.PRESSED || state == NeumorphicType.PRESSED_IN_OUT;
 		const fillColor = view.style.backgroundColor instanceof Color ? view.style.backgroundColor : defaultColor;
-		const borderColor = view.style.borderTopColor instanceof Color ? view.style.borderTopColor : defaultColor;
-
-		// Duplicate width as half of it will be clipped
-		const borderWidth = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.style.borderTopWidth)) * 2;
 
 		this._setBackground(view);
-
-		this.paintStroke.setStrokeWidth(borderWidth);
-		this.paintStroke.setColor(borderColor);
+		this._setStroke(view);
 
 		if (isPressable) {
 			this.paintLight.strokeWidth = shadowRadius;
@@ -244,6 +237,19 @@ export class NeumorphicCanvas extends Canvas {
 			}
 			this.paintBase.setColor(view.style.backgroundColor || defaultColor);
 		}
+	}
+
+	private _setStroke(view: NeumorphicLayout): void {
+		const borderColor = view.style.borderTopColor instanceof Color ? view.style.borderTopColor : defaultColor;
+
+		// Duplicate width as half of it will be clipped
+		const borderWidth = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.style.borderTopWidth)) * 2;
+
+		this.paintStroke = new Paint();
+		this.paintStroke.setStyle(drawStyle.STROKE);
+		this.paintStroke.setAntiAlias(true);
+		this.paintStroke.setStrokeWidth(borderWidth);
+		this.paintStroke.setColor(borderColor);
 	}
 }
 
