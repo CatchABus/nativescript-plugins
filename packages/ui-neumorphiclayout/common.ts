@@ -245,11 +245,13 @@ export class NeumorphicCanvas extends Canvas {
 		// Duplicate width as half of it will be clipped
 		const borderWidth = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.style.borderTopWidth)) * 2;
 
-		this.paintStroke = new Paint();
-		this.paintStroke.setStyle(drawStyle.STROKE);
-		this.paintStroke.setAntiAlias(true);
-		this.paintStroke.setStrokeWidth(borderWidth);
-		this.paintStroke.setColor(borderColor);
+		if (borderWidth > 0) {
+			this.paintStroke = new Paint();
+			this.paintStroke.setStyle(drawStyle.STROKE);
+			this.paintStroke.setAntiAlias(true);
+			this.paintStroke.setStrokeWidth(borderWidth);
+			this.paintStroke.setColor(borderColor);
+		}
 	}
 }
 
