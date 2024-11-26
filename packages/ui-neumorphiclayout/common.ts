@@ -146,6 +146,10 @@ export class NeumorphicCanvas extends Canvas {
 
 		this.paintBase = new Paint();
 		this.paintBase.setAntiAlias(true);
+
+		// Stroke paint will be set at a later stage if needed
+		this.paintStroke = null;
+
 		this.paintLight = new Paint();
 		this.paintLight.setAntiAlias(true);
 		this.paintDark = new Paint();
