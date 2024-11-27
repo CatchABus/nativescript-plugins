@@ -67,14 +67,16 @@ function _updateSublayerBounds(view: NeumorphicLayout) {
 }
 
 function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
-	const [bgLayer, fgLayer] = sublayers;
-	if (bgLayer == null || fgLayer == null) {
-		throw new Error('No shadow sublayers found!');
+	const state = view.neumorphism;
+
+	if (!state) {
+		return;
 	}
 
-	const state = view.neumorphism;
-	if (!state) {
-		throw new Error('No neumorphism state found!');
+	const [bgLayer, fgLayer] = sublayers;
+
+	if (bgLayer == null || fgLayer == null) {
+		return;
 	}
 
 	const { width, height } = view.getActualSize();
