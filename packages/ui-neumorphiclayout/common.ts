@@ -72,14 +72,23 @@ export class NeumorphicCanvas extends Canvas {
 
 	private path: Path;
 	private innerShadowPath: Path;
-	private paintBase: Paint;
 	private paintStroke: Paint;
-	private paintLight: Paint;
-	private paintDark: Paint;
+
+	private readonly paintBase: Paint;
+	private readonly paintLight: Paint;
+	private readonly paintDark: Paint;
 
 	constructor(view: WeakRef<NeumorphicLayout>) {
 		super(0, 0);
+
 		this.view = view;
+
+		this.paintBase = new Paint();
+		this.paintBase.setAntiAlias(true);
+		this.paintLight = new Paint();
+		this.paintLight.setAntiAlias(true);
+		this.paintDark = new Paint();
+		this.paintDark.setAntiAlias(true);
 	}
 
 	public manipulateColor(color: Color, factor: number): Color {
@@ -90,6 +99,10 @@ export class NeumorphicCanvas extends Canvas {
 		return new Color(a, Math.min(r, 255), Math.min(g, 255), Math.min(b, 255));
 	}
 
+	public getBasePaint(): Paint {
+		return this.paintBase;
+	}
+
 	public onDraw() {
 		const view = this.view && this.view.get();
 		const state = view.neumorphism;
@@ -98,7 +111,8 @@ export class NeumorphicCanvas extends Canvas {
 			throw new Error('No neumorphism state found!');
 		}
 
-		this.initDefaults();
+		// Stroke paint will be set at a later stage if needed
+		this.paintStroke = null;
 
 		if (state == NeumorphicType.PRESSED_IN_OUT) {
 			if (__ANDROID__) {
@@ -139,21 +153,6 @@ export class NeumorphicCanvas extends Canvas {
 			this.clipPath(this.path);
 			this.drawPath(this.path, this.paintStroke);
 		}
-	}
-
-	private initDefaults() {
-		const view = this.view && this.view.get();
-
-		this.paintBase = new Paint();
-		this.paintBase.setAntiAlias(true);
-
-		// Stroke paint will be set at a later stage if needed
-		this.paintStroke = null;
-
-		this.paintLight = new Paint();
-		this.paintLight.setAntiAlias(true);
-		this.paintDark = new Paint();
-		this.paintDark.setAntiAlias(true);
 	}
 
 	private initPaints(state: NeumorphicType) {

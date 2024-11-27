@@ -33,6 +33,19 @@ class NeumorphicDrawable extends android.graphics.drawable.Drawable {
 	public getOpacity() {
 		return android.graphics.PixelFormat.TRANSLUCENT;
 	}
+
+	public setColorFilter(color: number, mode: android.graphics.PorterDuff.Mode): void;
+	public setColorFilter(colorFilter: android.graphics.ColorFilter): void;
+
+	public setColorFilter(...args: any): void {
+		if (args.length === 2) {
+			super.setColorFilter(args[0], args[1]);
+		} else {
+			if (this.mAugmentedCanvas) {
+				this.mAugmentedCanvas.getBasePaint().setColorFilter(args[0]);
+			}
+		}
+	}
 }
 
 function _getNeumorphicDrawable(view: LayoutBase): NeumorphicDrawable {
