@@ -58,10 +58,16 @@ function _refresh(this: NeumorphicLayout): void {
 }
 
 function _updateSublayerBounds(view: NeumorphicLayout) {
+	const { width, height } = view.getActualSize();
+	const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
+	const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
 	const drawableLayers = _getDrawableLayers(view);
+	const bounds = view.nativeViewProtected.bounds;
+	const shadowPath = UIBezierPath.bezierPathWithRoundedRectCornerRadius(bounds, cornerRadius).CGPath;
 
 	for (const layer of drawableLayers) {
-		layer.frame = view.nativeViewProtected.bounds;
+		layer.frame = bounds;
+		layer.shadowPath = shadowPath;
 		layer.setNeedsDisplay();
 	}
 }
@@ -103,9 +109,12 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	fgLayer.setNeedsDisplay();
 }
 
+function _onLayoutChange(args: EventData): void {
+	_updateSublayerBounds(args.object as NeumorphicLayout);
+}
+
 function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType): void {
 	const drawableLayers = _getDrawableLayers(this);
-	const layoutChangeListener = (args: EventData) => _updateSublayerBounds(args.object as NeumorphicLayout);
 
 	if (value) {
 		if (drawableLayers.length) {
@@ -128,7 +137,7 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 			_updateSublayerShadows(this, [bgLayer, fgLayer]);
 			_updateSublayerBounds(this);
 
-			this.on(LayoutBase.layoutChangedEvent, layoutChangeListener);
+			this.on(LayoutBase.layoutChangedEvent, _onLayoutChange);
 		}
 	} else {
 		if (drawableLayers.length) {
@@ -137,7 +146,7 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 			}
 		}
 
-		this.off(LayoutBase.layoutChangedEvent, layoutChangeListener);
+		this.off(LayoutBase.layoutChangedEvent, _onLayoutChange);
 	}
 }
 
