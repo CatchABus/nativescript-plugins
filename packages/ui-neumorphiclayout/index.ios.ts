@@ -89,13 +89,15 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
 	const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
 	const fillColor = view.style.backgroundColor instanceof Color ? view.style.backgroundColor.ios.CGColor : UIColor.whiteColor.CGColor;
+	const shadowRadius = (view.shadowRadius || view.shadowDistance * 2) / Screen.mainScreen.scale;
+	const shadowOpacity = state == NeumorphicType.PRESSED ? 0 : 1;
 
 	bgLayer.cornerRadius = cornerRadius;
 	bgLayer.backgroundColor = fillColor;
 	bgLayer.shadowColor = view.lightShadowColor.ios.CGColor;
 	bgLayer.shadowOffset = CGSizeMake(-view.shadowDistance, -view.shadowDistance);
-	bgLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
-	bgLayer.shadowOpacity = state == NeumorphicType.PRESSED ? 0 : 1;
+	bgLayer.shadowRadius = shadowRadius;
+	bgLayer.shadowOpacity = shadowOpacity;
 
 	fgLayer.cornerRadius = cornerRadius;
 	fgLayer.backgroundColor = fillColor;
@@ -103,8 +105,8 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	fgLayer.allowsEdgeAntialiasing = true;
 	fgLayer.shadowColor = view.darkShadowColor.ios.CGColor;
 	fgLayer.shadowOffset = CGSizeMake(view.shadowDistance, view.shadowDistance);
-	fgLayer.shadowRadius = view.shadowRadius || view.shadowDistance * 2;
-	fgLayer.shadowOpacity = state == NeumorphicType.PRESSED ? 0 : 1;
+	fgLayer.shadowRadius = shadowRadius;
+	fgLayer.shadowOpacity = shadowOpacity;
 
 	fgLayer.setNeedsDisplay();
 }
