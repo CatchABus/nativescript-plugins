@@ -1,7 +1,6 @@
 import { Direction, Matrix, Path, RectF } from '@nativescript-community/ui-canvas';
 import { DOMMatrix } from './DOMMatrix';
 import { getVectorAngle, normalizeVector, radiansToDegrees } from './helpers';
-import { SVGPathData } from 'svg-pathdata';
 
 interface Point {
 	x: number;
@@ -22,52 +21,9 @@ class NSPath2D {
 			}
 		} else if (typeof path === 'string') {
 			this._path = new Path();
-			this._drawSVGPath(path);
+			console.warn('SVG path is not currently supported');
 		} else {
 			this._path = new Path();
-		}
-	}
-
-	private _drawSVGPath(path: string) {
-		const pathData = new SVGPathData(path).toAbs();
-
-		for (const command of pathData.commands) {
-			// These values can be different during each iteration
-			const lastX = this._lastPoint?.x ?? 0;
-			const lastY = this._lastPoint?.y ?? 0;
-
-			switch (command.type) {
-				case SVGPathData.LINE_TO:
-					this.lineTo(command.x, command.y);
-					break;
-				case SVGPathData.HORIZ_LINE_TO:
-					this.lineTo(command.x, lastY);
-					break;
-				case SVGPathData.VERT_LINE_TO:
-					this.lineTo(lastX, command.y);
-					break;
-				case SVGPathData.MOVE_TO:
-					this.moveTo(command.x, command.y);
-					break;
-				case SVGPathData.CURVE_TO:
-					this.bezierCurveTo(command.x1, command.y1, command.x2, command.y2, command.x, command.y);
-					break;
-				case SVGPathData.QUAD_TO:
-					this.quadraticCurveTo(command.x1, command.y1, command.x, command.y);
-					break;
-				case SVGPathData.SMOOTH_QUAD_TO:
-					console.warn('SVG smooth quad curve is not currently implemented');
-					break;
-				case SVGPathData.SMOOTH_CURVE_TO:
-					console.warn('SVG smooth curve is not currently implemented');
-					break;
-				case SVGPathData.CLOSE_PATH:
-					this.closePath();
-					break;
-				case SVGPathData.ARC:
-					console.warn('SVG elliptic arc is not currently implemented');
-					break;
-			}
 		}
 	}
 

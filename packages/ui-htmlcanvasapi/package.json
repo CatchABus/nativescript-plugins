@@ -35,7 +35,6 @@
 	"readmeFilename": "README.md",
 	"bootstrapper": "@nativescript/plugin-seed",
 	"dependencies": {
-		"@nativescript-community/ui-canvas": "^4.6.32",
-		"svg-pathdata": "^7.0.0"
+		"@nativescript-community/ui-canvas": "^4.6.32"
 	}
 }
