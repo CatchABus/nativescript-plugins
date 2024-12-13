@@ -351,7 +351,7 @@ abstract class AbstractCanvasRenderingContext2D {
 	public clearRect(x: number, y: number, width: number, height: number): void {
 		const context = this.nativeContext;
 		if (context) {
-			context.drawRect(x, y, width, height, this._clearPaint);
+			context.drawRect(createRect(x, y, width, height), this._clearPaint);
 		}
 	}
 
