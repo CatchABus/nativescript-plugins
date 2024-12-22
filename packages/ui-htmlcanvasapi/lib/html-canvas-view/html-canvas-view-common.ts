@@ -10,9 +10,13 @@ import { SCREEN_SCALE } from '../helpers';
 function onLayoutChange(args: EventData): void {
 	const view = args.object as HTMLCanvasViewBase;
 
-	if (view.getMeasuredWidth() != 0 && view.getMeasuredHeight() != 0) {
-		// During resize, a new bitmap is created using new dimensions
-		view._resizeOffscreenBuffer();
+	// During view layout, offscreen buffer is also resized
+	if (view.isOffscreenBufferEnabled) {
+		if (view.getMeasuredWidth() != 0 && view.getMeasuredHeight() != 0) {
+			view._resizeOffscreenBuffer();
+		} else {
+			view._disposeOffscreenBuffer();
+		}
 	}
 }
 
@@ -35,7 +39,6 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		super();
 
 		this._canvasElement = new HTMLCanvasElement(this);
-		this.on(CanvasView.layoutChangedEvent, onLayoutChange);
 	}
 
 	public get canvasElement(): HTMLCanvasElement {
@@ -48,11 +51,7 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 
 	public override disposeNativeView(): void {
 		super.disposeNativeView();
-
-		if (this._offscreenContext != null) {
-			this._offscreenContext.release();
-			this._offscreenContext = null;
-		}
+		this._disposeOffscreenBuffer();
 	}
 
 	public getContext(contextId: '2d', contextAttributes?: any): CanvasRenderingContext2D | null;
@@ -92,19 +91,25 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 	_resizeOffscreenBuffer(): void {
 		if (this._offscreenContext != null) {
 			this._offscreenContext.release();
+		}
 
-			this._offscreenContext = new Canvas(this.getMeasuredWidth(), this.getMeasuredHeight());
-			this._offscreenContext.scale(SCREEN_SCALE, SCREEN_SCALE);
+		this._offscreenContext = new Canvas(this.getMeasuredWidth(), this.getMeasuredHeight());
+		this._offscreenContext.scale(SCREEN_SCALE, SCREEN_SCALE);
+	}
+
+	_disposeOffscreenBuffer(): void {
+		if (this._offscreenContext != null) {
+			this._offscreenContext.release();
+			this._offscreenContext = null;
 		}
 	}
 
 	[isOffscreenBufferEnabledProperty.setNative](value: boolean) {
 		if (value) {
-			this._offscreenContext = new Canvas(this.getMeasuredWidth(), this.getMeasuredHeight());
-			this._offscreenContext.scale(SCREEN_SCALE, SCREEN_SCALE);
+			this.on(HTMLCanvasViewBase.layoutChangedEvent, onLayoutChange);
 		} else {
-			this._offscreenContext.release();
-			this._offscreenContext = null;
+			this.off(HTMLCanvasViewBase.layoutChangedEvent, onLayoutChange);
+			this._disposeOffscreenBuffer();
 		}
 	}
 }
