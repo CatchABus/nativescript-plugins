@@ -16,6 +16,11 @@ function onLayoutChange(args: EventData): void {
 	}
 }
 
+const isOffscreenBufferEnabledProperty = new Property<HTMLCanvasViewBase, boolean>({
+	name: 'isOffscreenBufferEnabled',
+	defaultValue: false,
+});
+
 abstract class HTMLCanvasViewBase extends CanvasView {
 	private readonly _canvasElement: HTMLCanvasElement;
 
@@ -102,11 +107,6 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		}
 	}
 }
-
-const isOffscreenBufferEnabledProperty = new Property<HTMLCanvasViewBase, boolean>({
-	name: 'isOffscreenBufferEnabled',
-	defaultValue: false,
-});
 
 isOffscreenBufferEnabledProperty.register(HTMLCanvasViewBase);
 
