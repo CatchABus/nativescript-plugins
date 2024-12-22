@@ -5,6 +5,7 @@ export { ImageBitmapRenderingContext } from './lib/contexts/ImageBitmapRendering
 export { OffscreenCanvasRenderingContext2D } from './lib/contexts/OffscreenCanvasRenderingContext2D';
 export { DOMMatrix } from './lib/DOMMatrix';
 export { DOMPoint } from './lib/DOMPoint';
+export { HTMLCanvasElement } from './lib/elements/HTMLCanvasElement';
 export { OffscreenCanvas } from './lib/elements/OffscreenCanvas';
 export { HTMLCanvasView } from './lib/html-canvas-view';
 export { Path2D } from './lib/Path2D';

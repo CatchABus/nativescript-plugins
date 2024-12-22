@@ -1,15 +1,7 @@
-import { BitmapShader, Canvas, CanvasView, createRect, createRectF, DashPathEffect, FillType, LinearGradient, Matrix, Paint, Path, PorterDuffMode, PorterDuffXfermode, RadialGradient, Rect, Shader, Style, TileMode } from '@nativescript-community/ui-canvas';
-import { Font, ImageSource, Screen, View } from '@nativescript/core';
-import { DOMMatrix } from '../DOMMatrix';
+import { View } from '@nativescript/core';
+import { CanvasContextProperties } from '../../CanvasTypes';
 import { Path2D } from '../Path2D';
-import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, radiansToDegrees } from '../helpers';
-import { CanvasCompositeOperation, CanvasContextProperties, CanvasContextRestorables, FillRule, FontKerning, FontStretch, FontVariantCaps, GradientData, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, RadialGradientParams, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../../CanvasTypes';
-import { parseFont } from '@nativescript/core/ui/styling/font';
-import { TextMetrics } from '../TextMetrics';
-import { CanvasGradient } from '../CanvasGradient';
-import { CanvasPattern } from '../CanvasPattern';
 import { AbstractCanvasRenderingContext2D } from './AbstractCanvasRenderingContext2D';
-import { OffscreenCanvas } from '../elements/OffscreenCanvas';
 
 const defaults: CanvasContextProperties = {
 	strokeStyle: '#000',

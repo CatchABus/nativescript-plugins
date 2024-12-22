@@ -5,12 +5,14 @@ import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingCon
 import { OffscreenCanvasRenderingContext2D } from '../contexts/OffscreenCanvasRenderingContext2D';
 import { DOMMatrix } from '../DOMMatrix';
 import { DOMPoint } from '../DOMPoint';
+import { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
 import { OffscreenCanvas } from '../elements/OffscreenCanvas';
 import { Path2D } from '../Path2D';
 import { TextMetrics } from '../TextMetrics';
 
 const polyfills = {
 	CanvasRenderingContext2D,
+	HTMLCanvasElement,
 	ImageBitmapRenderingContext,
 	OffscreenCanvasRenderingContext2D,
 	OffscreenCanvas,

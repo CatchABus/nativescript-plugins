@@ -1,5 +1,3 @@
-import { Matrix } from '@nativescript-community/ui-canvas';
-
 const matrixDefaults = [1, 0, 0, 0, 1, 0, 0, 0, 1];
 
 class NSDOMMatrix {

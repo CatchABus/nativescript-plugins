@@ -1,15 +1,15 @@
-import { BitmapShader, Canvas, CanvasView, createRect, createRectF, DashPathEffect, FillType, LinearGradient, Matrix, Paint, Path, PorterDuffMode, PorterDuffXfermode, RadialGradient, Rect, Shader, Style, TileMode } from '@nativescript-community/ui-canvas';
-import { Font, ImageSource, Screen, View } from '@nativescript/core';
-import { DOMMatrix } from '../DOMMatrix';
-import { Path2D } from '../Path2D';
-import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, isEmptyValue, radiansToDegrees } from '../helpers';
-import { CanvasCompositeOperation, CanvasContextProperties, CanvasContextRestorables, FillRule, FontKerning, FontStretch, FontVariantCaps, GradientData, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, RadialGradientParams, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../../CanvasTypes';
+import { BitmapShader, Canvas, createRect, createRectF, DashPathEffect, FillType, LinearGradient, Matrix, Paint, PorterDuffMode, PorterDuffXfermode, Rect, Shader, Style, TileMode } from '@nativescript-community/ui-canvas';
+import { Font, ImageSource, Screen } from '@nativescript/core';
 import { parseFont } from '@nativescript/core/ui/styling/font';
-import { TextMetrics } from '../TextMetrics';
+import { CanvasCompositeOperation, CanvasContextProperties, CanvasContextRestorables, FillRule, FontKerning, FontStretch, FontVariantCaps, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../../CanvasTypes';
 import { CanvasGradient } from '../CanvasGradient';
 import { CanvasPattern } from '../CanvasPattern';
-import { OffscreenCanvas } from '../elements/OffscreenCanvas';
-import { HTMLCanvasView } from '../html-canvas-view';
+import { DOMMatrix } from '../DOMMatrix';
+import { Path2D } from '../Path2D';
+import { TextMetrics } from '../TextMetrics';
+import type { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
+import type { OffscreenCanvas } from '../elements/OffscreenCanvas';
+import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, isEmptyValue, radiansToDegrees } from '../helpers';
 
 const defaults: CanvasContextProperties = {
 	strokeStyle: '#000',
@@ -212,7 +212,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		this._restorableProps._domMatrix = matrix;
 	}
 
-	public get canvas(): HTMLCanvasView | OffscreenCanvas {
+	public get canvas(): HTMLCanvasElement | OffscreenCanvas {
 		throw new TypeError('Illegal invocation');
 	}
 
@@ -543,57 +543,87 @@ abstract class AbstractCanvasRenderingContext2D {
 		// Populate text bounds
 		this._stylePaint.getTextBounds(text, 0, text.length, nativeTextBounds);
 
-		const actualBoundingBoxLeft = nativeTextBounds.left * -1;
-		const actualBoundingBoxAscent = nativeTextBounds.top * -1;
+		const textBoundsLeft = nativeTextBounds.left * -1;
+		const textBoundsTop = nativeTextBounds.top * -1;
+		const actualBoundingBoxLeft = textBoundsLeft;
+		const actualBoundingBoxRight = nativeTextBounds.right;
 
-		const metrics = {
-			width,
-			actualBoundingBoxLeft: actualBoundingBoxLeft,
-			actualBoundingBoxRight: nativeTextBounds.right,
-			actualBoundingBoxAscent: 0,
-			actualBoundingBoxDescent: 0,
-			fontBoundingBoxAscent: 0,
-			fontBoundingBoxDescent: 0,
-			// Not currently supported
-			hangingBaseline: 0,
-			ideographicBaseline: 0,
-			emHeightAscent: 0,
-		};
+		let actualBoundingBoxAscent: number;
+		let actualBoundingBoxDescent: number;
+		let fontBoundingBoxAscent: number;
+		let fontBoundingBoxDescent: number;
 
 		// TODO: Calculate baseline-accurate values based on original TextMetrics formula
 		switch (this.textBaseline) {
 			case 'top':
 			case 'hanging':
-				metrics.actualBoundingBoxAscent = nativeTextBounds.bottom;
-				metrics.actualBoundingBoxDescent = actualBoundingBoxAscent;
-				metrics.fontBoundingBoxAscent = nativeFontMetrics.bottom;
-				metrics.fontBoundingBoxDescent = nativeFontMetrics.top * -1;
+				actualBoundingBoxAscent = nativeTextBounds.bottom;
+				actualBoundingBoxDescent = textBoundsTop;
+				fontBoundingBoxAscent = nativeFontMetrics.bottom;
+				fontBoundingBoxDescent = nativeFontMetrics.top * -1;
 				break;
 			case 'middle':
 				const actualBoundingBoxMiddle = (nativeTextBounds.top * -1 - nativeTextBounds.bottom) / 2;
 				const fontBoundingBoxMiddle = (nativeFontMetrics.top * -1 - nativeFontMetrics.bottom) / 2;
 
-				metrics.actualBoundingBoxAscent = actualBoundingBoxMiddle;
-				metrics.actualBoundingBoxDescent = actualBoundingBoxMiddle;
-				metrics.fontBoundingBoxAscent = fontBoundingBoxMiddle;
-				metrics.fontBoundingBoxDescent = fontBoundingBoxMiddle;
+				actualBoundingBoxAscent = actualBoundingBoxMiddle;
+				actualBoundingBoxDescent = actualBoundingBoxMiddle;
+				fontBoundingBoxAscent = fontBoundingBoxMiddle;
+				fontBoundingBoxDescent = fontBoundingBoxMiddle;
 				break;
 			case 'bottom':
 			case 'ideographic':
-				metrics.actualBoundingBoxAscent = actualBoundingBoxAscent;
-				metrics.actualBoundingBoxDescent = nativeTextBounds.bottom;
-				metrics.fontBoundingBoxAscent = nativeFontMetrics.top * -1;
-				metrics.fontBoundingBoxDescent = nativeFontMetrics.bottom;
+				actualBoundingBoxAscent = textBoundsTop;
+				actualBoundingBoxDescent = nativeTextBounds.bottom;
+				fontBoundingBoxAscent = nativeFontMetrics.top * -1;
+				fontBoundingBoxDescent = nativeFontMetrics.bottom;
 				break;
 			default:
-				metrics.actualBoundingBoxAscent = actualBoundingBoxAscent;
-				metrics.actualBoundingBoxDescent = nativeTextBounds.bottom;
-				metrics.fontBoundingBoxAscent = nativeFontMetrics.ascent * -1;
-				metrics.fontBoundingBoxDescent = nativeFontMetrics.descent;
+				actualBoundingBoxAscent = textBoundsTop;
+				actualBoundingBoxDescent = nativeTextBounds.bottom;
+				fontBoundingBoxAscent = nativeFontMetrics.ascent * -1;
+				fontBoundingBoxDescent = nativeFontMetrics.descent;
 				break;
 		}
 
-		return new TextMetrics(metrics);
+		return Object.create(TextMetrics.prototype, {
+			width: {
+				value: width,
+			},
+			actualBoundingBoxLeft: {
+				value: actualBoundingBoxLeft,
+			},
+			actualBoundingBoxRight: {
+				value: actualBoundingBoxRight,
+			},
+			actualBoundingBoxAscent: {
+				value: actualBoundingBoxAscent,
+			},
+			actualBoundingBoxDescent: {
+				value: actualBoundingBoxDescent,
+			},
+			fontBoundingBoxAscent: {
+				value: fontBoundingBoxAscent,
+			},
+			fontBoundingBoxDescent: {
+				value: fontBoundingBoxDescent,
+			},
+			emHeightAscent: {
+				value: 0,
+			},
+			emHeightDescent: {
+				value: 0,
+			},
+			hangingBaseline: {
+				value: 0,
+			},
+			alphabeticBaseline: {
+				value: 0,
+			},
+			ideographicBaseline: {
+				value: 0,
+			},
+		});
 	}
 
 	public scale(x: number, y: number): void {

@@ -1,5 +1,4 @@
-import { LinearGradient, RadialGradient, TileMode } from '@nativescript-community/ui-canvas';
-import { GradientData, LinearGradientParams, RadialGradientParams } from '../CanvasTypes';
+import { GradientData } from '../CanvasTypes';
 
 class NSCanvasGradient {
 	private readonly _colors: string[] = [];
