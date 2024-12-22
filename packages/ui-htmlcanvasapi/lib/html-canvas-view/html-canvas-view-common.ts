@@ -1,5 +1,5 @@
 import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
-import { EventData, Property } from '@nativescript/core';
+import { booleanConverter, EventData, Property } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
@@ -19,6 +19,7 @@ function onLayoutChange(args: EventData): void {
 const isOffscreenBufferEnabledProperty = new Property<HTMLCanvasViewBase, boolean>({
 	name: 'isOffscreenBufferEnabled',
 	defaultValue: false,
+	valueConverter: booleanConverter,
 });
 
 abstract class HTMLCanvasViewBase extends CanvasView {
