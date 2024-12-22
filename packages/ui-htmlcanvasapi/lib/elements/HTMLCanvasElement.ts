@@ -1,9 +1,9 @@
-import { Canvas, createRectF } from '@nativescript-community/ui-canvas';
+import { Canvas } from '@nativescript-community/ui-canvas';
 import { ImageSource, Observable } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
-import { SUPPORTED_CANVAS_IMAGE_FORMATS } from '../helpers';
+import { SCREEN_SCALE, SUPPORTED_CANVAS_IMAGE_FORMATS } from '../helpers';
 import type { HTMLCanvasView } from '../html-canvas-view'; // Avoid importing module itself as it might result in circular dependencies
 import { OffscreenCanvas } from './OffscreenCanvas';
 
@@ -74,8 +74,14 @@ class NSHTMLCanvasElement extends Observable {
 	}
 
 	public toDataURL(type?: string, quality?: number): string {
-		const prefix = 'data:';
 		const view = this._nativeElement;
+
+		if (view.isDrawing()) {
+			console.warn(`Cannot call method 'toDataURL' during the drawing process`);
+			return null;
+		}
+
+		const prefix = 'data:';
 		const measuredWidth = view.getMeasuredWidth();
 		const measuredHeight = view.getMeasuredHeight();
 
@@ -90,9 +96,9 @@ class NSHTMLCanvasElement extends Observable {
 		const format = type != null ? type.split('/')[1] : 'png';
 		const nativeQuality = quality ? quality * 100 : 100;
 		const canvas = new Canvas(measuredWidth, measuredHeight);
-		const rect = createRectF(0, 0, this.width, this.height);
+		canvas.scale(SCREEN_SCALE, SCREEN_SCALE);
 
-		canvas.drawView(view, rect);
+		view.onDraw(canvas);
 
 		const imgSource = new ImageSource(canvas.getImage());
 		const base64String = imgSource.toBase64String(format as any, nativeQuality);
@@ -102,8 +108,8 @@ class NSHTMLCanvasElement extends Observable {
 		return `${prefix + type};base64,${base64String}`;
 	}
 
-	public isOffscreenBufferEnabled(): boolean {
-		return this._nativeElement.isOffscreenBufferEnabled();
+	public _isPixelScaleNeeded(): boolean {
+		return __ANDROID__ || this._nativeElement.isOffscreenBufferEnabled;
 	}
 
 	get width(): number {

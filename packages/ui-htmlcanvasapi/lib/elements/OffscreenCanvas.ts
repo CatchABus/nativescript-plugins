@@ -3,6 +3,7 @@ import { ImageSource, Observable, Screen } from '@nativescript/core';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
 import { CanvasContextType } from '../../CanvasTypes';
 import { OffscreenCanvasRenderingContext2D } from '../contexts/OffscreenCanvasRenderingContext2D';
+import { SCREEN_SCALE } from '../helpers';
 
 class NSOffscreenCanvas extends Observable {
 	private _nativeContext: Canvas;
@@ -20,14 +21,16 @@ class NSOffscreenCanvas extends Observable {
 	}
 
 	private _updateNativeContext(): void {
-		const scale = Screen.mainScreen.scale;
-
 		if (this._nativeContext != null) {
 			this._nativeContext.release();
 		}
 
-		this._nativeContext = new Canvas(this._width * scale, this._height * scale);
-		this._nativeContext.scale(scale, scale);
+		this._nativeContext = new Canvas(this._width * SCREEN_SCALE, this._height * SCREEN_SCALE);
+		this._nativeContext.scale(SCREEN_SCALE, SCREEN_SCALE);
+	}
+
+	public _isPixelScaleNeeded(): boolean {
+		return true;
 	}
 
 	public getContext(contextId: '2d', contextAttributes?: any): OffscreenCanvasRenderingContext2D | null;
@@ -74,10 +77,6 @@ class NSOffscreenCanvas extends Observable {
 	public convertToBlob(options: any): Blob {
 		console.warn('Method convertToBlob is not implemented');
 		return null;
-	}
-
-	public isOffscreenBufferEnabled(): boolean {
-		return true;
 	}
 
 	public get nativeContext(): Canvas {

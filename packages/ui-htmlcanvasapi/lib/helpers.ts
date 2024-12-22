@@ -1,6 +1,8 @@
 import { Align, Cap, FillType, Join, PorterDuffMode } from '@nativescript-community/ui-canvas';
 import { CanvasCompositeOperation, FillRule, LineCap, LineJoin, TextAlignment, TextDirection } from '../CanvasTypes';
+import { Screen } from '@nativescript/core';
 
+const SCREEN_SCALE = Screen.mainScreen.scale;
 const SUPPORTED_CANVAS_IMAGE_FORMATS = ['image/png', 'image/jpg', 'image/jpeg'];
 
 function degreesToRadians(degrees: number): number {
@@ -172,4 +174,4 @@ function getNativeLineJoin(lineJoin: LineJoin): Join {
 	return join;
 }
 
-export { SUPPORTED_CANVAS_IMAGE_FORMATS, degreesToRadians, radiansToDegrees, isEmptyValue, normalizeVector, getVectorAngle, getNativeCompositeOperation, getNativeFillRule, getNativeTextAlignment, getNativeLineCap, getNativeLineJoin };
+export { SCREEN_SCALE, SUPPORTED_CANVAS_IMAGE_FORMATS, degreesToRadians, radiansToDegrees, isEmptyValue, normalizeVector, getVectorAngle, getNativeCompositeOperation, getNativeFillRule, getNativeTextAlignment, getNativeLineCap, getNativeLineJoin };

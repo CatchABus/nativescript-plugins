@@ -9,7 +9,7 @@ import { Path2D } from '../Path2D';
 import { TextMetrics } from '../TextMetrics';
 import type { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
 import type { OffscreenCanvas } from '../elements/OffscreenCanvas';
-import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, isEmptyValue, radiansToDegrees } from '../helpers';
+import { getNativeCompositeOperation, getNativeFillRule, getNativeLineCap, getNativeLineJoin, getNativeTextAlignment, isEmptyValue, radiansToDegrees, SCREEN_SCALE } from '../helpers';
 
 const defaults: CanvasContextProperties = {
 	strokeStyle: '#000',
@@ -754,10 +754,8 @@ abstract class AbstractCanvasRenderingContext2D {
 		context.setMatrix(new Matrix());
 		this._domMatrix._reset();
 
-		if (__ANDROID__ || this.canvas.isOffscreenBufferEnabled()) {
-			// dp to dip conversion
-			const { scale } = Screen.mainScreen;
-			context.scale(scale, scale);
+		if (this.canvas._isPixelScaleNeeded()) {
+			context.scale(SCREEN_SCALE, SCREEN_SCALE);
 		}
 	}
 
@@ -804,10 +802,8 @@ abstract class AbstractCanvasRenderingContext2D {
 		matrix.setValues(values);
 		context.setMatrix(matrix);
 
-		if (__ANDROID__ || this.canvas.isOffscreenBufferEnabled()) {
-			// dp to dip conversion
-			const { scale } = Screen.mainScreen;
-			context.scale(scale, scale);
+		if (this.canvas._isPixelScaleNeeded()) {
+			context.scale(SCREEN_SCALE, SCREEN_SCALE);
 		}
 	}
 
