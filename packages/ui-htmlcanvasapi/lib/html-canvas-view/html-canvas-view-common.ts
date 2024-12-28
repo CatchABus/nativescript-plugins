@@ -1,4 +1,4 @@
-import { Canvas, CanvasView, createRectF } from '@nativescript-community/ui-canvas';
+import { Canvas, CanvasView, Paint } from '@nativescript-community/ui-canvas';
 import { booleanConverter, EventData, Property } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
@@ -12,8 +12,10 @@ function onLayoutChange(args: EventData): void {
 
 	// During view layout, offscreen buffer is also resized
 	if (view.isOffscreenBufferEnabled) {
-		if (view.getMeasuredWidth() != 0 && view.getMeasuredHeight() != 0) {
-			view._resizeOffscreenBuffer();
+		const { width, height } = view.getActualSize();
+
+		if (width != 0 && height != 0) {
+			view._resizeOffscreenBuffer(width, height);
 		} else {
 			view._disposeOffscreenBuffer();
 		}
@@ -31,6 +33,7 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 
 	private _currentCanvas: Canvas;
 	private _offscreenContext: Canvas;
+	private _offscreenPaint: Paint;
 	private _isDrawing: boolean;
 
 	public isOffscreenBufferEnabled: boolean;
@@ -80,21 +83,19 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		super.onDraw(canvas);
 
 		if (this._offscreenContext != null) {
-			const rect = createRectF(0, 0, this._canvasElement.width, this._canvasElement.height);
-			canvas.drawBitmap(this._offscreenContext.getImage(), null, rect, null);
+			canvas.drawBitmap(this._offscreenContext.getImage(), 0, 0, this._offscreenPaint);
 		}
 
 		this._currentCanvas = null;
 		this._isDrawing = false;
 	}
 
-	_resizeOffscreenBuffer(): void {
+	_resizeOffscreenBuffer(width: number, height: number): void {
 		if (this._offscreenContext != null) {
 			this._offscreenContext.release();
 		}
 
-		this._offscreenContext = new Canvas(this.getMeasuredWidth(), this.getMeasuredHeight());
-		this._offscreenContext.scale(SCREEN_SCALE, SCREEN_SCALE);
+		this._offscreenContext = new Canvas(width, height);
 	}
 
 	_disposeOffscreenBuffer(): void {
@@ -102,10 +103,14 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 			this._offscreenContext.release();
 			this._offscreenContext = null;
 		}
+		this._offscreenPaint = null;
 	}
 
 	[isOffscreenBufferEnabledProperty.setNative](value: boolean) {
 		if (value) {
+			this._offscreenPaint = new Paint();
+			this._offscreenPaint.setAntiAlias(true);
+
 			this.on(HTMLCanvasViewBase.layoutChangedEvent, onLayoutChange);
 		} else {
 			this.off(HTMLCanvasViewBase.layoutChangedEvent, onLayoutChange);

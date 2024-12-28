@@ -3,7 +3,6 @@ import { ImageSource, Observable, Screen } from '@nativescript/core';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
 import { CanvasContextType } from '../../CanvasTypes';
 import { OffscreenCanvasRenderingContext2D } from '../contexts/OffscreenCanvasRenderingContext2D';
-import { SCREEN_SCALE } from '../helpers';
 
 class NSOffscreenCanvas extends Observable {
 	private _nativeContext: Canvas;
@@ -25,12 +24,11 @@ class NSOffscreenCanvas extends Observable {
 			this._nativeContext.release();
 		}
 
-		this._nativeContext = new Canvas(this._width * SCREEN_SCALE, this._height * SCREEN_SCALE);
-		this._nativeContext.scale(SCREEN_SCALE, SCREEN_SCALE);
+		this._nativeContext = new Canvas(this._width, this._height);
 	}
 
 	public _isPixelScaleNeeded(): boolean {
-		return true;
+		return false;
 	}
 
 	public getContext(contextId: '2d', contextAttributes?: any): OffscreenCanvasRenderingContext2D | null;

@@ -19,7 +19,6 @@ type TextRendering = 'auto' | 'optimizeSpeed' | 'optimizeLegibility' | 'geometri
 type PatternRepetition = 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat';
 
 type CanvasContextProperties = CanvasContextRestorableProperties & {
-	letterSpacing: string;
 	imageSmoothingQuality: ImageSmoothingQuality;
 	fontKerning: FontKerning;
 	fontStretch: FontStretch;
@@ -32,6 +31,7 @@ type CanvasContextRestorableProperties = {
 	strokeStyle: string | CanvasGradient | CanvasPattern;
 	fillStyle: string | CanvasGradient | CanvasPattern;
 	globalAlpha: number;
+	letterSpacing: string;
 	lineWidth: number;
 	lineCap: LineCap;
 	lineJoin: LineJoin;

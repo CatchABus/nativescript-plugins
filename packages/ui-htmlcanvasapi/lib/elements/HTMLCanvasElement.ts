@@ -95,9 +95,10 @@ class NSHTMLCanvasElement extends Observable {
 
 		const format = type != null ? type.split('/')[1] : 'png';
 		const nativeQuality = quality ? quality * 100 : 100;
+		// Image is exported in pixels
 		const canvas = new Canvas(measuredWidth, measuredHeight);
-		canvas.scale(SCREEN_SCALE, SCREEN_SCALE);
 
+		canvas.scale(SCREEN_SCALE, SCREEN_SCALE);
 		view.onDraw(canvas);
 
 		const imgSource = new ImageSource(canvas.getImage());
@@ -109,7 +110,7 @@ class NSHTMLCanvasElement extends Observable {
 	}
 
 	public _isPixelScaleNeeded(): boolean {
-		return __ANDROID__ || this._nativeElement.isOffscreenBufferEnabled;
+		return __ANDROID__ && !this._nativeElement.isOffscreenBufferEnabled;
 	}
 
 	get width(): number {

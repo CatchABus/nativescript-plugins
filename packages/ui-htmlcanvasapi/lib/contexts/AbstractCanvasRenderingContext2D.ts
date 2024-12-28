@@ -1,5 +1,5 @@
 import { BitmapShader, Canvas, createRect, createRectF, DashPathEffect, FillType, LinearGradient, Matrix, Paint, PorterDuffMode, PorterDuffXfermode, Rect, Shader, Style, TileMode } from '@nativescript-community/ui-canvas';
-import { Font, ImageSource, Screen } from '@nativescript/core';
+import { Font, ImageSource } from '@nativescript/core';
 import { parseFont } from '@nativescript/core/ui/styling/font';
 import { CanvasCompositeOperation, CanvasContextProperties, CanvasContextRestorables, FillRule, FontKerning, FontStretch, FontVariantCaps, ImageSmoothingQuality, LinearGradientParams, LineCap, LineJoin, PatternRepetition, TextAlignment, TextBaseline, TextDirection, TextRendering } from '../../CanvasTypes';
 import { CanvasGradient } from '../CanvasGradient';
@@ -51,6 +51,8 @@ abstract class AbstractCanvasRenderingContext2D {
 	public textRendering: TextRendering;
 	public wordSpacing: string;
 
+	declare readonly canvas: HTMLCanvasElement | OffscreenCanvas;
+
 	private _path: Path2D;
 	private _stylePaint: Paint;
 	private _font: Font;
@@ -61,6 +63,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		strokeStyle: defaults.strokeStyle,
 		fillStyle: defaults.fillStyle,
 		globalAlpha: defaults.globalAlpha,
+		letterSpacing: defaults.letterSpacing,
 		lineWidth: defaults.lineWidth,
 		lineCap: defaults.lineCap,
 		lineJoin: defaults.lineJoin,
@@ -210,10 +213,6 @@ abstract class AbstractCanvasRenderingContext2D {
 
 	private set _domMatrix(matrix: DOMMatrix) {
 		this._restorableProps._domMatrix = matrix;
-	}
-
-	public get canvas(): HTMLCanvasElement | OffscreenCanvas {
-		throw new TypeError('Illegal invocation');
 	}
 
 	public isContextLost(): boolean {
