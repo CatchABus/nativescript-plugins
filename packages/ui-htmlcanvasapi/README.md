@@ -87,36 +87,37 @@ function updateGraph(canvasView: HTMLCanvasView) {
 ```
 
 Sometimes, there might be a need to draw things offscreen but keep reference to the view and eventually want to draw everything there.  
-`HTMLCanvasView` includes these custom methods:
-- enableOffscreenBuffer
-- disableOffscreenBuffer
-- isOffscreenBufferEnabled
-- drawOffscreenBuffer
+An offscreen buffer can be enabled by setting `isOffscreenBufferEnabled` to `true`.   
+Note: Everything will be drawn onto view canvas once app calls view `invalidate()` method.   
 
-
-```ts
-const view = args.object;
-const ctx = view.getContext('2d');
-
-view.enableOffscreenBuffer();
-
-ctx.save();
-ctx.fillStyle = 'yellow';
-ctx.fillRect(10, 10, 200, 100);
-ctx.transform(1, 0.5, -0.5, 1, 30, 10);
-ctx.fillStyle = 'red';
-ctx.fillRect(10, 10, 200, 100);
-ctx.transform(1, 0.5, -0.5, 1, 30, 10);
-ctx.fillStyle = 'blue';
-ctx.fillRect(10, 10, 200, 100);
-ctx.restore();
-
-view.drawOffscreenBuffer();
-// If buffer is no longer needed, just discard it
-view.disableOffscreenBuffer();
+```xml
+<canvas:HTMLCanvasView id="canvasView" width="100%" height="300" hardwareAccelerated="true" isOffscreenBufferEnabled="true"/>
 ```
 
-Note: This state is required to perform actions like `toDataURL`.
+```ts
+import { HTMLCanvasView } from '@nativescript-community/ui-htmlcanvasapi';
+import { EventData, Page } from '@nativescript/core';
+
+function onNavigatedTo(args: EventData): void {
+	const page = <Page>args.object;
+	const canvasView = page.getViewById<HTMLCanvasView>("canvasView");
+	const ctx = canvasView.getContext('2d');
+
+	ctx.save();
+	ctx.fillStyle = 'yellow';
+	ctx.fillRect(10, 10, 200, 100);
+	ctx.transform(1, 0.5, -0.5, 1, 30, 10);
+	ctx.fillStyle = 'red';
+	ctx.fillRect(10, 10, 200, 100);
+	ctx.transform(1, 0.5, -0.5, 1, 30, 10);
+	ctx.fillStyle = 'blue';
+	ctx.fillRect(10, 10, 200, 100);
+	ctx.restore();
+
+	// Draw everything to view
+	canvasView.invalidate();
+}
+```
 
 ## License
 

@@ -1,6 +1,6 @@
 import { Canvas } from '@nativescript-community/ui-canvas';
 import { HTMLCanvasView } from '@nativescript-community/ui-htmlcanvasapi';
-import { EventData, Page, View } from '@nativescript/core';
+import { EventData, Page } from '@nativescript/core';
 
 export function navigatedTo(args: EventData) {
 	const page = <Page>args.object;
