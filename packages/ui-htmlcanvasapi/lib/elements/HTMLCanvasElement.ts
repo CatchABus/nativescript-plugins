@@ -99,10 +99,7 @@ class NSHTMLCanvasElement extends Observable {
 		const canvas = new Canvas(measuredWidth, measuredHeight);
 
 		canvas.scale(SCREEN_SCALE, SCREEN_SCALE);
-
-		view._ignoreOffscreenBuffer = true;
 		view.onDraw(canvas);
-		view._ignoreOffscreenBuffer = false;
 
 		const imgSource = new ImageSource(canvas.getImage());
 		const base64String = imgSource.toBase64String(format as any, nativeQuality);

@@ -36,8 +36,6 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 	private _offscreenPaint: Paint;
 	private _isDrawing: boolean;
 
-	public _ignoreOffscreenBuffer: boolean;
-
 	public isOffscreenBufferEnabled: boolean;
 
 	constructor() {
@@ -51,7 +49,7 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 	}
 
 	public get nativeContext(): Canvas {
-		return this._offscreenContext != null && !this._ignoreOffscreenBuffer ? this._offscreenContext : this._currentCanvas;
+		return this._offscreenContext != null ? this._offscreenContext : this._currentCanvas;
 	}
 
 	public override disposeNativeView(): void {
@@ -82,12 +80,12 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		this._isDrawing = true;
 		this._currentCanvas = canvas;
 
+		console.log(this.id);
+
 		super.onDraw(canvas);
 
-		if (!this._ignoreOffscreenBuffer) {
-			if (this._offscreenContext != null) {
-				canvas.drawBitmap(this._offscreenContext.getImage(), 0, 0, this._offscreenPaint);
-			}
+		if (this._offscreenContext != null) {
+			canvas.drawBitmap(this._offscreenContext.getImage(), 0, 0, this._offscreenPaint);
 		}
 
 		this._currentCanvas = null;

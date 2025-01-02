@@ -7,7 +7,6 @@ import { OffscreenCanvas } from '../elements/OffscreenCanvas';
 class HTMLCanvasView extends CanvasView {
 	public isOffscreenBufferEnabled: boolean;
 
-	public _ignoreOffscreenBuffer: boolean;
 	public get canvasElement(): HTMLCanvasElement;
 	public get nativeContext(): Canvas;
 
