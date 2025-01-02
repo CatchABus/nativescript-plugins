@@ -80,8 +80,6 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		this._isDrawing = true;
 		this._currentCanvas = canvas;
 
-		console.log(this.id);
-
 		super.onDraw(canvas);
 
 		if (this._offscreenContext != null) {
