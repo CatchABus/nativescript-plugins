@@ -207,6 +207,10 @@ abstract class AbstractCanvasRenderingContext2D {
 		return shader;
 	}
 
+	private _updateShadowLayer(): void {
+		this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
+	}
+
 	private get _domMatrix(): DOMMatrix {
 		return this._restorableProps._domMatrix;
 	}
@@ -904,7 +908,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		this._restorableProps.shadowOffsetX = typeof val === 'number' ? val : defaults.shadowOffsetX;
 
 		if (this.shadowColor != null) {
-			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
+			this._updateShadowLayer();
 		}
 	}
 
@@ -916,7 +920,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		this._restorableProps.shadowOffsetY = typeof val === 'number' ? val : defaults.shadowOffsetY;
 
 		if (this.shadowColor != null) {
-			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
+			this._updateShadowLayer();
 		}
 	}
 
@@ -928,7 +932,7 @@ abstract class AbstractCanvasRenderingContext2D {
 		this._restorableProps.shadowBlur = typeof val === 'number' ? val : defaults.shadowBlur;
 
 		if (this.shadowColor != null) {
-			this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
+			this._updateShadowLayer();
 		}
 	}
 
@@ -938,8 +942,7 @@ abstract class AbstractCanvasRenderingContext2D {
 
 	public set shadowColor(val: string) {
 		this._restorableProps.shadowColor = isEmptyValue(val) ? defaults.shadowColor : val;
-
-		this._stylePaint.setShadowLayer(this.shadowBlur, this.shadowOffsetX, this.shadowOffsetY, this.shadowColor);
+		this._updateShadowLayer();
 	}
 
 	public get globalCompositeOperation(): CanvasCompositeOperation {

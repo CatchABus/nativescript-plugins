@@ -1,5 +1,5 @@
-import { Canvas, CanvasView, Paint } from '@nativescript-community/ui-canvas';
-import { booleanConverter, EventData, Property } from '@nativescript/core';
+import { Canvas, CanvasView, createRectF, Paint } from '@nativescript-community/ui-canvas';
+import { booleanConverter, EventData, ImageSource, Property } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
@@ -12,10 +12,11 @@ function onLayoutChange(args: EventData): void {
 
 	// During view layout, offscreen buffer is also resized
 	if (view.isOffscreenBufferEnabled) {
-		const { width, height } = view.getActualSize();
+		const measuredWidth = view.getMeasuredWidth();
+		const measuredHeight = view.getMeasuredHeight();
 
-		if (width != 0 && height != 0) {
-			view._resizeOffscreenBuffer(width, height);
+		if (measuredWidth != 0 && measuredHeight != 0) {
+			view._resizeOffscreenBuffer(measuredWidth, measuredHeight);
 		} else {
 			view._disposeOffscreenBuffer();
 		}
@@ -83,7 +84,9 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		super.onDraw(canvas);
 
 		if (this._offscreenContext != null) {
-			canvas.drawBitmap(this._offscreenContext.getImage(), 0, 0, this._offscreenPaint);
+			// Canvas instance might be view canvas or data export canvas
+			const rect = createRectF(0, 0, canvas.getWidth(), canvas.getHeight());
+			canvas.drawBitmap(this._offscreenContext.getImage(), null, rect, this._offscreenPaint);
 		}
 
 		this._currentCanvas = null;
@@ -96,6 +99,7 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 		}
 
 		this._offscreenContext = new Canvas(width, height);
+		this._offscreenContext.scale(SCREEN_SCALE, SCREEN_SCALE);
 	}
 
 	_disposeOffscreenBuffer(): void {

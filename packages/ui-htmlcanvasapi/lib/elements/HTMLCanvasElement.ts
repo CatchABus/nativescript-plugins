@@ -74,43 +74,22 @@ class NSHTMLCanvasElement extends Observable {
 	}
 
 	public toDataURL(type?: string, quality?: number): string {
-		const view = this._nativeElement;
-
-		if (view.isDrawing()) {
-			console.warn(`Cannot call method 'toDataURL' during the drawing process`);
-			return null;
-		}
-
 		const prefix = 'data:';
-		const measuredWidth = view.getMeasuredWidth();
-		const measuredHeight = view.getMeasuredHeight();
+		const imgSource = this._toImageSource();
 
-		if (measuredWidth === 0 || measuredHeight === 0) {
+		if (imgSource == null) {
 			return prefix;
-		}
-
-		if (type == null || !SUPPORTED_CANVAS_IMAGE_FORMATS.includes(type)) {
-			type = 'image/png';
 		}
 
 		const format = type != null ? type.split('/')[1] : 'png';
 		const nativeQuality = quality ? quality * 100 : 100;
-		// Image is exported in pixels
-		const canvas = new Canvas(measuredWidth, measuredHeight);
-
-		canvas.scale(SCREEN_SCALE, SCREEN_SCALE);
-		view.onDraw(canvas);
-
-		const imgSource = new ImageSource(canvas.getImage());
 		const base64String = imgSource.toBase64String(format as any, nativeQuality);
-
-		canvas.release();
 
 		return `${prefix + type};base64,${base64String}`;
 	}
 
 	public _isPixelScaleNeeded(): boolean {
-		return __ANDROID__ && !this._nativeElement.isOffscreenBufferEnabled;
+		return __ANDROID__ || this._nativeElement.isOffscreenBufferEnabled;
 	}
 
 	get width(): number {
@@ -129,12 +108,40 @@ class NSHTMLCanvasElement extends Observable {
 		this._nativeElement.height = val;
 	}
 
-	get nativeElement(): HTMLCanvasView {
+	public get nativeElement(): HTMLCanvasView {
 		return this._nativeElement;
 	}
 
 	public get nativeContext(): Canvas {
 		return this._nativeElement.nativeContext;
+	}
+
+	private _toImageSource(): ImageSource {
+		const view = this._nativeElement;
+
+		if (view.isDrawing()) {
+			console.warn(`Cannot export canvas content during the drawing process`);
+			return null;
+		}
+
+		const measuredWidth = view.getMeasuredWidth();
+		const measuredHeight = view.getMeasuredHeight();
+
+		if (measuredWidth === 0 || measuredHeight === 0) {
+			return null;
+		}
+
+		// Image is exported in pixels
+		const canvas = new Canvas(measuredWidth, measuredHeight);
+
+		canvas.scale(SCREEN_SCALE, SCREEN_SCALE);
+		view.onDraw(canvas);
+
+		const imgSource = new ImageSource(canvas.getImage());
+
+		canvas.release();
+
+		return imgSource;
 	}
 }
 

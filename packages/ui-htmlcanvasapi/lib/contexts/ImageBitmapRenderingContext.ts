@@ -1,7 +1,7 @@
 import { ImageSource } from '@nativescript/core';
 import type { HTMLCanvasElement } from '../elements/HTMLCanvasElement';
 import { OffscreenCanvas } from '../elements/OffscreenCanvas';
-import { Paint } from '@nativescript-community/ui-canvas';
+import { createRectF, Paint } from '@nativescript-community/ui-canvas';
 
 class NSImageBitmapRenderingContext {
 	declare readonly canvas: HTMLCanvasElement | OffscreenCanvas;
@@ -14,8 +14,9 @@ class NSImageBitmapRenderingContext {
 		const nativeContext = this.canvas.nativeContext;
 		if (nativeContext) {
 			const paint = new Paint();
-			paint.setAntiAlias(true);
+			const rect = createRectF(0, 0, nativeContext.getWidth(), nativeContext.getHeight());
 
+			paint.setAntiAlias(true);
 			nativeContext.drawBitmap(imageSource, 0, 0, paint);
 		}
 	}
