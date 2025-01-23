@@ -6,29 +6,30 @@ export * from './common';
 
 @NativeClass()
 class NeumorphicDrawable extends android.graphics.drawable.Drawable {
-	private mAugmentedCanvas: WeakRef<NeumorphicCanvas>;
+	private readonly mCanvasRef: WeakRef<NeumorphicCanvas>;
 
-	constructor(canvas: WeakRef<NeumorphicCanvas>) {
+	constructor(canvas: NeumorphicCanvas) {
 		super();
-		this.mAugmentedCanvas = canvas;
+		this.mCanvasRef = new WeakRef<NeumorphicCanvas>(canvas);
 	}
 
 	public draw(nativeCanvas: android.graphics.Canvas) {
-		const canvas = this.mAugmentedCanvas && this.mAugmentedCanvas.get();
+		const canvas = this.mCanvasRef && this.mCanvasRef.get();
 		if (canvas != null) {
 			const scale = Screen.mainScreen.scale;
 
-			canvas.save();
-			canvas.scale(scale, scale); // always scale to device density to work with dp
+			nativeCanvas.save();
+			nativeCanvas.scale(scale, scale); // always scale to device density to work with dip
 
 			(canvas as any).mNative = nativeCanvas;
 			canvas.onDraw();
-			canvas.restore();
+
+			nativeCanvas.restore();
 		}
 	}
 
 	public getAugmentedCanvas(): NeumorphicCanvas {
-		return this.mAugmentedCanvas && this.mAugmentedCanvas.get();
+		return this.mCanvasRef && this.mCanvasRef.get();
 	}
 
 	public getOpacity() {
@@ -42,7 +43,7 @@ class NeumorphicDrawable extends android.graphics.drawable.Drawable {
 		if (args.length === 2) {
 			super.setColorFilter(args[0], args[1]);
 		} else {
-			const canvas = this.mAugmentedCanvas && this.mAugmentedCanvas.get();
+			const canvas = this.mCanvasRef && this.mCanvasRef.get();
 			if (canvas) {
 				canvas.getBasePaint().setColorFilter(args[0]);
 			}
@@ -86,8 +87,8 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 			drawable.invalidateSelf();
 		} else {
 			_toggleViewClipping(this.parent, false);
-			const canvas = new NeumorphicCanvas(new WeakRef<NeumorphicLayout>(this));
-			nativeView.setBackground(new NeumorphicDrawable(new WeakRef<NeumorphicCanvas>(canvas)));
+			const canvas = new NeumorphicCanvas(this);
+			nativeView.setBackground(new NeumorphicDrawable(canvas));
 		}
 	} else {
 		if (drawable != null) {

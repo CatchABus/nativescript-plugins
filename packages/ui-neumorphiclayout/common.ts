@@ -68,7 +68,7 @@ stylePropertiesMap.set(
 export const shadowRadiusProperty = stylePropertiesMap.get('shadowRadius');
 
 export class NeumorphicCanvas extends Canvas {
-	private view: WeakRef<NeumorphicLayout>;
+	private readonly mViewRef: WeakRef<NeumorphicLayout>;
 
 	private path: Path;
 	private innerShadowPath: Path;
@@ -78,10 +78,10 @@ export class NeumorphicCanvas extends Canvas {
 	private readonly paintLight: Paint;
 	private readonly paintDark: Paint;
 
-	constructor(view: WeakRef<NeumorphicLayout>) {
+	constructor(view: NeumorphicLayout) {
 		super(0, 0);
 
-		this.view = view;
+		this.mViewRef = new WeakRef<NeumorphicLayout>(view);
 		this.paintBase = new Paint();
 		this.paintBase.setAntiAlias(true);
 		this.paintLight = new Paint();
@@ -103,7 +103,7 @@ export class NeumorphicCanvas extends Canvas {
 	}
 
 	public onDraw() {
-		const view = this.view && this.view.get();
+		const view = this.mViewRef && this.mViewRef.get();
 		const state = view.neumorphism;
 
 		if (!state) {
@@ -155,7 +155,7 @@ export class NeumorphicCanvas extends Canvas {
 	}
 
 	private initPaints(state: NeumorphicType) {
-		const view = this.view && this.view.get();
+		const view = this.mViewRef && this.mViewRef.get();
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 		const isPressable = state == NeumorphicType.PRESSED || state == NeumorphicType.PRESSED_IN_OUT;
 		const fillColor = view.style.backgroundColor instanceof Color ? view.style.backgroundColor : defaultColor;
@@ -182,7 +182,7 @@ export class NeumorphicCanvas extends Canvas {
 	}
 
 	private initShape(state: NeumorphicType) {
-		const view = this.view && this.view.get();
+		const view = this.mViewRef && this.mViewRef.get();
 
 		const { width, height } = view.getActualSize();
 		const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));

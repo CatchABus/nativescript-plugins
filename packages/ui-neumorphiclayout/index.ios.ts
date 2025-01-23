@@ -8,26 +8,27 @@ const layerNames = ['backgroundDrawable', 'foregroundDrawable'];
 
 @NativeClass()
 class CANeumorphicLayer extends CALayer implements CALayerDelegate {
-	private mAugmentedCanvas: NeumorphicCanvas;
+	private mCanvasRef: WeakRef<NeumorphicCanvas>;
 
 	public static initWithCanvas(canvas: NeumorphicCanvas): CANeumorphicLayer {
 		const layer = CANeumorphicLayer.layer() as CANeumorphicLayer;
-		layer.mAugmentedCanvas = canvas;
+		layer.mCanvasRef = new WeakRef<NeumorphicCanvas>(canvas);
 		return layer;
 	}
 
 	drawInContext(ctx: any): void {
-		const augmentedCanvas = this.mAugmentedCanvas as any;
-		if (augmentedCanvas != null) {
+		const canvas = this.mCanvasRef && this.mCanvasRef.get();
+		if (canvas != null) {
 			const size = this.bounds.size;
-			augmentedCanvas.setContext(ctx, size.width, size.height);
-			augmentedCanvas.onDraw();
+
+			canvas.setContext(ctx, size.width, size.height);
+			canvas.onDraw();
 		}
 		super.drawInContext(ctx);
 	}
 
 	public getAugmentedCanvas(): NeumorphicCanvas {
-		return this.mAugmentedCanvas;
+		return this.mCanvasRef && this.mCanvasRef.get();
 	}
 }
 
@@ -123,7 +124,7 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 			_updateSublayerShadows(this, drawableLayers);
 		} else {
 			const nativeView = this.nativeViewProtected as UIView;
-			const canvas = new NeumorphicCanvas(new WeakRef(this));
+			const canvas = new NeumorphicCanvas(this);
 
 			const bgLayer = CALayer.layer();
 			bgLayer.name = 'backgroundDrawable';
