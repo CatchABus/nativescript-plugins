@@ -6,28 +6,29 @@ export * from './common';
 
 @NativeClass()
 class NeumorphicDrawable extends android.graphics.drawable.Drawable {
-	private mAugmentedCanvas: NeumorphicCanvas;
+	private mAugmentedCanvas: WeakRef<NeumorphicCanvas>;
 
-	constructor(canvas: NeumorphicCanvas) {
+	constructor(canvas: WeakRef<NeumorphicCanvas>) {
 		super();
 		this.mAugmentedCanvas = canvas;
 	}
 
-	public draw(canvas: android.graphics.Canvas) {
-		if (this.mAugmentedCanvas != null) {
+	public draw(nativeCanvas: android.graphics.Canvas) {
+		const canvas = this.mAugmentedCanvas && this.mAugmentedCanvas.get();
+		if (canvas != null) {
 			const scale = Screen.mainScreen.scale;
 
 			canvas.save();
 			canvas.scale(scale, scale); // always scale to device density to work with dp
 
-			(this.mAugmentedCanvas as any).mNative = canvas;
-			this.mAugmentedCanvas.onDraw();
+			(canvas as any).mNative = nativeCanvas;
+			canvas.onDraw();
 			canvas.restore();
 		}
 	}
 
 	public getAugmentedCanvas(): NeumorphicCanvas {
-		return this.mAugmentedCanvas;
+		return this.mAugmentedCanvas && this.mAugmentedCanvas.get();
 	}
 
 	public getOpacity() {
@@ -41,8 +42,9 @@ class NeumorphicDrawable extends android.graphics.drawable.Drawable {
 		if (args.length === 2) {
 			super.setColorFilter(args[0], args[1]);
 		} else {
-			if (this.mAugmentedCanvas) {
-				this.mAugmentedCanvas.getBasePaint().setColorFilter(args[0]);
+			const canvas = this.mAugmentedCanvas && this.mAugmentedCanvas.get();
+			if (canvas) {
+				canvas.getBasePaint().setColorFilter(args[0]);
 			}
 		}
 	}
@@ -75,7 +77,7 @@ function _toggleViewClipping(view: ViewBase, clipChildren: boolean): void {
 	}
 }
 
-function _updateNeumorphismState(this: LayoutBase, value: NeumorphicType): void {
+function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType): void {
 	const drawable = _getNeumorphicDrawable(this);
 	const nativeView = this.nativeViewProtected as android.view.View;
 
@@ -84,8 +86,8 @@ function _updateNeumorphismState(this: LayoutBase, value: NeumorphicType): void 
 			drawable.invalidateSelf();
 		} else {
 			_toggleViewClipping(this.parent, false);
-			const canvas = new NeumorphicCanvas(new WeakRef(this as NeumorphicLayout));
-			nativeView.setBackground(new NeumorphicDrawable(canvas));
+			const canvas = new NeumorphicCanvas(new WeakRef<NeumorphicLayout>(this));
+			nativeView.setBackground(new NeumorphicDrawable(new WeakRef<NeumorphicCanvas>(canvas)));
 		}
 	} else {
 		if (drawable != null) {
