@@ -86,17 +86,27 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 		if (drawable != null) {
 			drawable.invalidateSelf();
 		} else {
-			_toggleViewClipping(this.parent, false);
 			const canvas = new NeumorphicCanvas(this);
+			// Keep neumorphic canvas as a reference to prevent GC from getting rid of it
+			this.augmentedCanvas = canvas;
+
+			_toggleViewClipping(this.parent, false);
 			nativeView.setBackground(new NeumorphicDrawable(canvas));
 		}
 	} else {
+		if (this.augmentedCanvas != null) {
+			delete this.augmentedCanvas;
+		}
+
 		if (drawable != null) {
 			_toggleViewClipping(this.parent, true);
 			nativeView.setBackground(null);
 		}
 	}
 }
+
+// Disable 'backgroundInternal' as it also uses 'setBackground' to apply a drawable
+const backgroundInternalOrigin = LayoutBase.prototype[backgroundInternalProperty.setNative];
 
 LayoutBase.prototype[borderTopColorProperty.setNative] = _refresh;
 LayoutBase.prototype[borderTopWidthProperty.setNative] = _refresh;
@@ -106,12 +116,9 @@ LayoutBase.prototype[darkShadowColorProperty.setNative] = _refresh;
 LayoutBase.prototype[shadowDistanceProperty.setNative] = _refresh;
 LayoutBase.prototype[shadowRadiusProperty.setNative] = _refresh;
 LayoutBase.prototype[neumorphismProperty.setNative] = _updateNeumorphismState;
-
-// Disable 'backgroundInternal' as it also uses 'setBackground' to apply a drawable
-const backgroundInternalOrigin = LayoutBase.prototype[backgroundInternalProperty.setNative];
-LayoutBase.prototype[backgroundInternalProperty.setNative] = function (value) {
+LayoutBase.prototype[backgroundInternalProperty.setNative] = function (this: NeumorphicLayout, value) {
 	if (this.neumorphism) {
-		_refresh.call(this, value);
+		_refresh.call(this);
 	} else {
 		backgroundInternalOrigin.call(this, value);
 	}

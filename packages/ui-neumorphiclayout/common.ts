@@ -257,6 +257,16 @@ export class NeumorphicCanvas extends Canvas {
 	}
 }
 
+const disposeNativeViewOrig = LayoutBase.prototype.disposeNativeView;
+
+LayoutBase.prototype.disposeNativeView = function (this: NeumorphicLayout) {
+	disposeNativeViewOrig.call(this);
+
+	if (this.augmentedCanvas != null) {
+		delete this.augmentedCanvas;
+	}
+};
+
 // Style properties
 for (let [key, value] of stylePropertiesMap) {
 	Object.defineProperty(LayoutBase.prototype, key, {
