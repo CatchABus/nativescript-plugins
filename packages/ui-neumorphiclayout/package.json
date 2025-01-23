@@ -1,6 +1,6 @@
 {
 	"name": "@nativescript-community/ui-neumorphiclayout",
-	"version": "3.0.9",
+	"version": "3.0.10",
 	"description": "Neumorphism-based layout for NativeScript",
 	"main": "index",
 	"typings": "index.d.ts",
