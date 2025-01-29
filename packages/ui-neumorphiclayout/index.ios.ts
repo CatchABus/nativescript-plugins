@@ -61,7 +61,7 @@ function _refresh(this: NeumorphicLayout): void {
 function _updateSublayerBounds(view: NeumorphicLayout) {
 	const { width, height } = view.getActualSize();
 	const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
-	const cornerRadius = Math.max(cornerRadiusDip, 0);
+	const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
 	const drawableLayers = _getDrawableLayers(view);
 	const bounds = view.nativeViewProtected.bounds;
 	const shadowPath = UIBezierPath.bezierPathWithRoundedRectCornerRadius(bounds, cornerRadius).CGPath;
@@ -71,6 +71,8 @@ function _updateSublayerBounds(view: NeumorphicLayout) {
 
 	for (const layer of drawableLayers) {
 		layer.frame = bounds;
+		// Corner radius relies on size, so update it during resize
+		layer.cornerRadius = cornerRadius;
 		layer.shadowPath = shadowPath;
 		layer.setNeedsDisplay();
 	}
