@@ -61,16 +61,22 @@ function _refresh(this: NeumorphicLayout): void {
 function _updateSublayerBounds(view: NeumorphicLayout) {
 	const { width, height } = view.getActualSize();
 	const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
-	const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
+	const cornerRadius = Math.max(cornerRadiusDip, 0);
 	const drawableLayers = _getDrawableLayers(view);
 	const bounds = view.nativeViewProtected.bounds;
 	const shadowPath = UIBezierPath.bezierPathWithRoundedRectCornerRadius(bounds, cornerRadius).CGPath;
+
+	CATransaction.begin();
+	CATransaction.setDisableActions(true);
 
 	for (const layer of drawableLayers) {
 		layer.frame = bounds;
 		layer.shadowPath = shadowPath;
 		layer.setNeedsDisplay();
 	}
+
+	CATransaction.setDisableActions(false);
+	CATransaction.commit();
 }
 
 function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
@@ -93,6 +99,9 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	const shadowRadius = (view.shadowRadius || view.shadowDistance * 2) / Screen.mainScreen.scale;
 	const shadowOpacity = state == NeumorphicType.PRESSED ? 0 : 1;
 
+	CATransaction.begin();
+	CATransaction.setDisableActions(true);
+
 	bgLayer.cornerRadius = cornerRadius;
 	bgLayer.backgroundColor = fillColor;
 	bgLayer.shadowColor = view.lightShadowColor.ios.CGColor;
@@ -108,6 +117,9 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	fgLayer.shadowOffset = CGSizeMake(view.shadowDistance, view.shadowDistance);
 	fgLayer.shadowRadius = shadowRadius;
 	fgLayer.shadowOpacity = shadowOpacity;
+
+	CATransaction.setDisableActions(false);
+	CATransaction.commit();
 
 	fgLayer.setNeedsDisplay();
 }
@@ -129,15 +141,22 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 			this.augmentedCanvas = canvas;
 
 			const bgLayer = CALayer.layer();
+			const fgLayer = CANeumorphicLayer.initWithCanvas(canvas);
+
+			CATransaction.begin();
+			CATransaction.setDisableActions(true);
+
 			bgLayer.name = 'backgroundDrawable';
 			bgLayer.zPosition = -2;
 
-			const fgLayer = CANeumorphicLayer.initWithCanvas(canvas);
 			fgLayer.name = 'foregroundDrawable';
 			fgLayer.zPosition = -1;
 
 			nativeView.layer.insertSublayerAtIndex(bgLayer, 0);
 			nativeView.layer.insertSublayerAbove(fgLayer, bgLayer);
+
+			CATransaction.setDisableActions(false);
+			CATransaction.commit();
 
 			_updateSublayerShadows(this, [bgLayer, fgLayer]);
 			_updateSublayerBounds(this);

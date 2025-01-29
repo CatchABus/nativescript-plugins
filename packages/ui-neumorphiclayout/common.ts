@@ -186,7 +186,7 @@ export class NeumorphicCanvas extends Canvas {
 
 		const { width, height } = view.getActualSize();
 		const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
-		const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
+		const cornerRadius = Math.max(cornerRadiusDip, 0);
 
 		const shadowRadius: number = view.shadowRadius || view.shadowDistance * 2;
 
