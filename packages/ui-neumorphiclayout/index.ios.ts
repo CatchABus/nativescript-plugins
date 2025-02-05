@@ -1,4 +1,4 @@
-import { backgroundInternalProperty, borderTopColorProperty, borderTopLeftRadiusProperty, borderTopWidthProperty, Color, EventData, LayoutBase, Length, Screen, Utils } from '@nativescript/core';
+import { backgroundInternalProperty, borderTopColorProperty, borderTopLeftRadiusProperty, borderTopWidthProperty, Color, EventData, LayoutBase, Length, PropertyChangeData, Screen, Style, Utils } from '@nativescript/core';
 import { NeumorphicLayout } from '.';
 import { darkShadowColorProperty, lightShadowColorProperty, NeumorphicCanvas, NeumorphicType, neumorphismProperty, shadowDistanceProperty, shadowRadiusProperty } from './common';
 
@@ -130,6 +130,11 @@ function _onLayoutChange(args: EventData): void {
 	_updateSublayerBounds(args.object as NeumorphicLayout);
 }
 
+function _onVisibilityChange(args: PropertyChangeData): void {
+	const style = args.object as Style;
+	_updateSublayerBounds(style.view as NeumorphicLayout);
+}
+
 function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType): void {
 	const drawableLayers = _getDrawableLayers(this);
 
@@ -164,6 +169,7 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 			_updateSublayerBounds(this);
 
 			this.on(LayoutBase.layoutChangedEvent, _onLayoutChange);
+			this.style.on('visibilityChange', _onVisibilityChange);
 		}
 	} else {
 		if (this.augmentedCanvas != null) {
@@ -177,6 +183,7 @@ function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType):
 		}
 
 		this.off(LayoutBase.layoutChangedEvent, _onLayoutChange);
+		this.style.off('visibilityChange', _onVisibilityChange);
 	}
 }
 
