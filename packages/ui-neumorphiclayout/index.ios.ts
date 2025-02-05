@@ -132,7 +132,10 @@ function _onLayoutChange(args: EventData): void {
 
 function _onVisibilityChange(args: PropertyChangeData): void {
 	const style = args.object as Style;
-	_updateSublayerBounds(style.view as NeumorphicLayout);
+
+	if (style.view) {
+		_updateSublayerBounds(style.view as NeumorphicLayout);
+	}
 }
 
 function _updateNeumorphismState(this: NeumorphicLayout, value: NeumorphicType): void {
