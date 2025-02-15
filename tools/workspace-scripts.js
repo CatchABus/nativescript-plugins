@@ -75,6 +75,13 @@ module.exports = {
 					description: '@nativescript-community/ui-htmlcanvasapi: Build',
 				},
 			},
+			// @nativescript-community/ui-constraintlayout
+			'ui-constraintlayout': {
+				build: {
+					script: 'nx run ui-constraintlayout:build.all',
+					description: '@nativescript-community/ui-constraintlayout: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
@@ -92,6 +99,10 @@ module.exports = {
 			'ui-htmlcanvasapi': {
 				script: 'nx run ui-htmlcanvasapi:focus',
 				description: 'Focus on @nativescript-community/ui-htmlcanvasapi',
+			},
+			'ui-constraintlayout': {
+				script: 'nx run ui-constraintlayout:focus',
+				description: 'Focus on @nativescript-community/ui-constraintlayout',
 			},
 			reset: {
 				script: 'nx run all:focus',

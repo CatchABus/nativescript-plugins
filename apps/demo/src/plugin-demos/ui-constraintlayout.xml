@@ -1,0 +1,16 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:ui="@nativescript-community/ui-constraintlayout" navigatingTo="navigatingTo" class="page">
+  <Page.actionBar>
+    <ActionBar title="ui-constraintlayout" icon="" class="action-bar">
+    </ActionBar>
+  </Page.actionBar>
+  <ui:ConstraintLayout>
+      <StackLayout leftToLeftOf="parent" topToTopOf="parent" backgroundColor="red">
+        <Button id="button1" text="Button1"/>
+      </StackLayout>
+      
+      <Button id="button2" rightToRightOf="parent" topToTopOf="parent" backgroundColor="green" text="Button2"/>
+      <Button id="button3" leftToLeftOf="parent" bottomToBottomOf="parent" backgroundColor="blue" text="Button3"/>
+      <Button id="button4" rightToRightOf="parent" bottomToBottomOf="parent" backgroundColor="yellow" text="Button4"/>
+      <Button id="button5" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="orange" text="Button5" tap="test"/>
+    </ui:ConstraintLayout>
+</Page>

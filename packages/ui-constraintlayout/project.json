@@ -1,0 +1,65 @@
+{
+	"name": "ui-constraintlayout",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "packages/ui-constraintlayout",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"options": {
+				"outputPath": "dist/packages/ui-constraintlayout",
+				"tsConfig": "packages/ui-constraintlayout/tsconfig.json",
+				"packageJson": "packages/ui-constraintlayout/package.json",
+				"main": "packages/ui-constraintlayout/index.d.ts",
+				"assets": [
+					"packages/ui-constraintlayout/*.md",
+					"packages/ui-constraintlayout/index.d.ts",
+					"LICENSE",
+					{
+						"glob": "**/*",
+						"input": "packages/ui-constraintlayout/platforms/",
+						"output": "./platforms/"
+					}
+				],
+				"dependsOn": [
+					{
+						"target": "build.all",
+						"projects": "dependencies"
+					}
+				]
+			}
+		},
+		"build.all": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["node tools/scripts/build-finish.ts ui-constraintlayout"],
+				"parallel": false
+			},
+			"outputs": ["{workspaceRoot}/dist/packages/ui-constraintlayout"],
+			"dependsOn": [
+				{
+					"target": "build.all",
+					"projects": "dependencies"
+				},
+				{
+					"target": "build",
+					"projects": "self"
+				}
+			]
+		},
+		"focus": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages ui-constraintlayout"],
+				"parallel": false
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:eslint",
+			"options": {
+				"lintFilePatterns": ["packages/ui-constraintlayout/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}
