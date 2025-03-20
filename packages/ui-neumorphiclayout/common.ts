@@ -75,8 +75,8 @@ export class NeumorphicCanvas extends Canvas {
 	private paintStroke: Paint;
 
 	private readonly paintBase: Paint;
-	private readonly paintLight: Paint;
 	private readonly paintDark: Paint;
+	private readonly paintLight: Paint;
 
 	constructor(view: NeumorphicLayout) {
 		super(0, 0);
@@ -84,10 +84,10 @@ export class NeumorphicCanvas extends Canvas {
 		this.mViewRef = new WeakRef<NeumorphicLayout>(view);
 		this.paintBase = new Paint();
 		this.paintBase.setAntiAlias(true);
-		this.paintLight = new Paint();
-		this.paintLight.setAntiAlias(true);
 		this.paintDark = new Paint();
 		this.paintDark.setAntiAlias(true);
+		this.paintLight = new Paint();
+		this.paintLight.setAntiAlias(true);
 	}
 
 	public manipulateColor(color: Color, factor: number): Color {
@@ -118,8 +118,8 @@ export class NeumorphicCanvas extends Canvas {
 				this.initShape(NeumorphicType.FLAT);
 				this.initPaints(NeumorphicType.FLAT);
 
-				this.drawPath(this.path, this.paintLight);
 				this.drawPath(this.path, this.paintDark);
+				this.drawPath(this.path, this.paintLight);
 				this.drawPath(this.path, this.paintBase);
 			}
 
@@ -128,8 +128,8 @@ export class NeumorphicCanvas extends Canvas {
 
 			this.clipPath(this.path);
 			this.drawPath(this.path, this.paintBase);
-			this.drawPath(this.innerShadowPath, this.paintLight);
 			this.drawPath(this.innerShadowPath, this.paintDark);
+			this.drawPath(this.innerShadowPath, this.paintLight);
 		} else {
 			this.initShape(state);
 			this.initPaints(state);
@@ -137,12 +137,12 @@ export class NeumorphicCanvas extends Canvas {
 			if (state == NeumorphicType.PRESSED) {
 				this.clipPath(this.path);
 				this.drawPath(this.path, this.paintBase);
-				this.drawPath(this.innerShadowPath, this.paintLight);
 				this.drawPath(this.innerShadowPath, this.paintDark);
+				this.drawPath(this.innerShadowPath, this.paintLight);
 			} else {
 				if (__ANDROID__) {
-					this.drawPath(this.path, this.paintLight);
 					this.drawPath(this.path, this.paintDark);
+					this.drawPath(this.path, this.paintLight);
 				}
 				this.drawPath(this.path, this.paintBase);
 			}
@@ -164,21 +164,21 @@ export class NeumorphicCanvas extends Canvas {
 		this._setStroke(view);
 
 		if (isPressable) {
-			this.paintLight.strokeWidth = shadowRadius;
-			this.paintLight.style = drawStyle.STROKE;
 			this.paintDark.strokeWidth = shadowRadius;
 			this.paintDark.style = drawStyle.STROKE;
+			this.paintLight.strokeWidth = shadowRadius;
+			this.paintLight.style = drawStyle.STROKE;
 		} else {
-			this.paintLight.strokeWidth = 0;
-			this.paintLight.style = drawStyle.FILL;
 			this.paintDark.strokeWidth = 0;
 			this.paintDark.style = drawStyle.FILL;
+			this.paintLight.strokeWidth = 0;
+			this.paintLight.style = drawStyle.FILL;
 		}
 
-		this.paintLight.setColor(fillColor);
 		this.paintDark.setColor(fillColor);
-		this.paintLight.setShadowLayer(shadowRadius, -view.shadowDistance, -view.shadowDistance, view.lightShadowColor);
+		this.paintLight.setColor(fillColor);
 		this.paintDark.setShadowLayer(shadowRadius, view.shadowDistance, view.shadowDistance, view.darkShadowColor);
+		this.paintLight.setShadowLayer(shadowRadius, -view.shadowDistance, -view.shadowDistance, view.lightShadowColor);
 	}
 
 	private initShape(state: NeumorphicType) {

@@ -106,8 +106,8 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 
 	bgLayer.cornerRadius = cornerRadius;
 	bgLayer.backgroundColor = fillColor;
-	bgLayer.shadowColor = view.lightShadowColor.ios.CGColor;
-	bgLayer.shadowOffset = CGSizeMake(-view.shadowDistance, -view.shadowDistance);
+	bgLayer.shadowColor = view.darkShadowColor.ios.CGColor;
+	bgLayer.shadowOffset = CGSizeMake(view.shadowDistance, view.shadowDistance);
 	bgLayer.shadowRadius = shadowRadius;
 	bgLayer.shadowOpacity = shadowOpacity;
 
@@ -115,8 +115,8 @@ function _updateSublayerShadows(view: NeumorphicLayout, sublayers: CALayer[]) {
 	fgLayer.backgroundColor = fillColor;
 	fgLayer.contentsScale = Screen.mainScreen.scale;
 	fgLayer.allowsEdgeAntialiasing = true;
-	fgLayer.shadowColor = view.darkShadowColor.ios.CGColor;
-	fgLayer.shadowOffset = CGSizeMake(view.shadowDistance, view.shadowDistance);
+	fgLayer.shadowColor = view.lightShadowColor.ios.CGColor;
+	fgLayer.shadowOffset = CGSizeMake(-view.shadowDistance, -view.shadowDistance);
 	fgLayer.shadowRadius = shadowRadius;
 	fgLayer.shadowOpacity = shadowOpacity;
 
