@@ -1,5 +1,5 @@
 import { CoreTypes, heightProperty, Trace, Utils, View, widthProperty } from '@nativescript/core';
-import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, endToEndOfProperty, endToStartOfProperty, getConstraintRelativePositionTarget, leftToLeftOfProperty, leftToRightOfProperty, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty } from './common';
+import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty } from './common';
 
 type ConstraintLayoutParams = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
 type AndroidView = android.view.View;
@@ -19,42 +19,45 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 		return new androidx.constraintlayout.widget.ConstraintLayout(this._context);
 	}
 
-	public _addViewToNativeVisualTree(child: View, atIndex: number = Number.MAX_SAFE_INTEGER): boolean {
-		const added = super._addViewToNativeVisualTree(child);
-
-		if (added) {
-			const childView = child.nativeViewProtected as AndroidView;
-			if (childView.getId() === NO_ID) {
-				childView.setId(android.view.View.generateViewId());
-			}
-		}
-
-		return added;
+	initNativeView(): void {
+		super.initNativeView();
+		this.nativeViewProtected.setClipToPadding(false);
 	}
 
-	public _removeViewFromNativeVisualTree(child: View): void {
-		super._removeViewFromNativeVisualTree(child);
-
-		const childView = child.nativeViewProtected;
-
-		if (childView) {
-			childView.setId(NO_ID);
+	public _addViewToNativeVisualTree(child: View, atIndex: number = Number.MAX_SAFE_INTEGER): boolean {
+		const childView = child.nativeViewProtected as AndroidView;
+		// Set ID before adding view to parent as ConstraintLayout keeps a mapping of its children based on it
+		if (childView.getId() === NO_ID) {
+			childView.setId(android.view.View.generateViewId());
 		}
+
+		return super._addViewToNativeVisualTree(child);
 	}
 }
 
-function getConstraintRelativePositionTargetId(id: string, view: View): number {
-	const target = getConstraintRelativePositionTarget(id, view);
-
-	if (target == null) {
-		return CONSTRAINT_UNSET_VALUE;
-	}
-
-	if (target === view.parent) {
+export function getConstraintNativeTargetId(id: string, view: View): number {
+	if (id === PARENT_CONSTRAINT_IDENTIFIER) {
 		return PARENT_ID;
 	}
 
-	return (target.nativeViewProtected as AndroidView).getId();
+	let nativeId: number = CONSTRAINT_UNSET_VALUE;
+
+	if (view.parent) {
+		view.parent.eachChild((child) => {
+			// Requested view may only have constraints with previous siblings
+			if (child === view) {
+				return false;
+			}
+
+			if (child.id === id && child.nativeViewProtected) {
+				nativeId = (child.nativeViewProtected as AndroidView).getId();
+				return false;
+			}
+			return true;
+		});
+	}
+
+	return nativeId;
 }
 
 applyViewMixin((originals) => {
@@ -110,7 +113,7 @@ applyViewMixin((originals) => {
 				} else if (value.unit === '%') {
 					layoutParams.width = MATCH_CONSTRAINT;
 					matchConstraintDefaultWidth = MATCH_CONSTRAINT_PERCENT;
-					layoutParams.matchConstraintPercentHeight = value.value;
+					layoutParams.matchConstraintPercentWidth = value.value;
 				} else if (value.unit === 'px') {
 					layoutParams.width = layout.round(value.value);
 				} else {
@@ -136,7 +139,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.leftToLeft = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -148,7 +151,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.leftToRight = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -160,7 +163,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.rightToLeft = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -172,7 +175,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.rightToRight = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -184,7 +187,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.topToTop = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -196,7 +199,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.topToBottom = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -208,7 +211,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.bottomToTop = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -220,7 +223,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.bottomToBottom = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -232,7 +235,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.baselineToBaseline = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -244,7 +247,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.startToEnd = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -256,7 +259,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.startToStart = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -268,7 +271,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.endToStart = id;
 			nativeView.setLayoutParams(layoutParams);
@@ -280,7 +283,7 @@ applyViewMixin((originals) => {
 
 			const nativeView = this.nativeViewProtected as AndroidView;
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
-			const id = getConstraintRelativePositionTargetId(value, this);
+			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.endToEnd = id;
 			nativeView.setLayoutParams(layoutParams);

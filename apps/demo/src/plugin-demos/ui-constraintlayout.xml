@@ -3,14 +3,19 @@
     <ActionBar title="ui-constraintlayout" icon="" class="action-bar">
     </ActionBar>
   </Page.actionBar>
-  <ui:ConstraintLayout>
-      <StackLayout leftToLeftOf="parent" topToTopOf="parent" backgroundColor="red">
-        <Button id="button1" text="Button1"/>
-      </StackLayout>
+  <ui:ConstraintLayout padding="0">
+      <Button id="button1" text="Button1" leftToLeftOf="parent" topToTopOf="parent"/>
       
       <Button id="button2" rightToRightOf="parent" topToTopOf="parent" backgroundColor="green" text="Button2"/>
-      <Button id="button3" leftToLeftOf="parent" bottomToBottomOf="parent" backgroundColor="blue" text="Button3"/>
+      <Button id="button3" leftToLeftOf="parent" bottomToBottomOf="parent" marginRight="-10" backgroundColor="blue" text="Button3"/>
       <Button id="button4" rightToRightOf="parent" bottomToBottomOf="parent" backgroundColor="yellow" text="Button4"/>
-      <Button id="button5" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="orange" text="Button5" tap="test"/>
+      <Button id="button5" width="300" height="100" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="orange" text="Button5" tap="test"/>
+
+      <Label text="Test1" leftToRightOf="button5" topToTopOf="button5" backgroundColor="cyan"/>
+      <Label text="Test2" rightToLeftOf="button5" bottomToBottomOf="button5" topToTopOf="button5" backgroundColor="cyan"/>
+      <Label id="text3" paddingBottom="0" fontWeight="bold" paddingTop="40" borderTopWidth="0" fontSize="30" text="Test3 αλγλφγλ δκκκσξ" textWrap="true" width="150" topToBottomOf="button5" rightToRightOf="button5" backgroundColor="cyan"/>
+      <Label text="Test4" bottomToTopOf="button5" rightToRightOf="button5" rightToRightOf="button5" backgroundColor="cyan"/>
+      <Label text="Test5T gfgf gfg" textWrap="true" width="100" fontSize="40" rightToLeftOf="text3" fontWeight="bold" paddingBottom="20" baselineToBaselineOf="text3" backgroundColor="cyan"/>
+      <Button id="button6" leftToLeftOf="button1" rightToRightOf="button2" topToTopOf="parent" backgroundColor="green" text="Button6"/>
     </ui:ConstraintLayout>
 </Page>

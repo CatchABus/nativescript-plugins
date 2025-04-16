@@ -1,5 +1,4 @@
-import { Observable, EventData, Page, View } from '@nativescript/core';
-import { DemoSharedUiConstraintlayout } from '@demo/shared';
+import { EventData, Page, View } from '@nativescript/core';
 import { ConstraintLayout } from '@nativescript-community/ui-constraintlayout';
 
 export function navigatingTo(args: EventData) {
@@ -7,7 +6,7 @@ export function navigatingTo(args: EventData) {
 }
 
 export function test(args: EventData) {
-	const view = args.object;
+	const view = args.object as View;
 
 	ConstraintLayout.setLeftToLeftOf(view, null);
 	ConstraintLayout.setBottomToBottomOf(view, null);

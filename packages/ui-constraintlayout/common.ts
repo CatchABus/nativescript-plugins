@@ -1,40 +1,7 @@
-import { LayoutBase, Observable, Property, View, ViewBase } from '@nativescript/core';
+import { LayoutBase, Property, View } from '@nativescript/core';
+import { ConstrainedChild } from '.';
 
 export const PARENT_CONSTRAINT_IDENTIFIER = 'parent';
-
-export enum RelConstraintPos {
-	leftToLeftOf = 'leftToLeftOf',
-	leftToRightOf = 'leftToRightOf',
-	rightToLeftOf = 'rightToLeftOf',
-	rightToRightOf = 'rightToRightOf',
-	leftRightCenter = 'leftRightCenter',
-	topToTopOf = 'topToTopOf',
-	topToBottomOf = 'topToBottomOf',
-	bottomToTopOf = 'bottomToTopOf',
-	bottomToBottomOf = 'bottomToBottomOf',
-	topBottomCenter = 'topBottomCenter',
-	baselineToBaselineOf = 'baselineToBaselineOf',
-	startToEndOf = 'startToEndOf',
-	startToStartOf = 'startToStartOf',
-	endToStartOf = 'endToStartOf',
-	endToEndOf = 'endToEndOf',
-}
-
-export interface ConstrainedChild extends View {
-	leftToLeftOf: string;
-	leftToRightOf: string;
-	rightToLeftOf: string;
-	rightToRightOf: string;
-	topToTopOf: string;
-	topToBottomOf: string;
-	bottomToTopOf: string;
-	bottomToBottomOf: string;
-	baselineToBaselineOf: string;
-	startToEndOf: string;
-	startToStartOf: string;
-	endToStartOf: string;
-	endToEndOf: string;
-}
 
 export class ConstraintLayoutBase extends LayoutBase {
 	public static isConstrainedChild(child: View): boolean {
@@ -157,115 +124,92 @@ export function applyViewMixin(callback: (originals: Partial<View>) => Partial<V
 	Object.assign(View.prototype, mixin);
 }
 
-export function getConstraintRelativePositionTarget(id: string, view: View): ViewBase {
-	const parent = view.parent;
-	let target: ViewBase;
-
-	if (parent) {
-		if (id === PARENT_CONSTRAINT_IDENTIFIER) {
-			target = parent;
-		}
-
-		parent.eachChild((child) => {
-			if (child.id === id) {
-				target = child;
-				return false;
-			}
-			return true;
-		});
-	} else {
-		target = null;
-	}
-
-	return target;
-}
-
 export const leftToLeftOfProperty = new Property<View, string>({
-	name: RelConstraintPos.leftToLeftOf,
+	name: 'leftToLeftOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 leftToLeftOfProperty.register(View);
 
 export const leftToRightOfProperty = new Property<View, string>({
-	name: RelConstraintPos.leftToRightOf,
+	name: 'leftToRightOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 leftToRightOfProperty.register(View);
 
 export const rightToLeftOfProperty = new Property<View, string>({
-	name: RelConstraintPos.rightToLeftOf,
+	name: 'rightToLeftOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 rightToLeftOfProperty.register(View);
 
 export const rightToRightOfProperty = new Property<View, string>({
-	name: RelConstraintPos.rightToRightOf,
+	name: 'rightToRightOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 rightToRightOfProperty.register(View);
 
 export const topToTopOfProperty = new Property<View, string>({
-	name: RelConstraintPos.topToTopOf,
+	name: 'topToTopOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 topToTopOfProperty.register(View);
 
 export const topToBottomOfProperty = new Property<View, string>({
-	name: RelConstraintPos.topToBottomOf,
+	name: 'topToBottomOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 topToBottomOfProperty.register(View);
 
 export const bottomToTopOfProperty = new Property<View, string>({
-	name: RelConstraintPos.bottomToTopOf,
+	name: 'bottomToTopOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 bottomToTopOfProperty.register(View);
 
 export const bottomToBottomOfProperty = new Property<View, string>({
-	name: RelConstraintPos.bottomToBottomOf,
+	name: 'bottomToBottomOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 bottomToBottomOfProperty.register(View);
 
 export const baselineToBaselineOfProperty = new Property<View, string>({
-	name: RelConstraintPos.baselineToBaselineOf,
+	name: 'baselineToBaselineOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 baselineToBaselineOfProperty.register(View);
 
 export const startToEndOfProperty = new Property<View, string>({
-	name: RelConstraintPos.startToEndOf,
+	name: 'startToEndOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 startToEndOfProperty.register(View);
 
 export const startToStartOfProperty = new Property<View, string>({
-	name: RelConstraintPos.startToStartOf,
+	name: 'startToStartOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 startToStartOfProperty.register(View);
 
 export const endToStartOfProperty = new Property<View, string>({
-	name: RelConstraintPos.endToStartOf,
+	name: 'endToStartOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });
 endToStartOfProperty.register(View);
 
 export const endToEndOfProperty = new Property<View, string>({
-	name: RelConstraintPos.endToEndOf,
+	name: 'endToEndOf',
 	defaultValue: null,
 	affectsLayout: global.isIOS,
 });

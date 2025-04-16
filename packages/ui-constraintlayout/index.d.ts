@@ -1,4 +1,22 @@
-import { LayoutBase } from '@nativescript/core';
+import { LayoutBase, View } from '@nativescript/core';
+
+export interface ConstrainedItem {
+	leftToLeftOf: string;
+	leftToRightOf: string;
+	rightToLeftOf: string;
+	rightToRightOf: string;
+	topToTopOf: string;
+	topToBottomOf: string;
+	bottomToTopOf: string;
+	bottomToBottomOf: string;
+	baselineToBaselineOf: string;
+	startToEndOf: string;
+	startToStartOf: string;
+	endToStartOf: string;
+	endToEndOf: string;
+}
+
+export interface ConstrainedChild extends View, ConstrainedItem {}
 
 export class ConstraintLayout extends LayoutBase {
 	public static isConstrainedChild(child: View): boolean {
