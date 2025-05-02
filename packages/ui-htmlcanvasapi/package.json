@@ -1,6 +1,6 @@
 {
 	"name": "@nativescript-community/ui-htmlcanvasapi",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"description": "An HTML Canvas API implementation on top of android and iOS native APIs",
 	"main": "index",
 	"types": "index.d.ts",
