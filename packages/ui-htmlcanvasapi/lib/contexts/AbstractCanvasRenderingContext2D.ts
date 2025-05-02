@@ -124,19 +124,20 @@ abstract class AbstractCanvasRenderingContext2D {
 
 	private _getTextBaseLineHeight(y: number): number {
 		const fontMetrics = this._stylePaint.getFontMetrics();
+
 		let baselineY: number;
 
 		switch (this.textBaseline) {
 			case 'top':
 			case 'hanging':
-				baselineY = y - fontMetrics.top - fontMetrics.bottom;
+				baselineY = y - fontMetrics.ascent - fontMetrics.descent;
 				break;
 			case 'middle':
-				baselineY = y - (fontMetrics.top + fontMetrics.bottom) / 2;
+				baselineY = y - (fontMetrics.ascent + fontMetrics.descent) / 2;
 				break;
 			case 'bottom':
 			case 'ideographic':
-				baselineY = y - fontMetrics.bottom;
+				baselineY = y - fontMetrics.descent;
 				break;
 			default:
 				baselineY = y;
