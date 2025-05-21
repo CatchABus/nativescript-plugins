@@ -1,5 +1,5 @@
 import { Canvas, CanvasView, createRectF, Paint } from '@nativescript-community/ui-canvas';
-import { booleanConverter, EventData, ImageSource, Property } from '@nativescript/core';
+import { booleanConverter, CSSType, EventData, Property } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
@@ -8,7 +8,7 @@ import type { OffscreenCanvas } from '../elements/OffscreenCanvas';
 import { SCREEN_SCALE } from '../helpers';
 
 function onLayoutChange(args: EventData): void {
-	const view = args.object as HTMLCanvasViewBase;
+	const view = args.object as HTMLCanvasView;
 
 	// During view layout, offscreen buffer is also resized
 	if (view.isOffscreenBufferEnabled) {
@@ -23,13 +23,14 @@ function onLayoutChange(args: EventData): void {
 	}
 }
 
-const isOffscreenBufferEnabledProperty = new Property<HTMLCanvasViewBase, boolean>({
+const isOffscreenBufferEnabledProperty = new Property<HTMLCanvasView, boolean>({
 	name: 'isOffscreenBufferEnabled',
 	defaultValue: false,
 	valueConverter: booleanConverter,
 });
 
-abstract class HTMLCanvasViewBase extends CanvasView {
+@CSSType('HTMLCanvasView')
+class HTMLCanvasView extends CanvasView {
 	private readonly _canvasElement: HTMLCanvasElement;
 
 	private _currentCanvas: Canvas;
@@ -115,14 +116,14 @@ abstract class HTMLCanvasViewBase extends CanvasView {
 			this._offscreenPaint = new Paint();
 			this._offscreenPaint.setAntiAlias(true);
 
-			this.on(HTMLCanvasViewBase.layoutChangedEvent, onLayoutChange);
+			this.on(HTMLCanvasView.layoutChangedEvent, onLayoutChange);
 		} else {
-			this.off(HTMLCanvasViewBase.layoutChangedEvent, onLayoutChange);
+			this.off(HTMLCanvasView.layoutChangedEvent, onLayoutChange);
 			this._disposeOffscreenBuffer();
 		}
 	}
 }
 
-isOffscreenBufferEnabledProperty.register(HTMLCanvasViewBase);
+isOffscreenBufferEnabledProperty.register(HTMLCanvasView);
 
-export { SCREEN_SCALE, HTMLCanvasViewBase, isOffscreenBufferEnabledProperty };
+export { HTMLCanvasView, isOffscreenBufferEnabledProperty, SCREEN_SCALE };
