@@ -82,6 +82,13 @@ module.exports = {
 					description: '@nativescript-community/ui-constraintlayout: Build',
 				},
 			},
+			// @nativescript-community/nordic-dfu
+			'nordic-dfu': {
+				build: {
+					script: 'nx run nordic-dfu:build.all',
+					description: '@nativescript-community/nordic-dfu: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
@@ -103,6 +110,10 @@ module.exports = {
 			'ui-constraintlayout': {
 				script: 'nx run ui-constraintlayout:focus',
 				description: 'Focus on @nativescript-community/ui-constraintlayout',
+			},
+			'nordic-dfu': {
+				script: 'nx run nordic-dfu:focus',
+				description: 'Focus on @nativescript-community/nordic-dfu',
 			},
 			reset: {
 				script: 'nx run all:focus',

@@ -1,0 +1,65 @@
+{
+	"name": "nordic-dfu",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "packages/nordic-dfu",
+	"targets": {
+		"build": {
+			"executor": "@nrwl/js:tsc",
+			"options": {
+				"outputPath": "dist/packages/nordic-dfu",
+				"tsConfig": "packages/nordic-dfu/tsconfig.json",
+				"packageJson": "packages/nordic-dfu/package.json",
+				"main": "packages/nordic-dfu/index.d.ts",
+				"assets": [
+					"packages/nordic-dfu/*.md",
+					"packages/nordic-dfu/**/index.d.ts",
+					"LICENSE",
+					{
+						"glob": "**/*",
+						"input": "packages/nordic-dfu/platforms/",
+						"output": "./platforms/"
+					}
+				],
+				"dependsOn": [
+					{
+						"target": "build.all",
+						"projects": "dependencies"
+					}
+				]
+			}
+		},
+		"build.all": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["node tools/scripts/build-finish.ts nordic-dfu"],
+				"parallel": false
+			},
+			"outputs": ["{workspaceRoot}/dist/packages/nordic-dfu"],
+			"dependsOn": [
+				{
+					"target": "build.all",
+					"projects": "dependencies"
+				},
+				{
+					"target": "build",
+					"projects": "self"
+				}
+			]
+		},
+		"focus": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages nordic-dfu"],
+				"parallel": false
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:eslint",
+			"options": {
+				"lintFilePatterns": ["packages/nordic-dfu/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

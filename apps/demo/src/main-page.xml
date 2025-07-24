@@ -9,6 +9,7 @@
         <Button text="ui-neumorphiclayout" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
         <Button text="ui-htmlcanvasapi" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
         <Button text="ui-constraintlayout" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="nordic-dfu" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
       </StackLayout>
     </ScrollView>
   </StackLayout>

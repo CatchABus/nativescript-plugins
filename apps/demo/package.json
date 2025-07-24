@@ -8,6 +8,7 @@
 		"@nativescript-community/ui-htmlcanvasapi": "file:../../packages/ui-htmlcanvasapi",
 		"@nativescript-community/ui-neumorphiclayout": "file:../../packages/ui-neumorphiclayout",
 		"@nativescript-community/ui-constraintlayout": "file:../../packages/ui-constraintlayout",
+		"@nativescript-community/nordic-dfu": "file:../../packages/nordic-dfu",
 		"@nativescript/core": "file:../../node_modules/@nativescript/core"
 	},
 	"devDependencies": {
