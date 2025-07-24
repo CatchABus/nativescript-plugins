@@ -96,6 +96,8 @@ class DFUProgressDelegateImpl extends NSObject implements DFUProgressDelegate {
 
 export class DFUInitiator extends DFUInitiatorCommon {
 	private readonly mNative: DFUServiceInitiator;
+	private mDelegate: DFUServiceDelegateImpl;
+	private mProgressDelegate: DFUProgressDelegateImpl;
 
 	constructor(peripheralUUID: string) {
 		super(peripheralUUID);
@@ -145,19 +147,23 @@ export class DFUInitiator extends DFUInitiatorCommon {
 	}
 
 	protected override _registerProgressListener(): void {
-		if (!this.mNative.delegate) {
-			this.mNative.delegate = DFUServiceDelegateImpl.initWithOwner(this);
+		if (!this.mDelegate) {
+			this.mDelegate = DFUServiceDelegateImpl.initWithOwner(this);
+			this.mNative.delegate = this.mDelegate;
 		}
-		if (!this.mNative.progressDelegate) {
-			this.mNative.progressDelegate = DFUProgressDelegateImpl.initWithOwner(this);
+		if (!this.mProgressDelegate) {
+			this.mProgressDelegate = DFUProgressDelegateImpl.initWithOwner(this);
+			this.mNative.progressDelegate = this.mProgressDelegate;
 		}
 	}
 
 	protected override _removeProgressListener(): void {
-		if (this.mNative.delegate) {
+		if (this.mDelegate) {
+			this.mDelegate = null;
 			this.mNative.delegate = null;
 		}
-		if (this.mNative.progressDelegate) {
+		if (this.mProgressDelegate) {
+			this.mProgressDelegate = null;
 			this.mNative.progressDelegate = null;
 		}
 	}

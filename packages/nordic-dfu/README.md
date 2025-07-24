@@ -10,7 +10,7 @@ npm install @nativescript-community/nordic-dfu
 ```
 
 ## Usage
-Note: Make sure to add the following permissions in android manifest file:
+Note: Apart from the standard BLE permissions, make sure to add the following in android manifest file:
 ```xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE"/>
