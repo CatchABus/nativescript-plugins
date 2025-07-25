@@ -37,9 +37,6 @@ export abstract class DFUInitiatorCommon extends Observable {
 	public abstract disableResume(): DFUInitiatorCommon;
 	public abstract start(filePath: string): DfuServiceController;
 
-	protected _registerProgressListener(): void {}
-	protected _removeProgressListener(): void {}
-
 	public _notifyDfuStateChanged(state: DfuState, reason?: string): void {
 		this.notify<DfuStateChangedEventData>({
 			eventName: DFUInitiatorCommon.dfuStateChangedEvent,
@@ -47,29 +44,5 @@ export abstract class DFUInitiatorCommon extends Observable {
 			state: state,
 			reason,
 		});
-	}
-
-	public override addEventListener(eventName: string, callback: (data: EventData) => void, thisArg?: any, once?: boolean): void {
-		const hasAlreadyAddedListeners = this.hasDfuListeners;
-
-		super.addEventListener(eventName, callback, thisArg, once);
-
-		if (!hasAlreadyAddedListeners && this.hasDfuListeners) {
-			this._registerProgressListener();
-		}
-	}
-
-	public override removeEventListener(eventName: string, callback?: (data: EventData) => void, thisArg?: any): void {
-		const hasOldListeners = this.hasDfuListeners;
-
-		super.removeEventListener(eventName, callback, thisArg);
-
-		if (hasOldListeners && !this.hasDfuListeners) {
-			this._removeProgressListener();
-		}
-	}
-
-	private get hasDfuListeners(): boolean {
-		return this.hasListeners(DFUInitiatorCommon.dfuStateChangedEvent) || this.hasListeners(DFUInitiatorCommon.dfuProgressEvent);
 	}
 }

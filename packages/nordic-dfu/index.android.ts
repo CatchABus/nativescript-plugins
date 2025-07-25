@@ -4,6 +4,9 @@ import { DfuState, DFUInitiatorCommon } from './common';
 import { Utils } from '@nativescript/core';
 import { DfuServiceController } from './serviceController';
 
+// Keep strong references of the initiators while running
+const executingInitiators = new Map<string, DFUInitiator>();
+
 @NativeClass
 class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerAdapter {
 	private readonly mOwner: WeakRef<DFUInitiator>;
@@ -53,6 +56,9 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 	public override onDfuCompleted(deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
+			if (executingInitiators.has(owner.peripheralUUID)) {
+				executingInitiators.delete(owner.peripheralUUID);
+			}
 			owner._notifyDfuStateChanged(DfuState.DFU_COMPLETED);
 		}
 
@@ -66,6 +72,9 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 	public override onDfuAborted(deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
+			if (executingInitiators.has(owner.peripheralUUID)) {
+				executingInitiators.delete(owner.peripheralUUID);
+			}
 			owner._notifyDfuStateChanged(DfuState.DFU_ABORTED);
 		}
 	}
@@ -88,6 +97,9 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 	public override onError(deviceAddress: string, error: number, errorType: number, message: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
+			if (executingInitiators.has(owner.peripheralUUID)) {
+				executingInitiators.delete(owner.peripheralUUID);
+			}
 			owner._notifyDfuStateChanged(DfuState.DFU_FAILED, message);
 		}
 	}
@@ -95,11 +107,15 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 
 export class DFUInitiator extends DFUInitiatorCommon {
 	private readonly mNative: no.nordicsemi.android.dfu.DfuServiceInitiator;
-	private mProgressListener: DfuProgressListener;
+	private readonly mProgressListener: DfuProgressListener;
 
 	constructor(peripheralUUID: string) {
 		super(peripheralUUID);
+
 		this.mNative = new no.nordicsemi.android.dfu.DfuServiceInitiator(peripheralUUID).setKeepBond(false);
+		this.mProgressListener = new DfuProgressListener(this);
+
+		no.nordicsemi.android.dfu.DfuServiceListenerHelper.registerProgressListener(Utils.android.getApplicationContext(), this.mProgressListener);
 	}
 
 	public override setDeviceName(name: string): DFUInitiator {
@@ -148,21 +164,9 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		}
 
 		const nativeController = this.mNative.start(appContext, com.nativescript.dfu.DfuService.class);
+
+		executingInitiators.set(this.peripheralUUID, this);
 		return new DfuServiceController(nativeController);
-	}
-
-	protected override _registerProgressListener(): void {
-		if (!this.mProgressListener) {
-			this.mProgressListener = new DfuProgressListener(this);
-			no.nordicsemi.android.dfu.DfuServiceListenerHelper.registerProgressListener(Utils.android.getApplicationContext(), this.mProgressListener);
-		}
-	}
-
-	protected override _removeProgressListener(): void {
-		if (this.mProgressListener) {
-			no.nordicsemi.android.dfu.DfuServiceListenerHelper.unregisterProgressListener(Utils.android.getApplicationContext(), this.mProgressListener);
-			this.mProgressListener = null;
-		}
 	}
 }
 

@@ -2,6 +2,9 @@ import { DfuProgressEventData } from '.';
 import { DFUInitiatorCommon, DfuState } from './common';
 import { DfuServiceController } from './serviceController';
 
+// Keep strong references of the initiators while running
+const executingInitiators = new Map<string, DFUInitiator>();
+
 @NativeClass
 class DFUServiceDelegateImpl extends NSObject implements DFUServiceDelegate {
 	public static ObjCProtocols = [DFUServiceDelegate];
@@ -18,6 +21,9 @@ class DFUServiceDelegateImpl extends NSObject implements DFUServiceDelegate {
 	dfuErrorDidOccurWithMessage(error: DFUError, message: string): void {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
+			if (executingInitiators.has(owner.peripheralUUID)) {
+				executingInitiators.delete(owner.peripheralUUID);
+			}
 			owner._notifyDfuStateChanged(DfuState.DFU_FAILED, message);
 		}
 	}
@@ -47,9 +53,15 @@ class DFUServiceDelegateImpl extends NSObject implements DFUServiceDelegate {
 					state = DfuState.DEVICE_DISCONNECTING;
 					break;
 				case DFUState.Completed:
+					if (executingInitiators.has(owner.peripheralUUID)) {
+						executingInitiators.delete(owner.peripheralUUID);
+					}
 					state = DfuState.DFU_COMPLETED;
 					break;
 				case DFUState.Aborted:
+					if (executingInitiators.has(owner.peripheralUUID)) {
+						executingInitiators.delete(owner.peripheralUUID);
+					}
 					state = DfuState.DFU_ABORTED;
 					break;
 				default:
@@ -96,12 +108,18 @@ class DFUProgressDelegateImpl extends NSObject implements DFUProgressDelegate {
 
 export class DFUInitiator extends DFUInitiatorCommon {
 	private readonly mNative: DFUServiceInitiator;
-	private mDelegate: DFUServiceDelegateImpl;
-	private mProgressDelegate: DFUProgressDelegateImpl;
+	private readonly mDelegate: DFUServiceDelegateImpl;
+	private readonly mProgressDelegate: DFUProgressDelegateImpl;
 
 	constructor(peripheralUUID: string) {
 		super(peripheralUUID);
+
 		this.mNative = DFUHelper.initDFUServiceInitiator();
+		this.mDelegate = DFUServiceDelegateImpl.initWithOwner(this);
+		this.mProgressDelegate = DFUProgressDelegateImpl.initWithOwner(this);
+
+		this.mNative.delegate = this.mDelegate;
+		this.mNative.progressDelegate = this.mProgressDelegate;
 	}
 
 	public override setDeviceName(name: string): DFUInitiator {
@@ -143,29 +161,9 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		const selectedFirmware = DFUFirmware.alloc().initWithUrlToZipFileError(NSURL.fileURLWithPath(filePath));
 		const identifier = NSUUID.alloc().initWithUUIDString(this.mPeripheralUUID);
 		const nativeController = this.mNative.withFirmware(selectedFirmware).startWithTargetWithIdentifier(identifier);
+
+		executingInitiators.set(this.peripheralUUID, this);
 		return new DfuServiceController(nativeController);
-	}
-
-	protected override _registerProgressListener(): void {
-		if (!this.mDelegate) {
-			this.mDelegate = DFUServiceDelegateImpl.initWithOwner(this);
-			this.mNative.delegate = this.mDelegate;
-		}
-		if (!this.mProgressDelegate) {
-			this.mProgressDelegate = DFUProgressDelegateImpl.initWithOwner(this);
-			this.mNative.progressDelegate = this.mProgressDelegate;
-		}
-	}
-
-	protected override _removeProgressListener(): void {
-		if (this.mDelegate) {
-			this.mDelegate = null;
-			this.mNative.delegate = null;
-		}
-		if (this.mProgressDelegate) {
-			this.mProgressDelegate = null;
-			this.mNative.progressDelegate = null;
-		}
 	}
 }
 
