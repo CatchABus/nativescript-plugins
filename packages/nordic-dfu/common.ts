@@ -28,8 +28,10 @@ export abstract class DFUInitiatorCommon extends Observable {
 		return this.mPeripheralUUID;
 	}
 
-	public abstract setDeviceName(name: string): DFUInitiatorCommon;
-	public abstract setKeepBond(val: boolean): DFUInitiatorCommon;
+	public abstract setAndroidDeviceName(name: string): DFUInitiatorCommon;
+	public abstract setAndroidDisableNotification(val: boolean): DFUInitiatorCommon;
+	public abstract setAndroidForeground(val: boolean): DFUInitiatorCommon;
+	public abstract setAndroidKeepBond(val: boolean): DFUInitiatorCommon;
 	public abstract setForceDfu(val: boolean): DFUInitiatorCommon;
 	public abstract setForceScanningForNewAddressInLegacyDfu(val: boolean): DFUInitiatorCommon;
 	public abstract setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(val: boolean): DFUInitiatorCommon;

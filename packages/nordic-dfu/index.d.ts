@@ -17,13 +17,25 @@ export declare class DFUInitiator extends DFUInitiatorCommon {
 	 *
 	 * @param name
 	 */
-	public setDeviceName(name: string): DFUInitiator;
+	public setAndroidDeviceName(name: string): DFUInitiator;
 	/**
 	 * Android only.
 	 *
 	 * @param val
 	 */
-	public setKeepBond(val: boolean): DFUInitiator;
+	public setAndroidDisableNotification(val: boolean): DFUInitiator;
+	/**
+	 * Android only.
+	 *
+	 * @param val
+	 */
+	public setAndroidForeground(val: boolean): DFUInitiator;
+	/**
+	 * Android only.
+	 *
+	 * @param val
+	 */
+	public setAndroidKeepBond(val: boolean): DFUInitiator;
 	public setForceDfu(val: boolean): DFUInitiator;
 	public setForceScanningForNewAddressInLegacyDfu(val: boolean): DFUInitiator;
 	public setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(val: boolean): DFUInitiator;

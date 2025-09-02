@@ -10,10 +10,15 @@ npm install @nativescript-community/nordic-dfu
 ```
 
 ## Usage
-Note: Apart from the standard BLE permissions, make sure to add the following in android manifest file:
+By default, android will start the process in the foreground so make sure to add the following permissions in the manifest file:
 ```xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE"/>
+```
+
+If you want to avoid this behaviour because you don't really need foreground activity and Google play complains about permissions, it can be disabled on the DFU initiator instance:
+```ts
+initiator.setAndroidForeground(false);
 ```
 
 Sample:

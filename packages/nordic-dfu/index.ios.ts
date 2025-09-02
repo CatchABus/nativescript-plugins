@@ -122,12 +122,22 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		this.mNative.progressDelegate = this.mProgressDelegate;
 	}
 
-	public override setDeviceName(name: string): DFUInitiator {
+	public override setAndroidDeviceName(name: string): DFUInitiator {
 		// Not implemented on iOS
 		return this;
 	}
 
-	public override setKeepBond(val: boolean): DFUInitiator {
+	public override setAndroidDisableNotification(val: boolean): DFUInitiator {
+		// Not implemented on iOS
+		return this;
+	}
+
+	public override setAndroidForeground(val: boolean): DFUInitiator {
+		// Not implemented on iOS
+		return this;
+	}
+
+	public override setAndroidKeepBond(val: boolean): DFUInitiator {
 		// Not implemented on iOS
 		return this;
 	}

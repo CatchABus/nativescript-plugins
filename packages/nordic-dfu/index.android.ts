@@ -118,12 +118,22 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		no.nordicsemi.android.dfu.DfuServiceListenerHelper.registerProgressListener(Utils.android.getApplicationContext(), this.mProgressListener);
 	}
 
-	public override setDeviceName(name: string): DFUInitiator {
+	public override setAndroidDeviceName(name: string): DFUInitiator {
 		this.mNative.setDeviceName(name);
 		return this;
 	}
 
-	public override setKeepBond(val: boolean): DFUInitiator {
+	public override setAndroidDisableNotification(val: boolean): DFUInitiator {
+		this.mNative.setDisableNotification(val);
+		return this;
+	}
+
+	public override setAndroidForeground(val: boolean): DFUInitiator {
+		this.mNative.setForeground(val);
+		return this;
+	}
+
+	public override setAndroidKeepBond(val: boolean): DFUInitiator {
 		this.mNative.setKeepBond(val);
 		return this;
 	}
