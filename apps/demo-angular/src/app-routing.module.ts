@@ -7,6 +7,7 @@ import { HomeComponent } from './home.component';
 const routes: Routes = [
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent },
+	{ path: 'dns-lookup', loadChildren: () => import('./plugin-demos/dns-lookup.module').then((m) => m.DnsLookupModule) },
 	{ path: 'nordic-dfu', loadChildren: () => import('./plugin-demos/nordic-dfu.module').then((m) => m.NordicDfuModule) },
 	{ path: 'ui-constraintlayout', loadChildren: () => import('./plugin-demos/ui-constraintlayout.module').then((m) => m.UiConstraintlayoutModule) },
 	{ path: 'ui-htmlcanvasapi', loadChildren: () => import('./plugin-demos/ui-htmlcanvasapi.module').then((m) => m.UiHtmlcanvasapiModule) },

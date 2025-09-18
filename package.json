@@ -29,7 +29,7 @@
 		"@nativescript/angular": "^15.0.1",
 		"@nativescript/core": "^8.4.7",
 		"@nativescript/plugin-tools": "5.4.1",
-		"@nativescript/types": "^8.4.0",
+		"@nativescript/types": "^8.9.1",
 		"@nativescript/webpack": "~5.0.22",
 		"@ngtools/webpack": "^15.1.4",
 		"@typescript-eslint/eslint-plugin": "^5.50.0",

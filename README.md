@@ -1,3 +1,4 @@
+- [@nativescript-community/dns-lookup](packages/dns-lookup/README.md)
 - [@nativescript-community/nordic-dfu](packages/nordic-dfu/README.md)
 - [@nativescript-community/ui-constraintlayout](packages/ui-constraintlayout/README.md)
 - [@nativescript-community/ui-htmlcanvasapi](packages/ui-htmlcanvasapi/README.md)

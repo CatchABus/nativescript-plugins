@@ -10,9 +10,11 @@ README.html
 node_modules
 package-lock.json
 yarn.lock
+**/*.aar
 
 # IDEs and editors
-/.idea
+**/.idea
+**/android.iml
 .project
 .classpath
 .c9/

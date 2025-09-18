@@ -89,6 +89,13 @@ module.exports = {
 					description: '@nativescript-community/nordic-dfu: Build',
 				},
 			},
+			// @nativescript-community/dns-lookup
+			'dns-lookup': {
+				build: {
+					script: 'nx run dns-lookup:build.all',
+					description: '@nativescript-community/dns-lookup: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
@@ -114,6 +121,10 @@ module.exports = {
 			'nordic-dfu': {
 				script: 'nx run nordic-dfu:focus',
 				description: 'Focus on @nativescript-community/nordic-dfu',
+			},
+			'dns-lookup': {
+				script: 'nx run dns-lookup:focus',
+				description: 'Focus on @nativescript-community/dns-lookup',
 			},
 			reset: {
 				script: 'nx run all:focus',

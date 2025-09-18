@@ -6,7 +6,8 @@
 		"@nativescript-community/ui-neumorphiclayout": "file:../../dist/packages/ui-neumorphiclayout",
 		"@nativescript/core": "file:../../node_modules/@nativescript/core",
 		"@nativescript-community/ui-constraintlayout": "file:../../dist/packages/ui-constraintlayout",
-		"@nativescript-community/nordic-dfu": "file:../../dist/packages/nordic-dfu"
+		"@nativescript-community/nordic-dfu": "file:../../dist/packages/nordic-dfu",
+		"@nativescript-community/dns-lookup": "file:../../dist/packages/dns-lookup"
 	},
 	"devDependencies": {
 		"@nativescript/android": "8.4.0",

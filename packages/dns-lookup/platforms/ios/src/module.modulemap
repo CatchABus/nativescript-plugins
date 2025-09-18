@@ -1,0 +1,4 @@
+module NSDNSResolver {
+  header "NSDNSResolver.h"
+  export *
+}
