@@ -4,18 +4,20 @@ declare module com {
 	export module nativescript {
 		export module dns {
 			export module NSDNSResolver {
-				export class CompleteCallback {
-					constructor(implementation: ICompleteCallback);
-					onComplete(addresses: string[]): void;
+				export class OnResolveCallback {
+					constructor(implementation: IOnResolveCallback);
+					onIPAddressResolution(address: string): void;
+					onComplete(): void;
 					onError(error: java.lang.Exception): void;
 				}
 
-				export interface ICompleteCallback {
-					onComplete(addresses: string[]): void;
+				export interface IOnResolveCallback {
+					onIPAddressResolution(address: string): void;
+					onComplete(): void;
 					onError(error: java.lang.Exception): void;
 				}
 
-				export function resolveHost(hostName: string, callback: CompleteCallback): void;
+				export function resolveHost(hostName: string, callback: OnResolveCallback): void;
 			}
 		}
 	}

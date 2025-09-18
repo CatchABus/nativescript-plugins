@@ -10,8 +10,9 @@ import java.util.concurrent.Executors;
 public class NSDNSResolver {
   private static ExecutorService _executorService;
 
-  public interface CompleteCallback {
-    void onComplete(String[] addresses);
+  public interface OnResolveCallback {
+    void onIPAddressResolution(String address);
+    void onComplete();
     void onError(Exception e);
   }
 
@@ -23,28 +24,26 @@ public class NSDNSResolver {
     return _executorService;
   }
 
-  public static void resolveHost(String hostName, CompleteCallback callback) {
+  public static void resolveHost(String hostName, OnResolveCallback callback) {
+    if (hostName == null || callback == null) {
+      return;
+    }
+
     final Handler handler = new Handler(Looper.myLooper());
 
     getExecutorService().execute(() -> {
       try {
         InetAddress[] inetAddresses = InetAddress.getAllByName(hostName);
-        String[] addresses = new String[inetAddresses.length];
-
-        for (int i = 0; i < inetAddresses.length; i++) {
-          addresses[i] = inetAddresses[i].getHostAddress();
-        }
 
         handler.post(() -> {
-          if (callback != null) {
-            callback.onComplete(addresses);
+          for (InetAddress ia : inetAddresses) {
+            callback.onIPAddressResolution(ia.getHostAddress());
           }
+          callback.onComplete();
         });
       } catch (Exception e) {
         handler.post(() -> {
-          if (callback != null) {
-            callback.onError(e);
-          }
+          callback.onError(e);
         });
       }
     });

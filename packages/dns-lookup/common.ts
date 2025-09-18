@@ -1,5 +1,5 @@
 import { LookupDNSFunction } from '.';
 
-export const lookupDNS: LookupDNSFunction = function (value: string): Promise<string[]> {
+export const lookupDNS: LookupDNSFunction = function (hostName: string): Promise<string[]> {
 	return Promise.resolve([]);
 };

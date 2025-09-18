@@ -2,13 +2,18 @@ import { LookupDNSFunction } from '.';
 
 const NSDNSResolver = com.nativescript.dns.NSDNSResolver;
 
-export const lookupDNS: LookupDNSFunction = function (value: string): Promise<string[]> {
+export const lookupDNS: LookupDNSFunction = function (hostName: string): Promise<string[]> {
 	return new Promise((resolve, reject) => {
 		try {
+			const addresses: string[] = [];
+
 			NSDNSResolver.resolveHost(
-				value,
-				new NSDNSResolver.CompleteCallback({
-					onComplete(addresses) {
+				hostName,
+				new NSDNSResolver.OnResolveCallback({
+					onIPAddressResolution(address) {
+						addresses.push(address);
+					},
+					onComplete() {
 						resolve(addresses);
 					},
 					onError(error) {

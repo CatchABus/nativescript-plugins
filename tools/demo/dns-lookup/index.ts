@@ -15,14 +15,7 @@ export class DemoSharedDnsLookup extends DemoSharedBase {
 		this.set('ipAddresses', 'loading...');
 
 		try {
-			const nativeAddresses = await lookupDNS(hostName);
-			const length = nativeAddresses.length;
-			const addresses: string[] = new Array<string>(length);
-
-			for (let i = 0, length = nativeAddresses.length; i < length; i++) {
-				addresses[i] = nativeAddresses[i];
-			}
-
+			const addresses = await lookupDNS(hostName);
 			this.set('ipAddresses', addresses.join('\n'));
 		} catch (e) {
 			console.error(e);
