@@ -1,0 +1,13 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page" xmlns:ui="@nativescript-community/ui-maplibre">
+    <Page.actionBar>
+        <ActionBar title="ui-maplibre" icon="" class="action-bar">
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout class="p-20">
+        <ScrollView class="h-full">
+          <StackLayout>
+            <ui:MapLibreView width="100%" height="500" mapReady="onMapReady" tap="onTap"/>
+          </StackLayout>
+        </ScrollView>
+    </StackLayout>
+</Page>

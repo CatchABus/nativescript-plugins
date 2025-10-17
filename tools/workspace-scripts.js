@@ -96,6 +96,13 @@ module.exports = {
 					description: '@nativescript-community/dns-lookup: Build',
 				},
 			},
+			// @nativescript-community/ui-maplibre
+			'ui-maplibre': {
+				build: {
+					script: 'nx run ui-maplibre:build.all',
+					description: '@nativescript-community/ui-maplibre: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
@@ -125,6 +132,10 @@ module.exports = {
 			'dns-lookup': {
 				script: 'nx run dns-lookup:focus',
 				description: 'Focus on @nativescript-community/dns-lookup',
+			},
+			'ui-maplibre': {
+				script: 'nx run ui-maplibre:focus',
+				description: 'Focus on @nativescript-community/ui-maplibre',
 			},
 			reset: {
 				script: 'nx run all:focus',

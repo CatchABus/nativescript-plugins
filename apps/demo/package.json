@@ -4,16 +4,17 @@
 	"license": "SEE LICENSE IN <your-license-filename>",
 	"repository": "<fill-your-repository-here>",
 	"dependencies": {
+		"@nativescript-community/dns-lookup": "file:../../packages/dns-lookup",
 		"@nativescript-community/nordic-dfu": "file:../../packages/nordic-dfu",
 		"@nativescript-community/ui-canvas": "^4.6.32",
 		"@nativescript-community/ui-constraintlayout": "file:../../packages/ui-constraintlayout",
 		"@nativescript-community/ui-htmlcanvasapi": "file:../../packages/ui-htmlcanvasapi",
+		"@nativescript-community/ui-maplibre": "file:../../packages/ui-maplibre",
 		"@nativescript-community/ui-neumorphiclayout": "file:../../packages/ui-neumorphiclayout",
-		"@nativescript/core": "file:../../node_modules/@nativescript/core",
-		"@nativescript-community/dns-lookup": "file:../../packages/dns-lookup"
+		"@nativescript/core": "file:../../node_modules/@nativescript/core"
 	},
 	"devDependencies": {
-		"@nativescript/android": "~8.6.0",
-		"@nativescript/ios": "~8.6.1"
+		"@nativescript/android": "~8.9.0",
+		"@nativescript/ios": "~8.9.1"
 	}
 }

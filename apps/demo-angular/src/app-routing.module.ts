@@ -11,6 +11,7 @@ const routes: Routes = [
 	{ path: 'nordic-dfu', loadChildren: () => import('./plugin-demos/nordic-dfu.module').then((m) => m.NordicDfuModule) },
 	{ path: 'ui-constraintlayout', loadChildren: () => import('./plugin-demos/ui-constraintlayout.module').then((m) => m.UiConstraintlayoutModule) },
 	{ path: 'ui-htmlcanvasapi', loadChildren: () => import('./plugin-demos/ui-htmlcanvasapi.module').then((m) => m.UiHtmlcanvasapiModule) },
+	{ path: 'ui-maplibre', loadChildren: () => import('./plugin-demos/ui-maplibre.module').then((m) => m.UiMaplibreModule) },
 	{ path: 'ui-neumorphiclayout', loadChildren: () => import('./plugin-demos/ui-neumorphiclayout.module').then((m) => m.UiNeumorphiclayoutModule) },
 ];
 

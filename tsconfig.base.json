@@ -24,7 +24,8 @@
 			"@nativescript-community/*": ["packages/*"],
 			"@nativescript-community/ui-htmlcanvasapi": ["packages/ui-htmlcanvasapi/index.d.ts"],
 			"@nativescript-community/nordic-dfu": ["packages/nordic-dfu/index.d.ts"],
-			"@nativescript-community/dns-lookup": ["packages/dns-lookup/index.d.ts"]
+			"@nativescript-community/dns-lookup": ["packages/dns-lookup/index.d.ts"],
+			"@nativescript-community/ui-maplibre": ["packages/ui-maplibre/index.d.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

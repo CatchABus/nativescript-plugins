@@ -1,0 +1,18 @@
+import { NativeObject } from '../../NativeObject';
+
+export abstract class BaseLayerCommon<T> extends NativeObject<T> {
+	private mVisible: boolean;
+
+	public abstract getId(): string;
+	public abstract expressionValueToNative(value): any;
+	public abstract extractPropertyValue(value);
+	public abstract setWrappedPropertyValue(value: any): void;
+
+	public get visible(): boolean {
+		return this.mVisible;
+	}
+
+	public set visible(value: boolean) {
+		this.mVisible = value;
+	}
+}

@@ -19,6 +19,9 @@ export class HomeComponent {
 			name: 'ui-htmlcanvasapi',
 		},
 		{
+			name: 'ui-maplibre',
+		},
+		{
 			name: 'ui-neumorphiclayout',
 		},
 	];
