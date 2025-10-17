@@ -1,7 +1,14 @@
 import { LatLng } from '../position/LatLng';
-import { CameraPosition as CameraPositionCommon } from '.';
+import { CameraPositionCommon } from './common';
 
-class CameraPositionIOS extends CameraPositionCommon<MLNMapCamera> {
+export class CameraPosition extends CameraPositionCommon<MLNMapCamera> {
+	private readonly mZoom: number;
+
+	constructor(target?: LatLng, zoom?: number, tilt?: number, bearing?: number) {
+		super(target, zoom, tilt, bearing);
+		this.mZoom = zoom ?? 1;
+	}
+
 	public override initNative(target?: LatLng, zoom?: number, tilt?: number, bearing?: number): MLNMapCamera {
 		const native = MLNMapCamera.new();
 
@@ -20,6 +27,10 @@ class CameraPositionIOS extends CameraPositionCommon<MLNMapCamera> {
 		return native;
 	}
 
+	public override get zoom(): number {
+		return this.mZoom;
+	}
+
 	public override get tilt(): number {
 		return this.native.pitch;
 	}
@@ -28,5 +39,3 @@ class CameraPositionIOS extends CameraPositionCommon<MLNMapCamera> {
 		return this.native.heading;
 	}
 }
-
-export { CameraPositionIOS as CameraPosition };

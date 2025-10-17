@@ -1,7 +1,7 @@
 import { LatLng } from '../position/LatLng';
-import { CameraPosition as CameraPositionCommon } from '.';
+import { CameraPositionCommon } from './common';
 
-class CameraPositionAndroid extends CameraPositionCommon<org.maplibre.android.camera.CameraPosition> {
+export class CameraPosition extends CameraPositionCommon<org.maplibre.android.camera.CameraPosition> {
 	public override initNative(target?: LatLng, zoom?: number, tilt?: number, bearing?: number): org.maplibre.android.camera.CameraPosition {
 		let nativeBulder = new org.maplibre.android.camera.CameraPosition.Builder();
 
@@ -36,5 +36,3 @@ class CameraPositionAndroid extends CameraPositionCommon<org.maplibre.android.ca
 		return this.native.bearing;
 	}
 }
-
-export { CameraPositionAndroid as CameraPosition };
