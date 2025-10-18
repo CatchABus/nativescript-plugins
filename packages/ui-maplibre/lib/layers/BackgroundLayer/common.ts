@@ -1,7 +1,8 @@
 import { Color } from '@nativescript/core';
 import { BaseLayer, ExpressionOrValue } from '../BaseLayer';
+import { BackgroundLayer as IBackgroundLayer } from '.';
 
-export abstract class BackgroundLayerCommon<T> extends BaseLayer<T> {
+export abstract class BackgroundLayerCommon<T> extends BaseLayer<T> implements IBackgroundLayer {
 	private mBackgroundColor: ExpressionOrValue<string | Color>;
 	private mBackgroundOpacity: ExpressionOrValue<number>;
 	private mBackgroundPattern: ExpressionOrValue<string>;

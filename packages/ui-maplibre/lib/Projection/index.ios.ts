@@ -4,7 +4,7 @@ import { ProjectionCommon } from './common';
 
 export class Projection extends ProjectionCommon<MLNMapProjection> {
 	public override fromScreenLocation(x: number, y: number): LatLng {
-		return new LatLng(this.native.convertPoint(CGPointMake(x, y)));
+		return LatLng.initWithNative(this.native.convertPoint(CGPointMake(x, y))) as LatLng;
 	}
 
 	public override toScreenLocation(location: LatLng): IPoint {

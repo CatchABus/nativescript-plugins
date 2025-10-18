@@ -1,8 +1,8 @@
 import { Color } from '@nativescript/core';
-import { ExpressionValueCommon } from './common';
 import { IExpressionCollator } from '../IExpressionCollator';
+import { NativeObject } from '../../NativeObject';
 
-export declare class ExpressionValue<T> extends ExpressionValueCommon<any> {
+export declare class ExpressionValue<T> extends NativeObject<any> {
 	public static get<P>(key: string): ExpressionValue<P>;
 	public static color(color: Color): ExpressionValue<Color>;
 	public static literal(value: string): ExpressionValue<string>;

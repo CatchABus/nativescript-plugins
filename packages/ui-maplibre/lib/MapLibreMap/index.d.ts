@@ -1,11 +1,11 @@
 import { Expression } from '../expressions';
 import { Feature } from '../geojson';
+import { NativeObject } from '../NativeObject';
 import { IPoint, LatLngBounds } from '../position';
 import { IRect } from '../position/IRect';
 import { LatLng } from '../position/LatLng';
 import { Projection } from '../Projection';
 import { Style } from '../Style';
-import { MapLibreMapCommon } from './common';
 
 export interface MapNativeRequestData<T> extends EventData {
 	eventName: 'mapNativeRequest';
@@ -13,7 +13,8 @@ export interface MapNativeRequestData<T> extends EventData {
 	callback: (nativeView: T) => void;
 }
 
-export declare class MapLibreMap extends MapLibreMapCommon<any> {
+export declare class MapLibreMap extends NativeObject<any> {
+	constructor();
 	public getProjection(): Projection;
 	public getStyle(): Style;
 	public setStyle(value: string | URL): void;
@@ -34,6 +35,8 @@ export declare class MapLibreMap extends MapLibreMapCommon<any> {
 	public set isZoomGesturesEnabled(value: boolean);
 	public get anchorRotateOrZoomGesturesToCenterCoordinate(): boolean;
 	public set anchorRotateOrZoomGesturesToCenterCoordinate(value: boolean);
+	public get isCompassEnabled(): boolean;
+	public set isCompassEnabled(value: boolean);
 	public get isAttributionEnabled(): boolean;
 	public set isAttributionEnabled(value: boolean);
 	public get isLogoEnabled(): boolean;

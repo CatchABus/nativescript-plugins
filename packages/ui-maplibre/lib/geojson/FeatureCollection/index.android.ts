@@ -1,9 +1,8 @@
-import { NativeMutableArray } from '../../NativeMutableArray';
 import { Feature } from '../Feature';
 import { FeatureCollectionCommon } from './common';
 
 export class FeatureCollection extends FeatureCollectionCommon<org.maplibre.geojson.FeatureCollection> {
-	private mFeatures: NativeMutableArray<Feature>;
+	private mFeatures: readonly Feature[];
 
 	constructor(content: Feature | Feature[] | string) {
 		super(content);
@@ -29,17 +28,16 @@ export class FeatureCollection extends FeatureCollectionCommon<org.maplibre.geoj
 		return native;
 	}
 
-	public override get features(): NativeMutableArray<Feature> {
+	public override get features(): readonly Feature[] {
 		if (!this.mFeatures) {
 			const nFeatures = this.native.features();
-			const arr = new NativeMutableArray(nFeatures);
+			const arr: Feature[] = [];
 
 			for (let i = 0, length = nFeatures.size(); i < length; i++) {
-				arr.push(new Feature(nFeatures.get(i)));
+				arr.push(Feature.initWithNative(nFeatures.get(i)) as Feature);
 			}
 
-			arr.registerObserver();
-			this.mFeatures = arr;
+			this.mFeatures = Object.freeze(arr);
 		}
 		return this.mFeatures;
 	}

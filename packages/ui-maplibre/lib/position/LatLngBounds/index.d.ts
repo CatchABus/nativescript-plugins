@@ -1,8 +1,8 @@
+import { NativeObject } from '../../NativeObject';
 import { LatLng } from '../LatLng';
-import { LatLngBoundsCommon } from './common';
 
-export declare class LatLngBounds extends LatLngBoundsCommon<any> {
+export declare class LatLngBounds extends NativeObject<any> {
 	constructor(sw: LatLng, ne: LatLng);
-	public abstract get sw(): LatLng;
-	public abstract get ne(): LatLng;
+	public get sw(): LatLng;
+	public get ne(): LatLng;
 }

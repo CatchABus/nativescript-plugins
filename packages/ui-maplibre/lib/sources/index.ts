@@ -1,3 +1,2 @@
-export * from './AbstractSource';
-export * from './GeoJsonSource';
 export * from './BaseSource';
+export * from './GeoJsonSource';

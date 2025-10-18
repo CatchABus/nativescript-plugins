@@ -1,8 +1,8 @@
-import { NativeMutableArray } from '../../NativeMutableArray';
+import { FeatureCollection as IFeatureCollection } from '.';
 import { BaseGeoJson } from '../BaseGeoJson';
 import { Feature } from '../Feature';
 
-export abstract class FeatureCollectionCommon<T> extends BaseGeoJson<T> {
+export abstract class FeatureCollectionCommon<T> extends BaseGeoJson<T> implements IFeatureCollection {
 	public static type = 'FeatureCollection';
 
 	public override get type(): string {
@@ -10,12 +10,11 @@ export abstract class FeatureCollectionCommon<T> extends BaseGeoJson<T> {
 	}
 
 	public toJSON() {
-		const toJson = super.toJSON();
 		return {
-			...toJson,
+			...super.toJSON(),
 			features: this.features,
 		};
 	}
 
-	public abstract get features(): NativeMutableArray<Feature>;
+	public abstract get features(): readonly Feature[];
 }

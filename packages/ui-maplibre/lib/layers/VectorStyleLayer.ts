@@ -1,7 +1,7 @@
 import { Expression } from '../expressions/Expression';
 import { BaseLayer } from './BaseLayer';
 
-export abstract class VectorStyleLayer<T> extends BaseLayer<T> {
+export abstract class VectorStyleLayer<T = any> extends BaseLayer<T> {
 	private mFilter: Expression;
 
 	public get filter(): Expression {

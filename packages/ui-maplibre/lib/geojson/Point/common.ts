@@ -1,7 +1,8 @@
+import { Point as IPoint } from '.';
 import { LatLng } from '../../position/LatLng';
 import { Geometry } from '../Geometry';
 
-export abstract class PointCommon<T> extends Geometry<T> {
+export abstract class PointCommon<T> extends Geometry<T> implements IPoint {
 	public static type = 'Point';
 
 	protected mTarget: LatLng;

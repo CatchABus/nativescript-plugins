@@ -1,7 +1,8 @@
+import { Geometry as IGeometry } from '.';
 import { BaseGeoJson } from '../BaseGeoJson';
 import type { Point } from '../Point';
 
-export abstract class GeometryCommon<T> extends BaseGeoJson<T> {
+export abstract class GeometryCommon<T> extends BaseGeoJson<T> implements IGeometry<T> {
 	public override get type(): string {
 		return null;
 	}

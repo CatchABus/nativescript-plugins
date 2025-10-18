@@ -1,4 +1,4 @@
-import { ILatLng } from '.';
+import { LatLng as ILatLng } from '.';
 import { NativeObject } from '../../NativeObject';
 
 export abstract class LatLngCommon<T> extends NativeObject<T> implements ILatLng {

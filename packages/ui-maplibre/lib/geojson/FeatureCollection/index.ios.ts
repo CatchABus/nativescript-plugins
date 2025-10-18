@@ -1,9 +1,8 @@
-import { NativeMutableArray } from '../../NativeMutableArray';
 import { Feature } from '../Feature';
 import { FeatureCollectionCommon } from './common';
 
 export class FeatureCollection extends FeatureCollectionCommon<MLNShapeCollectionFeature> {
-	private mFeatures: NativeMutableArray<Feature>;
+	private mFeatures: readonly Feature[];
 
 	constructor(content: Feature | Feature[] | string) {
 		super(content);
@@ -36,17 +35,16 @@ export class FeatureCollection extends FeatureCollectionCommon<MLNShapeCollectio
 		return native;
 	}
 
-	public override get features(): NativeMutableArray<Feature> {
+	public override get features(): readonly Feature[] {
 		if (!this.mFeatures) {
 			const nFeatures = this.native.shapes;
-			const arr = new NativeMutableArray(nFeatures);
+			const arr: Feature[] = [];
 
 			for (let i = 0, length = nFeatures.count; i < length; i++) {
-				arr.push(new Feature(nFeatures.objectAtIndex(i)));
+				arr.push(Feature.initWithNative(nFeatures.objectAtIndex(i)) as Feature);
 			}
 
-			arr.registerObserver();
-			this.mFeatures = arr;
+			this.mFeatures = Object.freeze(arr);
 		}
 		return this.mFeatures;
 	}

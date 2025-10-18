@@ -1,8 +1,8 @@
 import { View } from '@nativescript/core';
 import { MapLibreMap } from '../MapLibreMap';
-import { LatLng } from '../position/LatLng';
+import { MapLibreView as IMapLibreView } from '.';
 
-export abstract class MapLibreViewCommon extends View {
+export abstract class MapLibreViewCommon extends View implements IMapLibreView {
 	public static readonly mapReadyEvent = 'mapReady';
 	public static readonly mapStyleLoadedEvent = 'mapStyleLoaded';
 

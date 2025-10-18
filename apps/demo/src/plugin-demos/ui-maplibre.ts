@@ -1,7 +1,5 @@
-import { CameraPosition, CircleLayer, ExpressionValue, Feature, FeatureCollection, GeoJsonSource, LatLng, LatLngBounds, MapEventData, MapLibreView, MapStyleLoadedEventData, Style, SymbolLayer } from '@nativescript-community/ui-maplibre';
-import { Expression } from '@nativescript-community/ui-maplibre/lib/expressions/Expression';
-import { NativeMutableArray } from '@nativescript-community/ui-maplibre/lib/NativeMutableArray';
-import { EventData, Http, ImageSource, Page, TapGestureEventData, Utils } from '@nativescript/core';
+import { CameraPosition, CircleLayer, Expression, ExpressionValue, Feature, GeoJsonSource, LatLng, LatLngBounds, MapEventData, MapLibreView, MapStyleLoadedEventData, SymbolLayer } from '@nativescript-community/ui-maplibre';
+import { EventData, Page, TapGestureEventData } from '@nativescript/core';
 
 const GEOJSON_SOURCE_URL = 'https://s3.eu-central-1.amazonaws.com/maplibre-native/android-documentation-resources/bus-stops.geojson';
 const CLUSTER_ZONE_ENTRIES: [number, string][] = [
@@ -22,7 +20,6 @@ export function onMapReady(args: MapEventData) {
 
 	mapView.on('mapStyleLoaded', onMapStyleLoaded);
 	map.setStyle(new URL('https://tiles.openfreemap.org/styles/liberty'));
-	map.isRotateGesturesEnabled = true;
 
 	map.setCamera(new CameraPosition(new LatLng(-0.114, 51.506), 3.2, 60, 55.2), false);
 }
@@ -31,10 +28,8 @@ export async function onMapStyleLoaded(args: MapStyleLoadedEventData) {
 	const mapView = args.object as MapLibreView;
 	const map = mapView.getMap();
 	const style = args.style;
-	const geoJson = await Http.getString(GEOJSON_SOURCE_URL);
-	const fc = new FeatureCollection(geoJson);
 
-	source = new GeoJsonSource('cluster-source', fc, {
+	source = new GeoJsonSource('cluster-source', GEOJSON_SOURCE_URL, {
 		cluster: true,
 		clusterMaxZoom: 14,
 		clusterRadius: 50,
@@ -101,7 +96,7 @@ export function onTap(args: TapGestureEventData) {
 	}
 }
 
-function calculateClusterBounds(features: NativeMutableArray<Feature>): LatLngBounds {
+function calculateClusterBounds(features: Feature[]): LatLngBounds {
 	let minLat = Number.MAX_VALUE;
 	let maxLat = -Number.MAX_VALUE;
 	let minLon = Number.MAX_VALUE;

@@ -90,7 +90,7 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 
 		for (let i = 0, length = nFeatures.size(); i < length; i++) {
 			const nFeature: org.maplibre.geojson.Feature = nFeatures.get(i);
-			result.push(new Feature(nFeature));
+			result.push(Feature.initWithNative(nFeature) as Feature);
 		}
 
 		return result;

@@ -21,11 +21,15 @@ export abstract class NativeObject<T> extends Observable {
 		return this.mNative;
 	}
 
-	public initNative(...args): T {
+	public toJSON(): any {
+		return this;
+	}
+
+	protected initNative(...args): T {
 		return null;
 	}
 
-	public throwIllegalConstructorError(): void {
+	protected throwIllegalConstructorError(): void {
 		throw new TypeError(`Failed to construct '${this.constructor.name}': Illegal constructor`);
 	}
 

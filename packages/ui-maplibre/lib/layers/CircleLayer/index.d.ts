@@ -1,8 +1,8 @@
 import { BaseSource } from '../../sources';
 import { ExpressionOrValue } from '../BaseLayer';
-import { CircleLayerCommon } from './common';
+import { VectorStyleLayer } from '../VectorStyleLayer';
 
-export declare class CircleLayer extends CircleLayerCommon<any> {
+export declare class CircleLayer extends VectorStyleLayer<any> {
 	constructor(id: string, source: BaseSource);
 	public get circleColor(): ExpressionOrValue<string | Color>;
 	public set circleColor(value: ExpressionOrValue<string | Color>);

@@ -1,11 +1,10 @@
-import { NativeMutableArray } from '../../NativeMutableArray';
+import { BaseGeoJson } from '../BaseGeoJson';
 import { Feature } from '../Feature';
 import { Geometry } from '../Geometry';
-import { FeatureCollectionCommon } from './common';
 
-export declare class FeatureCollection extends FeatureCollectionCommon<any> {
+export declare class FeatureCollection extends BaseGeoJson<any> {
 	public static type: string;
 
 	constructor(content: Feature | Feature[] | string);
-	public get features(): NativeMutableArray<Feature>;
+	public get features(): readonly Feature[];
 }

@@ -5,7 +5,8 @@ import { ProjectionCommon } from './common';
 
 export class Projection extends ProjectionCommon<org.maplibre.android.maps.Projection> {
 	public override fromScreenLocation(x: number, y: number): LatLng {
-		return new LatLng(this.native.fromScreenLocation(new android.graphics.PointF(Utils.layout.toDevicePixels(x), Utils.layout.toDevicePixels(y))));
+		const nativeCoords = this.native.fromScreenLocation(new android.graphics.PointF(Utils.layout.toDevicePixels(x), Utils.layout.toDevicePixels(y)));
+		return LatLng.initWithNative(nativeCoords) as LatLng;
 	}
 
 	public override toScreenLocation(location: LatLng): IPoint {

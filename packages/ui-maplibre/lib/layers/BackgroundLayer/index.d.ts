@@ -1,7 +1,6 @@
-import { ExpressionOrValue } from '../BaseLayer';
-import { BackgroundLayerCommon } from './common';
+import { BaseLayer, ExpressionOrValue } from '../BaseLayer';
 
-export declare class BackgroundLayer extends BackgroundLayerCommon<any> {
+export declare class BackgroundLayer extends BaseLayer<any> {
 	constructor(id: string);
 	public get backgroundColor(): ExpressionOrValue<string | Color>;
 	public set backgroundColor(value: ExpressionOrValue<string | Color>);

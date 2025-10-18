@@ -1,7 +1,7 @@
 import { LatLng } from '../../position/LatLng';
-import { PointCommon } from './common';
+import { Geometry } from '../Geometry';
 
-export declare class Point extends PointCommon<any> {
+export declare class Point extends Geometry<any> {
 	public static type: string;
 
 	constructor(content: LatLng | string);

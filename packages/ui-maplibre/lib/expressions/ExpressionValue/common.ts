@@ -1,6 +1,7 @@
+import { ExpressionValue as IExpressionValue } from '.';
 import { NativeObject } from '../../NativeObject';
 
-export abstract class ExpressionValueCommon<T> extends NativeObject<T> {
+export abstract class ExpressionValueCommon<T> extends NativeObject<T> implements IExpressionValue<any> {
 	constructor() {
 		super();
 		this.throwIllegalConstructorError();

@@ -34,9 +34,9 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 		}
 	}
 
-	public getProjection(): Projection {
+	public override getProjection(): Projection {
 		if (!this.mProjection) {
-			this.mProjection = new Projection(this.native.getProjection());
+			this.mProjection = Projection.initWithNative(this.native.getProjection()) as Projection;
 		}
 		return this.mProjection;
 	}
@@ -117,7 +117,7 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 		}
 
 		for (let i = 0, length = nFeatures.size(); i < length; i++) {
-			result.push(new Feature(nFeatures.get(i)));
+			result.push(Feature.initWithNative(nFeatures.get(i)) as Feature);
 		}
 
 		return result;
@@ -180,6 +180,14 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 		} else {
 			this.native.getUiSettings().setFocalPoint(null);
 		}
+	}
+
+	public override get isCompassEnabled(): boolean {
+		return this.native.getUiSettings().isCompassEnabled();
+	}
+
+	public override set isCompassEnabled(value: boolean) {
+		this.native.getUiSettings().setCompassEnabled(value);
 	}
 
 	public override get isAttributionEnabled(): boolean {

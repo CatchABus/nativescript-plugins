@@ -1,8 +1,8 @@
-import { ExpressionCommon } from './common';
 import { ExpressionValue } from '../ExpressionValue';
 import { IExpressionCollator } from '../IExpressionCollator';
+import { NativeObject } from '../../NativeObject';
 
-export declare class Expression extends ExpressionCommon<any> {
+export declare class Expression extends NativeObject<any> {
 	public static all(...items: Expression[]): Expression;
 	public static has(key: string | ExpressionValue<any>): Expression;
 	public static gt(compareOne: ExpressionValue<any>, compareTwo: ExpressionValue<any> | string | number, collator?: IExpressionCollator): Expression;

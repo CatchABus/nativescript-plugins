@@ -1,13 +1,6 @@
 import { LatLngCommon } from './common';
 
 export class LatLng extends LatLngCommon<CLLocationCoordinate2D> {
-	constructor(native: any);
-	constructor(latitude: number, longitude: number);
-
-	constructor(...args: any[]) {
-		super(...args);
-	}
-
 	public override initNative(...args: any[]): CLLocationCoordinate2D {
 		return args[0] instanceof CLLocationCoordinate2D ? args[0] : CLLocationCoordinate2DMake(args[0], args[1]);
 	}

@@ -3,23 +3,33 @@ import { Geometry } from '../Geometry';
 import { FeatureCommon } from './common';
 
 export class Feature extends FeatureCommon<org.maplibre.geojson.Feature> {
-	constructor(content: Geometry | string | org.maplibre.geojson.Feature) {
-		super(content);
+	public override initNative(...args: any[]): org.maplibre.geojson.Feature {
+		let native: org.maplibre.geojson.Feature;
+
+		if (args.length === 2) {
+			native = org.maplibre.geojson.Feature.fromGeometry(args[1]?.native, null, args[0]);
+		} else if (args.length === 1) {
+			native = org.maplibre.geojson.Feature.fromJson(args[0]);
+		} else {
+			native = null;
+		}
+
+		return native;
 	}
-	public override initNative(content: Geometry | string | org.maplibre.geojson.Feature): org.maplibre.geojson.Feature {
-		if (content instanceof org.maplibre.geojson.Feature) {
-			return content;
-		}
 
-		if (content instanceof Geometry) {
-			return org.maplibre.geojson.Feature.fromGeometry(content.native);
-		}
+	public override get id(): string {
+		return this.native.id();
+	}
 
-		if (typeof content === 'string') {
-			return org.maplibre.geojson.Feature.fromJson(content);
-		}
+	public override get coordinate(): LatLng {
+		const boundingBox = org.maplibre.turf.TurfMeasurement.bbox(this.native);
+		const centerLong = (boundingBox[0] + boundingBox[2]) / 2;
+		const centerLat = (boundingBox[1] + boundingBox[3]) / 2;
 
-		return null;
+		if (!this.mCoordinate || this.mCoordinate.latitude !== centerLat || this.mCoordinate.longitude !== centerLong) {
+			this.mCoordinate = new LatLng(centerLat, centerLong);
+		}
+		return this.mCoordinate;
 	}
 
 	public override getAttribute(key: string): string | boolean | number {
@@ -53,16 +63,5 @@ export class Feature extends FeatureCommon<org.maplibre.geojson.Feature> {
 
 	public override removeAttribute(key: string): void {
 		this.native.removeProperty(key);
-	}
-
-	public override get coordinate(): LatLng {
-		const boundingBox = org.maplibre.turf.TurfMeasurement.bbox(this.native);
-		const centerLong = (boundingBox[0] + boundingBox[2]) / 2;
-		const centerLat = (boundingBox[1] + boundingBox[3]) / 2;
-
-		if (!this.mCoordinate || this.mCoordinate.latitude !== centerLat || this.mCoordinate.longitude !== centerLong) {
-			this.mCoordinate = new LatLng(centerLat, centerLong);
-		}
-		return this.mCoordinate;
 	}
 }

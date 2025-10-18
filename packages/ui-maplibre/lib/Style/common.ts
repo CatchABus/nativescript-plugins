@@ -2,8 +2,9 @@ import { ImageSource } from '@nativescript/core';
 import { NativeObject } from '../NativeObject';
 import { BaseSource } from '../sources';
 import { BaseLayer } from '../layers';
+import { Style as IStyle } from '.';
 
-export abstract class StyleCommon<T> extends NativeObject<T> {
+export abstract class StyleCommon<T> extends NativeObject<T> implements IStyle {
 	constructor() {
 		super();
 		this.throwIllegalConstructorError();

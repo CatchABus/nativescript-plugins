@@ -1,6 +1,7 @@
+import { BaseLayer as IBaseLayer } from '.';
 import { NativeObject } from '../../NativeObject';
 
-export abstract class BaseLayerCommon<T> extends NativeObject<T> {
+export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBaseLayer<T> {
 	private mVisible: boolean;
 
 	public abstract getId(): string;

@@ -50,10 +50,10 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 		});
 	}
 
-	public getProjection(): Projection {
+	public override getProjection(): Projection {
 		if (!this.mProjection) {
 			this._runWithNativeView((nativeView) => {
-				this.mProjection = new Projection(nativeView.mapProjection());
+				this.mProjection = Projection.initWithNative(nativeView.mapProjection()) as Projection;
 			});
 		}
 		return this.mProjection;
@@ -76,7 +76,7 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 		});
 
 		if (this.mVisibleBounds == null || this.mVisibleBounds.ne.latitude !== nativeBounds.ne.latitude || this.mVisibleBounds.ne.longitude !== nativeBounds.ne.longitude || this.mVisibleBounds.sw.latitude !== nativeBounds.sw.latitude || this.mVisibleBounds.sw.longitude !== nativeBounds.sw.longitude) {
-			this.mVisibleBounds = new LatLngBounds(new LatLng(nativeBounds.ne), new LatLng(nativeBounds.sw));
+			this.mVisibleBounds = LatLngBounds.initWithNative(nativeBounds) as LatLngBounds;
 		}
 
 		return this.mVisibleBounds;
@@ -136,7 +136,7 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 		});
 
 		for (let i = 0, length = nFeatures.count; i < length; i++) {
-			result.push(new Feature(nFeatures.objectAtIndex(i)));
+			result.push(Feature.initWithNative(nFeatures.objectAtIndex(i)) as Feature);
 		}
 
 		return result;
@@ -229,6 +229,21 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 	public override set anchorRotateOrZoomGesturesToCenterCoordinate(value: boolean) {
 		this._runWithNativeView((nativeView) => {
 			nativeView.anchorRotateOrZoomGesturesToCenterCoordinate = value;
+		});
+	}
+
+	public override get isCompassEnabled(): boolean {
+		let value: boolean;
+
+		this._runWithNativeView((nativeView) => {
+			value = nativeView.showsCompassView;
+		});
+		return value;
+	}
+
+	public override set isCompassEnabled(value: boolean) {
+		this._runWithNativeView((nativeView) => {
+			nativeView.showsCompassView = value;
 		});
 	}
 

@@ -1,6 +1,7 @@
 import { ObservableArray } from '@nativescript/core';
+import { NativeMutableArray as INativeMutableArray } from '.';
 
-export abstract class NativeMutableArrayCommon<T> extends ObservableArray<T> {
+export abstract class NativeMutableArrayCommon<T> extends ObservableArray<T> implements INativeMutableArray<T> {
 	private readonly mNative: any;
 
 	constructor(native: any) {

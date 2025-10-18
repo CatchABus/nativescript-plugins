@@ -14,7 +14,7 @@ export class Point extends PointCommon<MLNPointAnnotation> {
 
 			native = nativeShape instanceof MLNPointAnnotation ? nativeShape : null;
 		} else {
-			const native = MLNPointAnnotation.alloc().init();
+			native = MLNPointAnnotation.alloc().init();
 			native.coordinate = content.native;
 		}
 

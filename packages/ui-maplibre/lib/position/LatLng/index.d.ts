@@ -1,12 +1,6 @@
-import { LatLngCommon } from './common';
+import { NativeObject } from '../../NativeObject';
 
-export interface ILatLng {
-	latitude: number;
-	longitude: number;
-}
-
-export declare class LatLng extends LatLngCommon<any> {
-	constructor(native: any);
+export declare class LatLng extends NativeObject<any> {
 	constructor(latitude: number, longitude: number);
 	get latitude(): number;
 	set latitude(value: number);

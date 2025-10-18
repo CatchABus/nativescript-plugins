@@ -10,25 +10,36 @@ function onNativeMutableArrayChange<T extends NativeObject<any>>(args: ChangedDa
 		case ChangeType.Add:
 			for (let i = args.index, length = args.index + args.addedCount; i < length; i++) {
 				const value = oa.getItem(i);
-				native.add(i, value);
+				if (value?.native) {
+					native.add(i, value.native);
+				}
 			}
 			break;
 		case ChangeType.Delete:
 			for (const item of args.removed) {
-				native.remove(item);
+				if (item?.native) {
+					native.remove(item.native);
+				}
 			}
 			break;
 		case ChangeType.Update:
-			native.set(args.index, oa.getItem(args.index));
+			const value = oa.getItem(args.index);
+			if (value?.native) {
+				native.set(args.index, value.native);
+			}
 			break;
 		case ChangeType.Splice:
 			for (const item of args.removed) {
-				native.remove(item);
+				if (item?.native) {
+					native.remove(item.native);
+				}
 			}
 
 			for (let i = args.index, length = args.index + args.addedCount; i < length; i++) {
 				const value = oa.getItem(i);
-				native.add(i, value);
+				if (value?.native) {
+					native.add(i, value.native);
+				}
 			}
 			break;
 		default:

@@ -1,7 +1,8 @@
 import { ImageSource } from '@nativescript/core';
-import { StyleCommon } from './common';
+import { NativeObject } from '../NativeObject';
 
-export declare class Style extends StyleCommon<any> {
+export declare class Style extends NativeObject<any> {
+	constructor();
 	public addImage(name: string, source: ImageSource);
 	public removeImage(name: string): void;
 	public addSource(source: any): void;

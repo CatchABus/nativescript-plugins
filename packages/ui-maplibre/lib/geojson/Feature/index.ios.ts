@@ -5,22 +5,23 @@ import { FeatureCommon } from './common';
 export class Feature extends FeatureCommon<MLNFeature> {
 	private mDictionary: NSMutableDictionary<string, string | boolean | number>;
 
-	constructor(content: Geometry | string | MLNFeature) {
-		super(content);
-	}
-
-	public override initNative(content: Geometry | string | MLNFeature): MLNFeature {
+	public override initNative(...args: any[]): MLNFeature {
 		let native: MLNFeature;
 
-		if (this._isNativeFeature(content)) {
-			native = content;
-		} else if (content instanceof Geometry) {
-			if (content.isPoint()) {
+		if (args.length === 2) {
+			const geometry = args[1] as Geometry;
+
+			if (geometry.isPoint()) {
 				native = MLNPointFeature.alloc().init();
-				NSCMapLibreHelpers.setPointFeatureCoordinateCoordinate(native as MLNPointFeature, content.coordinate.native);
+				native.identifier = args[0];
+				// Use this helper method to set coordinate as runtime throws the following error otherwise:
+				// Error: Attempted to assign to readonly property.
+				NSCMapLibreHelpers.setPointFeatureCoordinateCoordinate(native as MLNPointFeature, geometry.coordinate.native);
+			} else {
+				native = null;
 			}
-		} else if (typeof content === 'string') {
-			const jsonData = NSString.stringWithString(content).dataUsingEncoding(NSUTF8StringEncoding);
+		} else if (args.length === 1) {
+			const jsonData = NSString.stringWithString(args[0]).dataUsingEncoding(NSUTF8StringEncoding);
 			const nativeShape = MLNShape.shapeWithDataEncodingError(jsonData, NSUTF8StringEncoding);
 
 			if (this._isNativeFeature(nativeShape)) {
@@ -46,6 +47,18 @@ export class Feature extends FeatureCommon<MLNFeature> {
 		return this.mDictionary;
 	}
 
+	public override get id(): string {
+		return this.native.identifier;
+	}
+
+	public override get coordinate(): LatLng {
+		const nativeCoord = this.native.coordinate;
+		if (!this.mCoordinate || this.mCoordinate.latitude !== nativeCoord.latitude || this.mCoordinate.longitude !== nativeCoord.longitude) {
+			this.mCoordinate = LatLng.initWithNative(this.native.coordinate) as LatLng;
+		}
+		return this.mCoordinate;
+	}
+
 	public override getAttribute(key: string): string | boolean | number {
 		return this.native.attributeForKey(key);
 	}
@@ -58,13 +71,5 @@ export class Feature extends FeatureCommon<MLNFeature> {
 	public override removeAttribute(key: string): void {
 		this.attributeDictionary.removeObjectForKey(key);
 		this.native.attributes = this.attributeDictionary;
-	}
-
-	public override get coordinate(): LatLng {
-		const nativeCoord = this.native.coordinate;
-		if (!this.mCoordinate || this.mCoordinate.latitude !== nativeCoord.latitude || this.mCoordinate.longitude !== nativeCoord.longitude) {
-			this.mCoordinate = new LatLng(this.native.coordinate);
-		}
-		return this.mCoordinate;
 	}
 }

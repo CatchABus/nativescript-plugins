@@ -6,8 +6,9 @@ import { IPoint, LatLngBounds } from '../position';
 import { IRect } from '../position/IRect';
 import { Expression } from '../expressions';
 import { Feature } from '../geojson';
+import { MapLibreMap as IMapLibreMap } from '.';
 
-export abstract class MapLibreMapCommon<T> extends NativeObject<T> {
+export abstract class MapLibreMapCommon<T> extends NativeObject<T> implements IMapLibreMap {
 	protected mStyle: Style;
 	protected mProjection: Projection;
 	protected mVisibleBounds: LatLngBounds;
@@ -15,6 +16,10 @@ export abstract class MapLibreMapCommon<T> extends NativeObject<T> {
 	constructor() {
 		super();
 		this.throwIllegalConstructorError();
+	}
+
+	public getProjection(): Projection {
+		throw new Error('Method not implemented.');
 	}
 
 	public getStyle(): Style {
@@ -53,6 +58,8 @@ export abstract class MapLibreMapCommon<T> extends NativeObject<T> {
 	public abstract set isZoomGesturesEnabled(value: boolean);
 	public abstract get anchorRotateOrZoomGesturesToCenterCoordinate(): boolean;
 	public abstract set anchorRotateOrZoomGesturesToCenterCoordinate(value: boolean);
+	public abstract get isCompassEnabled(): boolean;
+	public abstract set isCompassEnabled(value: boolean);
 	public abstract get isAttributionEnabled(): boolean;
 	public abstract set isAttributionEnabled(value: boolean);
 	public abstract get isLogoEnabled(): boolean;

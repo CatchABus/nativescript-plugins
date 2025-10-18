@@ -1,0 +1,6 @@
+import { BaseSource as IBaseSource } from '.';
+import { NativeObject } from '../../NativeObject';
+
+export abstract class BaseSourceCommon<T> extends NativeObject<T> implements IBaseSource<T> {
+	public abstract getId(): string;
+}

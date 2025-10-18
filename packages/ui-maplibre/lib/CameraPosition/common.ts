@@ -1,24 +1,24 @@
 import { LatLng } from '../position/LatLng';
 import { NativeObject } from '../NativeObject';
+import { CameraPosition as ICameraPosition } from '.';
 
-export class CameraPositionCommon<T> extends NativeObject<T> {
+export class CameraPositionCommon<T> extends NativeObject<T> implements ICameraPosition {
 	private readonly mTarget: LatLng;
 
 	constructor(target?: LatLng, zoom?: number, tilt?: number, bearing?: number) {
 		super(target, zoom, tilt, bearing);
 		this.mTarget = target;
 	}
-
 	public get target(): LatLng {
 		return this.mTarget;
 	}
 	public get zoom(): number {
-		return 0;
+		throw new Error('Method not implemented.');
 	}
 	public get tilt(): number {
-		return 0;
+		throw new Error('Method not implemented.');
 	}
 	public get heading(): number {
-		return 0;
+		throw new Error('Method not implemented.');
 	}
 }

@@ -91,7 +91,7 @@ export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 
 		for (let i = 0, length = nFeatures.count; i < length; i++) {
 			const nFeature: org.maplibre.geojson.Feature = nFeatures.objectAtIndex(i);
-			result.push(new Feature(nFeature));
+			result.push(Feature.initWithNative(nFeature) as Feature);
 		}
 
 		return result;
