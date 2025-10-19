@@ -23,7 +23,7 @@ export class Point extends PointCommon<MLNPointAnnotation> {
 
 	public override get coordinate(): LatLng {
 		if (this.mTarget === undefined) {
-			this.mTarget = new LatLng(this.native.coordinate.latitude, this.native.coordinate.longitude);
+			this.mTarget = LatLng.initWithNative(this.native.coordinate) as LatLng;
 		}
 		return this.mTarget;
 	}
