@@ -1,5 +1,5 @@
-import { CameraPosition } from '../CameraPosition';
-import { NativeObject } from '../NativeObject';
+import { CameraPosition } from '../position/CameraPosition';
+import { NativeObject } from '../nativeWrappers/NativeObject';
 import { Style } from '../Style';
 import { Projection } from '../Projection';
 import { IPoint, LatLngBounds } from '../position';

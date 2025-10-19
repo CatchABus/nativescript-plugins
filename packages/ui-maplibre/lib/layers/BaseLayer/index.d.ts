@@ -1,5 +1,5 @@
 import { ExpressionValue } from '../../expressions/ExpressionValue';
-import { NativeObject } from '../../NativeObject';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 
 export type ExpressionOrValue<T> = ExpressionValue<T> | T;
 

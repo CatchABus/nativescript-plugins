@@ -1,6 +1,6 @@
 import { ExpressionValue } from '../ExpressionValue';
 import { IExpressionCollator } from '../IExpressionCollator';
-import { NativeObject } from '../../NativeObject';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 
 export declare class Expression extends NativeObject<any> {
 	public static all(...items: Expression[]): Expression;

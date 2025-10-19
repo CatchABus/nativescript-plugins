@@ -1,5 +1,5 @@
 import { Utils } from '@nativescript/core';
-import { CameraPosition } from '../CameraPosition';
+import { CameraPosition } from '../position/CameraPosition';
 import { Expression } from '../expressions';
 import { Feature } from '../geojson';
 import { IPoint, LatLng, LatLngBounds } from '../position';

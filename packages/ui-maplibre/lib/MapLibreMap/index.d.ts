@@ -1,6 +1,6 @@
 import { Expression } from '../expressions';
 import { Feature } from '../geojson';
-import { NativeObject } from '../NativeObject';
+import { NativeObject } from '../nativeWrappers/NativeObject';
 import { IPoint, LatLngBounds } from '../position';
 import { IRect } from '../position/IRect';
 import { LatLng } from '../position/LatLng';

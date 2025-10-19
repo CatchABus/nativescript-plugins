@@ -1,5 +1,5 @@
-import { LatLng } from '../position/LatLng';
-import { NativeObject } from '../NativeObject';
+import { LatLng } from '../LatLng';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 import { CameraPosition as ICameraPosition } from '.';
 
 export class CameraPositionCommon<T> extends NativeObject<T> implements ICameraPosition {

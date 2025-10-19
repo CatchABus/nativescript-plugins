@@ -1,5 +1,5 @@
 import { BaseLayer as IBaseLayer } from '.';
-import { NativeObject } from '../../NativeObject';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 
 export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBaseLayer<T> {
 	private mVisible: boolean;

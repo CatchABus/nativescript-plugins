@@ -1,5 +1,5 @@
 import { LatLngBounds as ILatLngBounds } from '.';
-import { NativeObject } from '../../NativeObject';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 import { LatLng } from '../LatLng';
 
 export abstract class LatLngBoundsCommon<T> extends NativeObject<T> implements ILatLngBounds {

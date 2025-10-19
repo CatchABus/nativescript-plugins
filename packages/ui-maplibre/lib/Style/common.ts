@@ -1,5 +1,5 @@
 import { ImageSource } from '@nativescript/core';
-import { NativeObject } from '../NativeObject';
+import { NativeObject } from '../nativeWrappers/NativeObject';
 import { BaseSource } from '../sources';
 import { BaseLayer } from '../layers';
 import { Style as IStyle } from '.';

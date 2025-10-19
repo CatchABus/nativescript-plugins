@@ -1,16 +1,7 @@
-import { AndroidActivityBundleEventData, Application } from '@nativescript/core';
 import { MapLibreViewCommon } from './common';
 import { MapEventData, MapStyleLoadedEventData } from '.';
 import { MapLibreMap } from '../MapLibreMap';
-import { LatLng } from '../position/LatLng';
-
-if (Application.android.startActivity) {
-	org.maplibre.android.MapLibre.getInstance(Application.android.startActivity);
-} else {
-	Application.once(Application.android.activityCreatedEvent, (args: AndroidActivityBundleEventData) => {
-		org.maplibre.android.MapLibre.getInstance(args.activity);
-	});
-}
+import { MapLibreSettings } from '../MapLibreSettings';
 
 @NativeClass
 @Interfaces([org.maplibre.android.maps.OnMapReadyCallback])
@@ -68,6 +59,9 @@ export class MapLibreView extends MapLibreViewCommon {
 	private mStyleLoadedListener: MapStyleLoadingListener;
 
 	createNativeView(): Object {
+		// Using MapView requires calling MapLibre.getInstance before inflating or creating the view.
+		MapLibreSettings.getOrCreateNativeMapSettings();
+
 		const mapView = new org.maplibre.android.maps.MapView(this._context);
 		mapView.getMapAsync(new MapReadyCallback(this));
 

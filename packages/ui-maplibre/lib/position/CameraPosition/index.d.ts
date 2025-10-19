@@ -1,5 +1,5 @@
-import { NativeObject } from '../NativeObject';
-import { LatLng } from '../position/LatLng';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
+import { LatLng } from '../LatLng';
 
 export declare class CameraPosition extends NativeObject<T> {
 	constructor(target?: LatLng, zoom?: number, tilt?: number, bearing?: number);

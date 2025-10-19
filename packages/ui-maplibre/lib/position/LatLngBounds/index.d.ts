@@ -1,4 +1,4 @@
-import { NativeObject } from '../../NativeObject';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 import { LatLng } from '../LatLng';
 
 export declare class LatLngBounds extends NativeObject<any> {

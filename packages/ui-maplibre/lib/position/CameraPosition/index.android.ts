@@ -1,4 +1,4 @@
-import { LatLng } from '../position/LatLng';
+import { LatLng } from '../LatLng';
 import { CameraPositionCommon } from './common';
 
 export class CameraPosition extends CameraPositionCommon<org.maplibre.android.camera.CameraPosition> {

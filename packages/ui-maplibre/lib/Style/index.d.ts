@@ -1,5 +1,5 @@
 import { ImageSource } from '@nativescript/core';
-import { NativeObject } from '../NativeObject';
+import { NativeObject } from '../nativeWrappers/NativeObject';
 
 export declare class Style extends NativeObject<any> {
 	constructor();

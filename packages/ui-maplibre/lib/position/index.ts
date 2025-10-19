@@ -1,3 +1,4 @@
+export * from './CameraPosition';
 export * from './LatLng';
 export * from './LatLngBounds';
 export * from './IPoint';

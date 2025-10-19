@@ -1,5 +1,5 @@
 import { LatLng as ILatLng } from '.';
-import { NativeObject } from '../../NativeObject';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 
 export abstract class LatLngCommon<T> extends NativeObject<T> implements ILatLng {
 	public toJSON() {

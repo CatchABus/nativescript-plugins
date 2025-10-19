@@ -1,4 +1,4 @@
-import { NativeObject } from '../../NativeObject';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 
 export declare class LatLng extends NativeObject<any> {
 	constructor(latitude: number, longitude: number);

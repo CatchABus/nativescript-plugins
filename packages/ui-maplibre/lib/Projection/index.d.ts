@@ -1,4 +1,4 @@
-import { NativeObject } from '../NativeObject';
+import { NativeObject } from '../nativeWrappers/NativeObject';
 import { IPoint } from '../position';
 import { LatLng } from '../position/LatLng';
 import { ScreenPoint } from '../position/ScreenPoint';

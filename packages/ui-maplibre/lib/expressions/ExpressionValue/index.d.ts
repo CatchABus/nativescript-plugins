@@ -1,6 +1,6 @@
 import { Color } from '@nativescript/core';
 import { IExpressionCollator } from '../IExpressionCollator';
-import { NativeObject } from '../../NativeObject';
+import { NativeObject } from '../../nativeWrappers/NativeObject';
 
 export declare class ExpressionValue<T> extends NativeObject<any> {
 	public static get<P>(key: string): ExpressionValue<P>;

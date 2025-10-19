@@ -19,9 +19,7 @@ export function onMapReady(args: MapEventData) {
 	const map = mapView.getMap();
 
 	mapView.on('mapStyleLoaded', onMapStyleLoaded);
-	map.setStyle(new URL('https://tiles.openfreemap.org/styles/liberty'));
-
-	map.setCamera(new CameraPosition(new LatLng(-0.114, 51.506), 3.2, 60, 55.2), false);
+	map.setStyle(new URL('https://demotiles.maplibre.org/style.json'));
 }
 
 export async function onMapStyleLoaded(args: MapStyleLoadedEventData) {
@@ -67,8 +65,6 @@ export async function onMapStyleLoaded(args: MapStyleLoadedEventData) {
 
 	style.addLayer(markerLayer);
 	style.addLayer(countLayer);
-
-	//map.setVisibleCoordinateBounds(calculateClusterBounds(fc.features), 100);
 }
 
 export function onTap(args: TapGestureEventData) {
