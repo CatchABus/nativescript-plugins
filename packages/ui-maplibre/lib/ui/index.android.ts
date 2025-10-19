@@ -62,10 +62,7 @@ export class MapLibreView extends MapLibreViewCommon {
 		// Using MapView requires calling MapLibre.getInstance before inflating or creating the view.
 		MapLibreSettings.getOrCreateNativeMapSettings();
 
-		const mapView = new org.maplibre.android.maps.MapView(this._context);
-		mapView.getMapAsync(new MapReadyCallback(this));
-
-		return mapView;
+		return new org.maplibre.android.maps.MapView(this._context);
 	}
 
 	initNativeView(): void {
@@ -73,6 +70,7 @@ export class MapLibreView extends MapLibreViewCommon {
 
 		this.mStyleLoadedListener = new MapStyleLoadingListener(this);
 		this.nativeViewProtected.addOnDidFinishLoadingStyleListener(this.mStyleLoadedListener);
+		this.nativeViewProtected.getMapAsync(new MapReadyCallback(this));
 	}
 
 	disposeNativeView(): void {
