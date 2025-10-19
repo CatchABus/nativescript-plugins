@@ -44,7 +44,7 @@ export class MapLibreView extends MapLibreViewCommon {
 		};
 	}
 
-	createNativeView(): Object {
+	createNativeView(): MLNMapView {
 		return MLNMapView.alloc().init();
 	}
 

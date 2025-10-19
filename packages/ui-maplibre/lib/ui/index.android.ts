@@ -58,7 +58,7 @@ export class MapLibreView extends MapLibreViewCommon {
 
 	private mStyleLoadedListener: MapStyleLoadingListener;
 
-	createNativeView(): Object {
+	createNativeView(): org.maplibre.android.maps.MapView {
 		// Using MapView requires calling MapLibre.getInstance before inflating or creating the view.
 		MapLibreSettings.getOrCreateNativeMapSettings();
 
