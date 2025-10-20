@@ -1,7 +1,7 @@
 {
 	"name": "@nativescript-community/ui-maplibre",
-	"version": "1.0.0",
-	"description": "Add a plugin description",
+	"version": "0.1.0",
+	"description": "A NativeScript plugin for integrating MapLibre native SDKs (iOS & Android).",
 	"main": "index",
 	"types": "index.d.ts",
 	"nativescript": {
@@ -19,7 +19,11 @@
 		"JavaScript",
 		"TypeScript",
 		"iOS",
-		"Android"
+		"Android",
+		"maplibre",
+		"map",
+		"maps",
+		"libre"
 	],
 	"author": {
 		"name": "CatchABus",
