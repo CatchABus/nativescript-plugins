@@ -36,6 +36,12 @@ export declare class DFUInitiator extends DFUInitiatorCommon {
 	 * @param val
 	 */
 	public setAndroidKeepBond(val: boolean): DFUInitiator;
+	/**
+	 * Android only.
+	 *
+	 * @param val
+	 */
+	public setAndroidScanTimeout(val: number): DFUInitiator;
 	public setForceDfu(val: boolean): DFUInitiator;
 	public setForceScanningForNewAddressInLegacyDfu(val: boolean): DFUInitiator;
 	public setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(val: boolean): DFUInitiator;

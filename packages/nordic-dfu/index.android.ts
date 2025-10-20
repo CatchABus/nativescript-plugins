@@ -138,6 +138,11 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		return this;
 	}
 
+	public override setAndroidScanTimeout(val: number): DFUInitiator {
+		this.mNative.setScanTimeout(val);
+		return this;
+	}
+
 	public override setForceDfu(val: boolean): DFUInitiator {
 		this.mNative.setForceDfu(val);
 		return this;

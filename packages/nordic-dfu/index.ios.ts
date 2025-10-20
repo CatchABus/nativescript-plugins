@@ -142,6 +142,11 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		return this;
 	}
 
+	public override setAndroidScanTimeout(val: number): DFUInitiatorCommon {
+		// Not implemented on iOS
+		return this;
+	}
+
 	public override setForceDfu(val: boolean): DFUInitiator {
 		this.mNative.forceDfu = val;
 		return this;

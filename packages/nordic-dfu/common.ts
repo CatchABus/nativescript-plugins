@@ -32,6 +32,7 @@ export abstract class DFUInitiatorCommon extends Observable {
 	public abstract setAndroidDisableNotification(val: boolean): DFUInitiatorCommon;
 	public abstract setAndroidForeground(val: boolean): DFUInitiatorCommon;
 	public abstract setAndroidKeepBond(val: boolean): DFUInitiatorCommon;
+	public abstract setAndroidScanTimeout(val: number): DFUInitiatorCommon;
 	public abstract setForceDfu(val: boolean): DFUInitiatorCommon;
 	public abstract setForceScanningForNewAddressInLegacyDfu(val: boolean): DFUInitiatorCommon;
 	public abstract setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(val: boolean): DFUInitiatorCommon;
