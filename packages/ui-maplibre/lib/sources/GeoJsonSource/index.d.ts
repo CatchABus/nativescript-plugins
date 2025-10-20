@@ -23,7 +23,7 @@ export interface GeoJsonOptions {
 
 export declare class GeoJsonSource extends GeoJsonSourceCommon<any> {
 	constructor(id: string);
-	constructor(id: string, content: string | Feature | FeatureCollection | Geometry, options?: GeoJsonOptions);
+	constructor(id: string, content: string | URL | Feature | FeatureCollection | Geometry, options?: GeoJsonOptions);
 
 	public getClusterExpansionZoom(feature: Feature): number;
 	public querySourceFeatures(filter?: Expression): Feature[];

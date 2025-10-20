@@ -5,7 +5,7 @@ import { GeoJsonSourceCommon } from './common';
 
 export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.style.sources.GeoJsonSource> {
 	constructor(id: string);
-	constructor(id: string, content: string | Feature | FeatureCollection | Geometry, options?: GeoJsonOptions);
+	constructor(id: string, content: string | URL | Feature | FeatureCollection | Geometry, options?: GeoJsonOptions);
 	constructor(...args) {
 		super(...args);
 	}
@@ -20,7 +20,9 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 			let options: org.maplibre.android.style.sources.GeoJsonOptions;
 
 			if (typeof args[1] === 'string') {
-				secondArg = new java.net.URL(args[1]);
+				secondArg = args[1];
+			} else if (args[1] instanceof URL) {
+				secondArg = new java.net.URL(args[1].toString());
 			} else {
 				secondArg = args[1].native;
 			}

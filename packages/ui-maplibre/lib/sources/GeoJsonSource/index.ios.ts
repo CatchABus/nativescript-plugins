@@ -5,7 +5,7 @@ import { GeoJsonSourceCommon } from './common';
 
 export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 	constructor(id: string);
-	constructor(id: string, content: string | Feature | FeatureCollection | Geometry, options?: GeoJsonOptions);
+	constructor(id: string, content: string | URL | Feature | FeatureCollection | Geometry, options?: GeoJsonOptions);
 	constructor(...args) {
 		super(...args);
 	}
@@ -23,10 +23,19 @@ export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 			} else {
 				options = null;
 			}
-			if (typeof args[1] === 'string') {
-				native = MLNShapeSource.alloc().initWithIdentifierURLOptions(args[0], NSURL.URLWithString(args[1]), options);
+
+			if (args[1] instanceof URL) {
+				native = MLNShapeSource.alloc().initWithIdentifierURLOptions(args[0], NSURL.URLWithString(args[1].toString()), options);
 			} else {
-				native = MLNShapeSource.alloc().initWithIdentifierShapeOptions(args[0], args[1]?.native, options);
+				let nativeShape: MLNShape;
+
+				if (typeof args[1] === 'string') {
+					const jsonData = NSString.stringWithString(args[1]).dataUsingEncoding(NSUTF8StringEncoding);
+					nativeShape = MLNShape.shapeWithDataEncodingError(jsonData, NSUTF8StringEncoding);
+				} else {
+					nativeShape = args[1]?.native;
+				}
+				native = MLNShapeSource.alloc().initWithIdentifierShapeOptions(args[0], nativeShape, options);
 			}
 		}
 		return native;
