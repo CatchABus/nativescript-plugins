@@ -1,6 +1,6 @@
 {
 	"name": "@nativescript-community/ui-maplibre",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "A NativeScript plugin for integrating MapLibre native SDKs (iOS & Android).",
 	"main": "index",
 	"types": "index.d.ts",
