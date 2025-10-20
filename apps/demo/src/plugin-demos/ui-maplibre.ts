@@ -27,7 +27,7 @@ export async function onMapStyleLoaded(args: MapStyleLoadedEventData) {
 	const map = mapView.getMap();
 	const style = args.style;
 
-	source = new GeoJsonSource('cluster-source', GEOJSON_SOURCE_URL, {
+	source = new GeoJsonSource('cluster-source', new URL(GEOJSON_SOURCE_URL), {
 		cluster: true,
 		clusterMaxZoom: 14,
 		clusterRadius: 50,
