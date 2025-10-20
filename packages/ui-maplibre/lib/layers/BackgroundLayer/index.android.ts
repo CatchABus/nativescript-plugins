@@ -1,6 +1,7 @@
 import { Color } from '@nativescript/core';
 import { BackgroundLayerCommon } from './common';
 import { ExpressionOrValue } from '../BaseLayer';
+import { ExpressionValue } from '../../expressions';
 
 export abstract class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.style.layers.BackgroundLayer> {
 	constructor(id: string) {
@@ -44,6 +45,15 @@ export abstract class BackgroundLayer extends BackgroundLayerCommon<org.maplibre
 
 	public override set backgroundPattern(value: ExpressionOrValue<string>) {
 		super.backgroundPattern = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.backgroundPattern(this.expressionValueToNative(value)));
+
+		let nativeValue;
+
+		if (value instanceof ExpressionValue) {
+			nativeValue = org.maplibre.android.style.expressions.Expression.image(value.native);
+		} else {
+			nativeValue = this.expressionValueToNative(value);
+		}
+
+		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.backgroundPattern(nativeValue));
 	}
 }

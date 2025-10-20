@@ -3,6 +3,7 @@ import { BaseSource } from '../../sources/BaseSource';
 import { SymbolLayerCommon } from './common';
 import { ExpressionOrValue } from '../BaseLayer';
 import { Expression } from '../../expressions/Expression';
+import { ExpressionValue } from '../../expressions';
 
 export abstract class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.layers.SymbolLayer> {
 	constructor(id: string, source: BaseSource) {
@@ -46,7 +47,16 @@ export abstract class SymbolLayer extends SymbolLayerCommon<org.maplibre.android
 
 	public override set iconImageName(value: ExpressionOrValue<string>) {
 		super.iconImageName = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.iconImage(this.expressionValueToNative(value)));
+
+		let nativeValue;
+
+		if (value instanceof ExpressionValue) {
+			nativeValue = org.maplibre.android.style.expressions.Expression.image(value.native);
+		} else {
+			nativeValue = this.expressionValueToNative(value);
+		}
+
+		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.iconImage(nativeValue));
 	}
 
 	public override get text(): ExpressionOrValue<string> {
