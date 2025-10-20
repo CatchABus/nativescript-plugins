@@ -16,14 +16,18 @@ export class Style extends StyleCommon<MLNStyle> {
 	}
 
 	public override addSource(source: BaseSource): void {
-		this.native.addSource(source.native);
+		this.native.addSource(source?.native);
+	}
+
+	public override removeSource(source: BaseSource): void {
+		this.native.removeSource(source?.native);
 	}
 
 	public override addLayer(layer: BaseLayer): void {
-		this.native.addLayer(layer.native);
+		this.native.addLayer(layer?.native);
 	}
 
 	public override removeLayer(layer: BaseLayer): void {
-		this.native.removeLayer(layer.native);
+		this.native.removeLayer(layer?.native);
 	}
 }
