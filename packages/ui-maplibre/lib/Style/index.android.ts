@@ -1,6 +1,6 @@
 import { ImageSource } from '@nativescript/core';
 import { StyleCommon } from './common';
-import { BaseSource } from '../sources';
+import { BaseSource, GeoJsonSource } from '../sources';
 import { BaseLayer } from '../layers';
 
 export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
@@ -24,6 +24,21 @@ export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
 
 	public override removeSource(source: BaseSource): void {
 		this.native.removeSource(source?.native);
+	}
+
+	public override getSource(id: string): BaseSource {
+		const nativeSource = this.native.getSource(id);
+		let source: BaseSource;
+
+		if (!nativeSource) {
+			source = null;
+		} else if (nativeSource instanceof org.maplibre.android.style.sources.GeoJsonSource) {
+			source = GeoJsonSource.initWithNative(nativeSource) as GeoJsonSource;
+		} else {
+			source = null;
+		}
+
+		return source;
 	}
 
 	public override addLayer(layer: BaseLayer): void {

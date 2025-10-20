@@ -1,6 +1,6 @@
 import { ImageSource } from '@nativescript/core';
 import { StyleCommon } from './common';
-import { BaseSource } from '../sources';
+import { BaseSource, GeoJsonSource } from '../sources';
 import { BaseLayer } from '../layers';
 
 export class Style extends StyleCommon<MLNStyle> {
@@ -21,6 +21,21 @@ export class Style extends StyleCommon<MLNStyle> {
 
 	public override removeSource(source: BaseSource): void {
 		this.native.removeSource(source?.native);
+	}
+
+	public override getSource(id: string): BaseSource {
+		const nativeSource = this.native.sourceWithIdentifier(id);
+		let source: BaseSource;
+
+		if (!nativeSource) {
+			source = null;
+		} else if (nativeSource instanceof MLNShapeSource) {
+			source = GeoJsonSource.initWithNative(nativeSource) as GeoJsonSource;
+		} else {
+			source = null;
+		}
+
+		return source;
 	}
 
 	public override addLayer(layer: BaseLayer): void {

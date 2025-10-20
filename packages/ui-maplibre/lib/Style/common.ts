@@ -14,6 +14,7 @@ export abstract class StyleCommon<T> extends NativeObject<T> implements IStyle {
 	public abstract removeImage(name: string): void;
 	public abstract addSource(source: BaseSource): void;
 	public abstract removeSource(source: BaseSource): void;
+	public abstract getSource(id: string): BaseSource;
 	public abstract addLayer(layer: BaseLayer): void;
 	public abstract removeLayer(layer: BaseLayer): void;
 }
