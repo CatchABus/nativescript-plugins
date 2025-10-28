@@ -3,10 +3,7 @@ import { NativeObject } from '../../nativeWrappers/NativeObject';
 
 export abstract class LatLngCommon<T> extends NativeObject<T> implements ILatLng {
 	public toJSON() {
-		return {
-			latitude: this.latitude,
-			longitude: this.longitude,
-		};
+		return [this.longitude, this.latitude];
 	}
 
 	abstract get latitude(): number;

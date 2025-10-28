@@ -1,4 +1,4 @@
-import { CameraPosition, CircleLayer, Expression, ExpressionValue, Feature, GeoJsonSource, LatLng, LatLngBounds, MapEventData, MapLibreView, MapStyleLoadedEventData, SymbolLayer } from '@nativescript-community/ui-maplibre';
+import { CameraPosition, CircleLayer, Expression, ExpressionValue, GeoJsonSource, MapEventData, MapLibreView, MapStyleLoadedEventData, SymbolLayer } from '@nativescript-community/ui-maplibre';
 import { EventData, Page, TapGestureEventData } from '@nativescript/core';
 
 const GEOJSON_SOURCE_URL = 'https://s3.eu-central-1.amazonaws.com/maplibre-native/android-documentation-resources/bus-stops.geojson';
@@ -90,22 +90,4 @@ export function onTap(args: TapGestureEventData) {
 		const zoom = source.getClusterExpansionZoom(f);
 		map.setCamera(new CameraPosition(f.coordinate, zoom), true);
 	}
-}
-
-function calculateClusterBounds(features: Feature[]): LatLngBounds {
-	let minLat = Number.MAX_VALUE;
-	let maxLat = -Number.MAX_VALUE;
-	let minLon = Number.MAX_VALUE;
-	let maxLon = -Number.MAX_VALUE;
-
-	for (const f of features) {
-		const loc = f.coordinate;
-
-		minLon = Math.min(minLon, loc.longitude);
-		maxLon = Math.max(maxLon, loc.longitude);
-		minLat = Math.min(minLat, loc.latitude);
-		maxLat = Math.max(maxLat, loc.latitude);
-	}
-
-	return new LatLngBounds(new LatLng(minLat, minLon), new LatLng(maxLat, maxLon));
 }
