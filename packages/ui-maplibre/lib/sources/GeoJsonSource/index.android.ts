@@ -16,15 +16,15 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 		if (args.length === 1) {
 			native = new org.maplibre.android.style.sources.GeoJsonSource(args[0]);
 		} else {
-			let secondArg;
+			let content;
 			let options: org.maplibre.android.style.sources.GeoJsonOptions;
 
 			if (typeof args[1] === 'string') {
-				secondArg = args[1];
+				content = args[1];
 			} else if (args[1] instanceof URL) {
-				secondArg = new java.net.URL(args[1].toString());
+				content = new java.net.URI(args[1].toString());
 			} else {
-				secondArg = args[1].native;
+				content = args[1]?.native;
 			}
 
 			if (args[2] && typeof args[2] === 'object') {
@@ -32,7 +32,14 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 			} else {
 				options = null;
 			}
-			native = new org.maplibre.android.style.sources.GeoJsonSource(args[0], secondArg, options);
+
+			if (content) {
+				native = new org.maplibre.android.style.sources.GeoJsonSource(args[0], content, options);
+			} else if (options) {
+				native = new org.maplibre.android.style.sources.GeoJsonSource(args[0], options);
+			} else {
+				native = new org.maplibre.android.style.sources.GeoJsonSource(args[0]);
+			}
 		}
 		return native;
 	}
@@ -96,5 +103,18 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 		}
 
 		return result;
+	}
+
+	public override setData(value: string | URL | Feature | FeatureCollection | Geometry): void {
+		if (!value) {
+			this.native.setUri('');
+			this.native.setGeoJsonSync('');
+		} else if (typeof value === 'string') {
+			this.native.setGeoJsonSync(value);
+		} else if (value instanceof URL) {
+			this.native.setUri(value.toString());
+		} else {
+			this.native.setGeoJsonSync(value?.native);
+		}
 	}
 }

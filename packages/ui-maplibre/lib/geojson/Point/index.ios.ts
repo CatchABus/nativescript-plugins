@@ -9,9 +9,7 @@ export class Point extends PointCommon<MLNPointAnnotation> {
 		let native: MLNPointAnnotation;
 
 		if (typeof content === 'string') {
-			const jsonData = NSString.stringWithString(content).dataUsingEncoding(NSUTF8StringEncoding);
-			const nativeShape = MLNShape.shapeWithDataEncodingError(jsonData, NSUTF8StringEncoding);
-
+			const nativeShape = Point.getNativeFromJson(content);
 			native = nativeShape instanceof MLNPointAnnotation ? nativeShape : null;
 		} else {
 			native = MLNPointAnnotation.alloc().init();

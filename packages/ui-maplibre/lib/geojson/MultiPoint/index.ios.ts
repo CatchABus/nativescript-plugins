@@ -10,9 +10,7 @@ export class MultiPoint extends MultiPointCommon<MLNPointCollection> {
 		let native: MLNPointCollection;
 
 		if (typeof content === 'string') {
-			const jsonData = NSString.stringWithString(content).dataUsingEncoding(NSUTF8StringEncoding);
-			const nativeShape = MLNShape.shapeWithDataEncodingError(jsonData, NSUTF8StringEncoding);
-
+			const nativeShape = MultiPoint.getNativeFromJson(content);
 			native = nativeShape instanceof MLNPointCollection ? nativeShape : null;
 		} else {
 			const length = content.length;

@@ -1,6 +1,6 @@
 import { GeoJsonOptions } from '.';
 import { Expression } from '../../expressions';
-import { Feature, FeatureCollection, Geometry } from '../../geojson';
+import { BaseGeoJson, Feature, FeatureCollection, Geometry } from '../../geojson';
 import { GeoJsonSourceCommon } from './common';
 
 export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
@@ -30,8 +30,7 @@ export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 				let nativeShape: MLNShape;
 
 				if (typeof args[1] === 'string') {
-					const jsonData = NSString.stringWithString(args[1]).dataUsingEncoding(NSUTF8StringEncoding);
-					nativeShape = MLNShape.shapeWithDataEncodingError(jsonData, NSUTF8StringEncoding);
+					nativeShape = BaseGeoJson.getNativeFromJson(args[1]);
 				} else {
 					nativeShape = args[1]?.native;
 				}
@@ -104,5 +103,18 @@ export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 		}
 
 		return result;
+	}
+
+	public override setData(value: string | URL | Feature | FeatureCollection | Geometry): void {
+		if (!value) {
+			this.native.shape = null;
+			this.native.URL = null;
+		} else if (typeof value === 'string') {
+			this.native.shape = BaseGeoJson.getNativeFromJson(value);
+		} else if (value instanceof URL) {
+			this.native.URL = NSURL.URLWithString(value.toString());
+		} else {
+			this.native.shape = value?.native;
+		}
 	}
 }

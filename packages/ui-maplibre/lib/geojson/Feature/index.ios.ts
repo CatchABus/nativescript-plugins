@@ -16,14 +16,12 @@ export class Feature extends FeatureCommon<MLNFeature> {
 				native.identifier = args[0];
 				// Use this helper method to set coordinate as runtime throws the following error otherwise:
 				// Error: Attempted to assign to readonly property.
-				NSCMapLibreHelpers.setPointFeatureCoordinateCoordinate(native as MLNPointFeature, geometry.coordinate.native);
+				NSMapLibreHelpers.setPointFeatureCoordinateCoordinate(native as MLNPointFeature, geometry.coordinate.native);
 			} else {
 				native = null;
 			}
 		} else if (args.length === 1) {
-			const jsonData = NSString.stringWithString(args[0]).dataUsingEncoding(NSUTF8StringEncoding);
-			const nativeShape = MLNShape.shapeWithDataEncodingError(jsonData, NSUTF8StringEncoding);
-
+			const nativeShape = Feature.getNativeFromJson(args[0]);
 			if (this._isNativeFeature(nativeShape)) {
 				native = nativeShape;
 			} else {

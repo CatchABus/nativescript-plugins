@@ -27,4 +27,5 @@ export declare class GeoJsonSource extends GeoJsonSourceCommon<any> {
 
 	public getClusterExpansionZoom(feature: Feature): number;
 	public querySourceFeatures(filter?: Expression): Feature[];
+	public setData(value: string | URL | Feature | FeatureCollection | Geometry): void;
 }

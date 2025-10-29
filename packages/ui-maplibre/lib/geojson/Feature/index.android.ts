@@ -1,5 +1,4 @@
 import { LatLng } from '../../position';
-import { Geometry } from '../Geometry';
 import { FeatureCommon } from './common';
 
 export class Feature extends FeatureCommon<org.maplibre.geojson.Feature> {
