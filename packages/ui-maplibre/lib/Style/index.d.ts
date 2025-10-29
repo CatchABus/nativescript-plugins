@@ -8,8 +8,11 @@ export declare class Style extends NativeObject<any> {
 	public addImage(name: string, source: ImageSource);
 	public removeImage(name: string): void;
 	public addSource(source: any): void;
-	public removeSource(source: BaseSource): void;
 	public getSource(id: string): BaseSource;
+	public getSources(): readonly BaseSource[];
+	public removeSource(source: BaseSource): void;
 	public addLayer(layer: BaseLayer): void;
+	public getLayer(id: string): BaseLayer;
+	public getLayers(): readonly BaseLayer[];
 	public removeLayer(layer: BaseLayer): void;
 }

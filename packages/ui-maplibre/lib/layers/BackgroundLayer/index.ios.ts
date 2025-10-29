@@ -2,7 +2,7 @@ import { Color } from '@nativescript/core';
 import { BackgroundLayerCommon } from './common';
 import { ExpressionOrValue } from '../BaseLayer';
 
-export abstract class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLayer> {
+export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLayer> {
 	constructor(id: string) {
 		super(id);
 	}

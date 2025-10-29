@@ -4,7 +4,7 @@ import { ExpressionOrValue } from '../BaseLayer';
 import { BaseSource } from '../../sources';
 import { Expression } from '../../expressions/Expression';
 
-export abstract class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
+export class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);
 	}
@@ -45,17 +45,5 @@ export abstract class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer>
 	public override set circleRadius(value: ExpressionOrValue<number>) {
 		super.circleRadius = value;
 		this.native.circleRadius = this.expressionValueToNative(value);
-	}
-
-	public override get filter(): Expression {
-		if (super.filter === undefined) {
-			super.filter = Expression.initWithNative(this.native.predicate) as Expression;
-		}
-		return super.filter;
-	}
-
-	public override set filter(value: Expression) {
-		super.filter = value;
-		this.native.predicate = value?.native;
 	}
 }

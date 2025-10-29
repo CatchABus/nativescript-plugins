@@ -16,4 +16,11 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	public set visible(value: boolean) {
 		this.mVisible = value;
 	}
+
+	public toJSON() {
+		return {
+			id: this.getId(),
+			type: this.constructor.name,
+		};
+	}
 }

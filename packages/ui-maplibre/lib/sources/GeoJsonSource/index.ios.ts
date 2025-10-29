@@ -93,6 +93,36 @@ export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 		return feature ? this.native.zoomLevelForExpandingCluster(feature.native) : -1;
 	}
 
+	public override getClusterChildren(feature: Feature): readonly Feature[] {
+		const result: Feature[] = [];
+
+		if (feature?.native) {
+			const nFeatures = this.native.childrenOfCluster(feature.native);
+
+			for (let i = 0, length = nFeatures.count; i < length; i++) {
+				const nFeature: org.maplibre.geojson.Feature = nFeatures.objectAtIndex(i);
+				result.push(Feature.initWithNative(nFeature) as Feature);
+			}
+		}
+
+		return Object.freeze(result);
+	}
+
+	public override getClusterLeaves(feature: Feature, limit: number, offset?: number): readonly Feature[] {
+		const result: Feature[] = [];
+
+		if (feature?.native) {
+			const nFeatures = this.native.leavesOfClusterOffsetLimit(feature.native, offset || 0, limit);
+
+			for (let i = 0, length = nFeatures.count; i < length; i++) {
+				const nFeature: org.maplibre.geojson.Feature = nFeatures.objectAtIndex(i);
+				result.push(Feature.initWithNative(nFeature) as Feature);
+			}
+		}
+
+		return Object.freeze(result);
+	}
+
 	public override querySourceFeatures(filter?: Expression): Feature[] {
 		const result: Feature[] = [];
 		const nFeatures = this.native.featuresMatchingPredicate(filter?.native);

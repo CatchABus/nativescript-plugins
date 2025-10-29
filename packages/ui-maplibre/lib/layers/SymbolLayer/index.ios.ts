@@ -4,7 +4,7 @@ import { SymbolLayerCommon } from './common';
 import { ExpressionOrValue } from '../BaseLayer';
 import { Expression } from '../../expressions/Expression';
 
-export abstract class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
+export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);
 	}
@@ -117,17 +117,5 @@ export abstract class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer>
 	public override set textFontNames(value: ExpressionOrValue<string[]>) {
 		super.textFontNames = value;
 		this.native.textFontNames = this.expressionValueToNative(value);
-	}
-
-	public override get filter(): Expression {
-		if (super.filter === undefined) {
-			super.filter = Expression.initWithNative(this.native.predicate) as Expression;
-		}
-		return super.filter;
-	}
-
-	public override set filter(value: Expression) {
-		super.filter = value;
-		this.native.predicate = value?.native;
 	}
 }

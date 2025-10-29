@@ -90,7 +90,39 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 	}
 
 	public override getClusterExpansionZoom(feature: Feature): number {
-		return feature ? this.native.getClusterExpansionZoom(feature.native) : -1;
+		return feature?.native ? this.native.getClusterExpansionZoom(feature.native) : -1;
+	}
+
+	public override getClusterChildren(feature: Feature): readonly Feature[] {
+		const result: Feature[] = [];
+
+		if (feature?.native) {
+			const nFeatureCollection = this.native.getClusterChildren(feature?.native);
+			const nFeatures = nFeatureCollection.features();
+
+			for (let i = 0, length = nFeatures.size(); i < length; i++) {
+				const nFeature: org.maplibre.geojson.Feature = nFeatures.get(i);
+				result.push(Feature.initWithNative(nFeature) as Feature);
+			}
+		}
+
+		return Object.freeze(result);
+	}
+
+	public override getClusterLeaves(feature: Feature, limit: number, offset?: number): readonly Feature[] {
+		const result: Feature[] = [];
+
+		if (feature?.native) {
+			const nFeatureCollection = this.native.getClusterLeaves(feature?.native, limit, offset || 0);
+			const nFeatures = nFeatureCollection.features();
+
+			for (let i = 0, length = nFeatures.size(); i < length; i++) {
+				const nFeature: org.maplibre.geojson.Feature = nFeatures.get(i);
+				result.push(Feature.initWithNative(nFeature) as Feature);
+			}
+		}
+
+		return Object.freeze(result);
 	}
 
 	public override querySourceFeatures(filter?: Expression): Feature[] {

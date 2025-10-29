@@ -4,7 +4,7 @@ import { CircleLayerCommon } from './common';
 import { BaseSource } from '../../sources';
 import { Expression } from '../../expressions/Expression';
 
-export abstract class CircleLayer extends CircleLayerCommon<org.maplibre.android.style.layers.CircleLayer> {
+export class CircleLayer extends CircleLayerCommon<org.maplibre.android.style.layers.CircleLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);
 	}
@@ -35,17 +35,5 @@ export abstract class CircleLayer extends CircleLayerCommon<org.maplibre.android
 	public override set circleRadius(value: ExpressionOrValue<number>) {
 		super.circleRadius = value;
 		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.circleRadius(this.expressionValueToNative(value)));
-	}
-
-	public override get filter(): Expression {
-		if (super.filter === undefined) {
-			super.filter = Expression.initWithNative(this.native.getFilter()) as Expression;
-		}
-		return super.filter;
-	}
-
-	public override set filter(value: Expression) {
-		super.filter = value;
-		this.native.setFilter(value?.native);
 	}
 }

@@ -1,9 +1,9 @@
 import { Color } from '@nativescript/core';
 import { ExpressionOrValue } from '../BaseLayer';
-import { VectorStyleLayer } from '../VectorStyleLayer';
 import { SymbolLayer as ISymbolLayer } from '.';
+import { AbstractVectorLayer } from '../AbstractVectorLayer';
 
-export abstract class SymbolLayerCommon<T> extends VectorStyleLayer<T> implements ISymbolLayer {
+export abstract class SymbolLayerCommon<T> extends AbstractVectorLayer<T> implements ISymbolLayer {
 	private mIconAllowsOverlap: ExpressionOrValue<boolean>;
 	private mIconScale: ExpressionOrValue<number>;
 	private mIconImageName: ExpressionOrValue<string>;

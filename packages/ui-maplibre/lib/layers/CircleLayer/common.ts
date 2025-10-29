@@ -1,9 +1,9 @@
 import { Color } from '@nativescript/core';
 import { ExpressionOrValue } from '../BaseLayer';
-import { VectorStyleLayer } from '../VectorStyleLayer';
 import { CircleLayer as ICircleLayer } from '.';
+import { AbstractVectorLayer } from '../AbstractVectorLayer';
 
-export abstract class CircleLayerCommon<T> extends VectorStyleLayer<T> implements ICircleLayer {
+export abstract class CircleLayerCommon<T> extends AbstractVectorLayer<T> implements ICircleLayer {
 	private mCircleColor: ExpressionOrValue<string | Color>;
 	private mCircleRadius: ExpressionOrValue<number>;
 

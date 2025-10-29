@@ -3,7 +3,7 @@ import { BackgroundLayerCommon } from './common';
 import { ExpressionOrValue } from '../BaseLayer';
 import { ExpressionValue } from '../../expressions';
 
-export abstract class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.style.layers.BackgroundLayer> {
+export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.style.layers.BackgroundLayer> {
 	constructor(id: string) {
 		super(id);
 	}

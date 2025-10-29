@@ -1,9 +1,9 @@
 import { Color } from '@nativescript/core';
 import { BaseSource } from '../../sources';
 import { ExpressionOrValue } from '../BaseLayer';
-import { VectorStyleLayer } from '../VectorStyleLayer';
+import { AbstractVectorLayer } from '../AbstractVectorLayer';
 
-export declare class SymbolLayer extends VectorStyleLayer<any> {
+export declare class SymbolLayer extends AbstractVectorLayer<any> {
 	constructor(id: string, source: BaseSource);
 	public get iconAllowsOverlap(): ExpressionOrValue<boolean>;
 	public set iconAllowsOverlap(value: ExpressionOrValue<boolean>);

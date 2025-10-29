@@ -5,7 +5,7 @@ import { ExpressionOrValue } from '../BaseLayer';
 import { Expression } from '../../expressions/Expression';
 import { ExpressionValue } from '../../expressions';
 
-export abstract class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.layers.SymbolLayer> {
+export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.layers.SymbolLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);
 	}
@@ -130,17 +130,5 @@ export abstract class SymbolLayer extends SymbolLayerCommon<org.maplibre.android
 			finalValue = this.expressionValueToNative(value);
 		}
 		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.textFont(finalValue));
-	}
-
-	public override get filter(): Expression {
-		if (super.filter === undefined) {
-			super.filter = Expression.initWithNative(this.native.getFilter()) as Expression;
-		}
-		return super.filter;
-	}
-
-	public override set filter(value: Expression) {
-		super.filter = value;
-		this.native.setFilter(value?.native);
 	}
 }
