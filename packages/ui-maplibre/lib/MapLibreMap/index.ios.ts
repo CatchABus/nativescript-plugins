@@ -142,6 +142,36 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 		return result;
 	}
 
+	public override get minZoom(): number {
+		let value: number;
+
+		this._runWithNativeView((nativeView) => {
+			value = nativeView.minimumZoomLevel;
+		});
+		return value;
+	}
+
+	public override set minZoom(value: number) {
+		this._runWithNativeView((nativeView) => {
+			nativeView.minimumZoomLevel = value;
+		});
+	}
+
+	public override get maxZoom(): number {
+		let value: number;
+
+		this._runWithNativeView((nativeView) => {
+			value = nativeView.maximumZoomLevel;
+		});
+		return value;
+	}
+
+	public override set maxZoom(value: number) {
+		this._runWithNativeView((nativeView) => {
+			nativeView.maximumZoomLevel = value;
+		});
+	}
+
 	public override get isRotateGesturesEnabled(): boolean {
 		let value: boolean;
 

@@ -123,6 +123,22 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 		return result;
 	}
 
+	public override get minZoom(): number {
+		return this.native.getMinZoomLevel();
+	}
+
+	public override set minZoom(value: number) {
+		this.native.setMinZoomPreference(value);
+	}
+
+	public override get maxZoom(): number {
+		return this.native.getMaxZoomLevel();
+	}
+
+	public override set maxZoom(value: number) {
+		this.native.setMaxZoomPreference(value);
+	}
+
 	public override get isRotateGesturesEnabled(): boolean {
 		return this.native.getUiSettings().isRotateGesturesEnabled();
 	}
