@@ -1,5 +1,4 @@
-import { Expression } from '../../expressions';
-import { ExpressionValue } from '../../expressions/ExpressionValue';
+import { ExpressionFilterSpecification, ExpressionSpecification } from '../../Expression';
 import { Feature, FeatureCollection, Geometry } from '../../geojson';
 import { GeoJsonSourceCommon } from './common';
 
@@ -9,10 +8,7 @@ export interface GeoJsonOptions {
 	clusterMaxZoom?: number;
 	clusterMinPoints?: number;
 	clusterProperties?: {
-		[key: string]: {
-			operatorExpression: ExpressionValue;
-			mapExpression: ExpressionValue;
-		};
+		[key: string]: [string, ExpressionSpecification];
 	};
 	clusterRadius?: number;
 	lineMetrics?: boolean;
@@ -28,6 +24,6 @@ export declare class GeoJsonSource extends GeoJsonSourceCommon<any> {
 	public getClusterExpansionZoom(feature: Feature): number;
 	public getClusterChildren(feature: Feature): readonly Feature[];
 	public getClusterLeaves(feature: Feature, limit: number, offset?: number): readonly Feature[];
-	public querySourceFeatures(filter?: Expression): Feature[];
+	public querySourceFeatures(filter?: ExpressionFilterSpecification): Feature[];
 	public setData(value: string | URL | Feature | FeatureCollection | Geometry): void;
 }

@@ -1,11 +1,11 @@
 import { Utils } from '@nativescript/core';
 import { CameraPosition } from '../position/CameraPosition';
-import { Expression } from '../expressions';
 import { Feature } from '../geojson';
 import { IPoint, LatLng, LatLngBounds } from '../position';
 import { IRect } from '../position/IRect';
 import { Projection } from '../Projection';
 import { MapLibreMapCommon } from './common';
+import { Expression, ExpressionFilterSpecification } from '../Expression';
 
 export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.MapLibreMap> {
 	private mNativeVisibleBounds: androidNative.Array<number>;
@@ -83,9 +83,10 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 		}
 	}
 
-	public override queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: Expression): Feature[] {
+	public override queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: ExpressionFilterSpecification): Feature[] {
 		const result: Feature[] = [];
-		const nFilter: org.maplibre.android.style.expressions.Expression = filter instanceof Expression ? filter.native : null;
+		const expression = Expression.filter(filter);
+		const nFilter: org.maplibre.android.style.expressions.Expression = expression?.native;
 		let nLayerIds: androidNative.Array<string>;
 		let nFeatures: java.util.List<org.maplibre.geojson.Feature>;
 

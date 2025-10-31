@@ -1,5 +1,5 @@
 import { GeoJsonOptions } from '.';
-import { Expression } from '../../expressions';
+import { Expression, ExpressionFilterSpecification } from '../../Expression';
 import { Feature, FeatureCollection, Geometry } from '../../geojson';
 import { GeoJsonSourceCommon } from './common';
 
@@ -64,7 +64,13 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 		if (options.clusterProperties && typeof options.clusterProperties === 'object') {
 			for (const key in options.clusterProperties) {
 				const data = options.clusterProperties[key];
-				native.withClusterProperty(key, data.operatorExpression, data.mapExpression);
+
+				if (Array.isArray(data)) {
+					const operatorExpression = Expression.propertyValue(data[0]);
+					const mapExpression = Expression.propertyValue(data[1]);
+
+					native.withClusterProperty(key, operatorExpression?.native, mapExpression?.native);
+				}
 			}
 		}
 
@@ -125,9 +131,10 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 		return Object.freeze(result);
 	}
 
-	public override querySourceFeatures(filter?: Expression): Feature[] {
+	public override querySourceFeatures(filter?: ExpressionFilterSpecification): Feature[] {
 		const result: Feature[] = [];
-		const nFeatures = this.native.querySourceFeatures(filter?.native);
+		const expression = Expression.filter(filter);
+		const nFeatures = this.native.querySourceFeatures(expression?.native);
 
 		for (let i = 0, length = nFeatures.size(); i < length; i++) {
 			const nFeature: org.maplibre.geojson.Feature = nFeatures.get(i);

@@ -1,4 +1,4 @@
-import { CameraPosition, CircleLayer, Expression, ExpressionValue, GeoJsonSource, MapEventData, MapLibreView, MapStyleLoadedEventData, SymbolLayer } from '@nativescript-community/ui-maplibre';
+import { CameraPosition, CircleLayer, ExpressionSpecification, GeoJsonSource, MapEventData, MapLibreView, MapStyleLoadedEventData, SymbolLayer } from '@nativescript-community/ui-maplibre';
 import { EventData, Page, TapGestureEventData } from '@nativescript/core';
 
 const GEOJSON_SOURCE_URL = 'https://s3.eu-central-1.amazonaws.com/maplibre-native/android-documentation-resources/bus-stops.geojson';
@@ -34,12 +34,12 @@ export async function onMapStyleLoaded(args: MapStyleLoadedEventData) {
 	});
 
 	const markerLayer = new CircleLayer('marker-layer', source);
-	markerLayer.filter = Expression.neq(ExpressionValue.get('cluster'), true);
+	markerLayer.filter = ['!=', ['get', 'cluster'], true];
 	markerLayer.circleColor = 'orange';
 	markerLayer.circleRadius = 8;
 
 	const countLayer = new SymbolLayer('count-layer', source);
-	countLayer.text = ExpressionValue.get('point_count');
+	countLayer.text = ['get', 'point_count'];
 	countLayer.textSize = 14;
 	countLayer.textColor = '#fff';
 	countLayer.textAllowsOverlap = true;
@@ -53,11 +53,11 @@ export async function onMapStyleLoaded(args: MapStyleLoadedEventData) {
 		l.circleColor = entry[1];
 		l.circleRadius = 18;
 
-		const pointCount = ExpressionValue.get('point_count');
+		const countExpression: ExpressionSpecification = ['get', 'point_count'];
 		if (i === 0) {
-			l.filter = Expression.all(Expression.has('point_count'), Expression.gte(pointCount, ExpressionValue.literal(entry[0])));
+			l.filter = ['all', ['has', 'point_count'], ['>=', countExpression, entry[0]]];
 		} else {
-			l.filter = Expression.all(Expression.has('point_count'), Expression.gt(pointCount, ExpressionValue.literal(entry[0])), Expression.lt(pointCount, ExpressionValue.literal(CLUSTER_ZONE_ENTRIES[i - 1][0])));
+			l.filter = ['all', ['has', 'point_count'], ['>', countExpression, entry[0]], ['<', countExpression, CLUSTER_ZONE_ENTRIES[i - 1][0]]];
 		}
 
 		style.addLayer(l);
@@ -83,7 +83,7 @@ export function onTap(args: TapGestureEventData) {
 			y: args.getY(),
 		},
 		null,
-		Expression.eq(ExpressionValue.get('cluster'), true)
+		['==', ['get', 'cluster'], true]
 	);
 
 	for (const f of features) {

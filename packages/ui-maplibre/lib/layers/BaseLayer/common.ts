@@ -1,20 +1,31 @@
 import { BaseLayer as IBaseLayer } from '.';
+import { PropertyValueSpecification } from '../../Expression';
 import { NativeObject } from '../../nativeWrappers/NativeObject';
+import { LayoutProperty } from '../../utils/decorators';
 
 export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBaseLayer<T> {
-	private mVisible: boolean;
+	public static readonly layoutPropertyMappings = new Map<string, string>();
+	public static readonly paintPropertyMappings = new Map<string, string>();
+
+	private readonly mCachedPropertyValues = new Map<string, PropertyValueSpecification<any>>();
 
 	public abstract getId(): string;
-	public abstract expressionValueToNative(value): any;
-	public abstract extractPropertyValue(value);
-	public abstract setWrappedPropertyValue(value: any): void;
 
-	public get visible(): boolean {
-		return this.mVisible;
+	@LayoutProperty('visibility')
+	public get visible(): 'visible' | 'none' {
+		return this.getPropertyValueInternal('visible');
 	}
 
-	public set visible(value: boolean) {
-		this.mVisible = value;
+	public set visible(value: 'visible' | 'none') {
+		this.setPropertyValueInternal('visible', value);
+	}
+
+	public getPropertyValueInternal(name: string): PropertyValueSpecification<any> {
+		return this.mCachedPropertyValues.get(name);
+	}
+
+	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): void {
+		this.mCachedPropertyValues.set(name, value);
 	}
 
 	public toJSON() {

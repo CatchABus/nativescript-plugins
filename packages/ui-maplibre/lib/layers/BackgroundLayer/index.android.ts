@@ -1,7 +1,5 @@
-import { Color } from '@nativescript/core';
 import { BackgroundLayerCommon } from './common';
-import { ExpressionOrValue } from '../BaseLayer';
-import { ExpressionValue } from '../../expressions';
+import { ColorSpecification, DataDrivenPropertyValueSpecification, Expression, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
 
 export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.style.layers.BackgroundLayer> {
 	constructor(id: string) {
@@ -12,48 +10,36 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 		return new org.maplibre.android.style.layers.BackgroundLayer(id);
 	}
 
-	public override get backgroundColor(): ExpressionOrValue<string | Color> {
-		if (!super.backgroundColor) {
-			super.backgroundColor = this.extractPropertyValue(this.native.getBackgroundColor());
+	public override get backgroundColor(): PropertyValueSpecification<ColorSpecification> {
+		if (super.backgroundColor === undefined) {
+			super.backgroundColor = this.native.getBackgroundColor().value;
 		}
 		return super.backgroundColor;
 	}
 
-	public override set backgroundColor(value: ExpressionOrValue<string | Color>) {
+	public override set backgroundColor(value) {
 		super.backgroundColor = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.backgroundColor(this.expressionValueToNative(value)));
 	}
 
-	public override get backgroundOpacity(): ExpressionOrValue<number> {
-		if (!super.backgroundOpacity) {
-			super.backgroundOpacity = this.extractPropertyValue(this.native.getBackgroundOpacity());
+	public override get backgroundOpacity(): PropertyValueSpecification<number> {
+		if (super.backgroundOpacity === undefined) {
+			super.backgroundOpacity = this.native.getBackgroundOpacity().value.floatValue();
 		}
 		return super.backgroundOpacity;
 	}
 
-	public override set backgroundOpacity(value: ExpressionOrValue<number>) {
+	public override set backgroundOpacity(value) {
 		super.backgroundOpacity = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.backgroundOpacity(this.expressionValueToNative(value)));
 	}
 
-	public override get backgroundPattern(): ExpressionOrValue<string> {
-		if (!super.backgroundPattern) {
-			super.backgroundPattern = this.extractPropertyValue(this.native.getBackgroundPattern());
+	public override get backgroundPattern(): DataDrivenPropertyValueSpecification<ResolvedImageSpecification> {
+		if (super.backgroundPattern === undefined) {
+			super.backgroundPattern = this.native.getBackgroundPattern().value;
 		}
 		return super.backgroundPattern;
 	}
 
-	public override set backgroundPattern(value: ExpressionOrValue<string>) {
+	public override set backgroundPattern(value) {
 		super.backgroundPattern = value;
-
-		let nativeValue;
-
-		if (value instanceof ExpressionValue) {
-			nativeValue = org.maplibre.android.style.expressions.Expression.image(value.native);
-		} else {
-			nativeValue = this.expressionValueToNative(value);
-		}
-
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.backgroundPattern(nativeValue));
 	}
 }

@@ -1,11 +1,11 @@
 import { MapNativeRequestData } from '.';
 import { CameraPosition } from '../position/CameraPosition';
-import { Expression } from '../expressions';
 import { Feature } from '../geojson';
-import { IPoint, LatLng, LatLngBounds } from '../position';
+import { IPoint, LatLngBounds } from '../position';
 import { IRect } from '../position/IRect';
 import { Projection } from '../Projection';
 import { MapLibreMapCommon } from './common';
+import { Expression, ExpressionFilterSpecification } from '../Expression';
 
 export class MapLibreMap extends MapLibreMapCommon<any> {
 	private _runWithNativeView(callback: (nativeView: MLNMapView) => void): void {
@@ -105,9 +105,10 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 		});
 	}
 
-	public override queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: Expression): Feature[] {
+	public override queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: ExpressionFilterSpecification): Feature[] {
 		const result: Feature[] = [];
-		const nFilter: NSPredicate = filter instanceof Expression ? filter.native : null;
+		const expression = Expression.filter(filter);
+		const nFilter: NSPredicate = expression?.native;
 		let nLayerIds: NSSet<string>;
 		let nFeatures: NSArray<MLNFeature>;
 

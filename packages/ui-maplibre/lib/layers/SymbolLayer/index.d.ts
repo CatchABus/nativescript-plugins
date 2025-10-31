@@ -1,24 +1,23 @@
-import { Color } from '@nativescript/core';
 import { BaseSource } from '../../sources';
-import { ExpressionOrValue } from '../BaseLayer';
 import { AbstractVectorLayer } from '../AbstractVectorLayer';
+import { ColorSpecification, DataDrivenPropertyValueSpecification, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
 
 export declare class SymbolLayer extends AbstractVectorLayer<any> {
 	constructor(id: string, source: BaseSource);
-	public get iconAllowsOverlap(): ExpressionOrValue<boolean>;
-	public set iconAllowsOverlap(value: ExpressionOrValue<boolean>);
-	public get iconScale(): ExpressionOrValue<number>;
-	public set iconScale(value: ExpressionOrValue<number>);
-	public get iconImageName(): ExpressionOrValue<string>;
-	public set iconImageName(value: ExpressionOrValue<string>);
-	public get text(): ExpressionOrValue<string>;
-	public set text(value: ExpressionOrValue<string>);
-	public get textAllowsOverlap(): ExpressionOrValue<boolean>;
-	public set textAllowsOverlap(value: ExpressionOrValue<boolean>);
-	public get textSize(): ExpressionOrValue<number>;
-	public set textSize(value: ExpressionOrValue<number>);
-	public get textColor(): ExpressionOrValue<string | Color>;
-	public set textColor(value: ExpressionOrValue<string | Color>);
-	public get textFontNames(): ExpressionOrValue<string[]>;
-	public set textFontNames(value: ExpressionOrValue<string[]>);
+	public get iconAllowsOverlap(): PropertyValueSpecification<boolean>;
+	public set iconAllowsOverlap(value: PropertyValueSpecification<boolean>);
+	public get iconScale(): PropertyValueSpecification<number>;
+	public set iconScale(value: PropertyValueSpecification<number>);
+	public get iconImageName(): DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
+	public set iconImageName(value: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>);
+	public get text(): PropertyValueSpecification<string>;
+	public set text(value: PropertyValueSpecification<string>);
+	public get textAllowsOverlap(): PropertyValueSpecification<boolean>;
+	public set textAllowsOverlap(value: PropertyValueSpecification<boolean>);
+	public get textSize(): PropertyValueSpecification<number>;
+	public set textSize(value: PropertyValueSpecification<number>);
+	public get textColor(): PropertyValueSpecification<ColorSpecification>;
+	public set textColor(value: PropertyValueSpecification<ColorSpecification>);
+	public get textFontNames(): PropertyValueSpecification<string[]>;
+	public set textFontNames(value: PropertyValueSpecification<string[]>);
 }

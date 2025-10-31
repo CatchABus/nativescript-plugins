@@ -1,8 +1,7 @@
-import { Color } from '@nativescript/core';
 import { CircleLayerCommon } from './common';
-import { ExpressionOrValue } from '../BaseLayer';
 import { BaseSource } from '../../sources';
-import { Expression } from '../../expressions/Expression';
+import { Expression } from '../../Expression';
+import { Color } from '@nativescript/core';
 
 export class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
 	constructor(id: string, source: BaseSource) {
@@ -13,37 +12,31 @@ export class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
 		return MLNCircleStyleLayer.alloc().initWithIdentifierSource(id, source.native);
 	}
 
-	public override get circleColor(): ExpressionOrValue<string | Color> {
-		if (!super.circleColor && this.native.circleColor) {
-			super.circleColor = this.extractPropertyValue(this.native.circleColor);
+	public override get circleColor() {
+		if (super.circleColor === undefined) {
+			super.circleColor = (Expression.initWithNative(this.native.circleColor) as Expression).toJSON();
 		}
 		return super.circleColor;
 	}
 
-	public override set circleColor(value: ExpressionOrValue<string | Color>) {
-		if (typeof value === 'string') {
-			if (Color.isValid(value)) {
-				super.circleColor = value;
-				this.native.circleColor = this.expressionValueToNative(new Color(value));
-			} else {
-				super.circleColor = '#000000';
-				this.native.circleColor = this.expressionValueToNative(new Color(super.circleColor));
-			}
-		} else {
-			super.circleColor = value;
-			this.native.circleColor = this.expressionValueToNative(value);
-		}
+	public override set circleColor(value) {
+		const expression = Expression.propertyValue(typeof value === 'string' ? new Color(value) : value);
+
+		super.circleColor = value;
+		this.native.circleColor = expression?.native;
 	}
 
-	public override get circleRadius(): ExpressionOrValue<number> {
-		if (!super.circleRadius && this.native.circleRadius) {
-			super.circleRadius = this.extractPropertyValue(this.native.circleRadius);
+	public override get circleRadius() {
+		if (super.circleRadius === undefined) {
+			super.circleRadius = (Expression.initWithNative(this.native.circleRadius) as Expression).toJSON();
 		}
 		return super.circleRadius;
 	}
 
-	public override set circleRadius(value: ExpressionOrValue<number>) {
+	public override set circleRadius(value) {
+		const expression = Expression.propertyValue(value);
+
 		super.circleRadius = value;
-		this.native.circleRadius = this.expressionValueToNative(value);
+		this.native.circleRadius = expression?.native;
 	}
 }

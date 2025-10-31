@@ -1,6 +1,6 @@
-import { Color } from '@nativescript/core';
 import { BackgroundLayerCommon } from './common';
-import { ExpressionOrValue } from '../BaseLayer';
+import { ColorSpecification, DataDrivenPropertyValueSpecification, Expression, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
+import { Color } from '@nativescript/core';
 
 export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLayer> {
 	constructor(id: string) {
@@ -11,49 +11,45 @@ export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLay
 		return MLNBackgroundStyleLayer.alloc().initWithIdentifier(id);
 	}
 
-	public override get backgroundColor(): ExpressionOrValue<string | Color> {
-		if (!super.backgroundColor && this.native.backgroundColor) {
-			super.backgroundColor = this.extractPropertyValue(this.native.backgroundColor);
+	public override get backgroundColor(): PropertyValueSpecification<ColorSpecification> {
+		if (super.backgroundColor === undefined) {
+			super.backgroundColor = (Expression.initWithNative(this.native.backgroundColor) as Expression).toJSON();
 		}
 		return super.backgroundColor;
 	}
 
-	public override set backgroundColor(value: ExpressionOrValue<string | Color>) {
-		if (typeof value === 'string') {
-			if (Color.isValid(value)) {
-				super.backgroundColor = value;
-				this.native.backgroundColor = this.expressionValueToNative(new Color(value));
-			} else {
-				super.backgroundColor = '#000000';
-				this.native.backgroundColor = this.expressionValueToNative(new Color(super.backgroundColor));
-			}
-		} else {
-			super.backgroundColor = value;
-			this.native.backgroundColor = this.expressionValueToNative(value);
-		}
+	public override set backgroundColor(value: PropertyValueSpecification<ColorSpecification>) {
+		const expression = Expression.propertyValue(typeof value === 'string' ? new Color(value) : value);
+
+		super.backgroundColor = value;
+		this.native.backgroundColor = expression?.native;
 	}
 
-	public override get backgroundOpacity(): ExpressionOrValue<number> {
-		if (!super.backgroundOpacity && this.native.backgroundOpacity) {
-			super.backgroundOpacity = this.extractPropertyValue(this.native.backgroundOpacity);
+	public override get backgroundOpacity(): PropertyValueSpecification<number> {
+		if (super.backgroundOpacity === undefined) {
+			super.backgroundOpacity = (Expression.initWithNative(this.native.backgroundOpacity) as Expression).toJSON();
 		}
 		return super.backgroundOpacity;
 	}
 
-	public override set backgroundOpacity(value: ExpressionOrValue<number>) {
+	public override set backgroundOpacity(value: PropertyValueSpecification<number>) {
+		const expression = Expression.propertyValue(value);
+
 		super.backgroundOpacity = value;
-		this.native.backgroundOpacity = this.expressionValueToNative(value);
+		this.native.backgroundOpacity = expression?.native;
 	}
 
-	public override get backgroundPattern(): ExpressionOrValue<string> {
-		if (!super.backgroundPattern && this.native.backgroundPattern) {
-			super.backgroundPattern = this.extractPropertyValue(this.native.backgroundPattern);
+	public override get backgroundPattern(): DataDrivenPropertyValueSpecification<ResolvedImageSpecification> {
+		if (super.backgroundPattern === undefined) {
+			super.backgroundPattern = (Expression.initWithNative(this.native.backgroundPattern) as Expression).toJSON();
 		}
 		return super.backgroundPattern;
 	}
 
-	public override set backgroundPattern(value: ExpressionOrValue<string>) {
+	public override set backgroundPattern(value: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>) {
+		const expression = Expression.propertyValue(value);
+
 		super.backgroundPattern = value;
-		this.native.backgroundPattern = this.expressionValueToNative(value);
+		this.native.backgroundPattern = expression?.native;
 	}
 }

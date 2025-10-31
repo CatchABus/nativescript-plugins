@@ -1,8 +1,7 @@
-import { Color } from '@nativescript/core';
 import { BaseSource } from '../../sources/BaseSource';
 import { SymbolLayerCommon } from './common';
-import { ExpressionOrValue } from '../BaseLayer';
-import { Expression } from '../../expressions/Expression';
+import { Expression } from '../../Expression';
+import { Color } from '@nativescript/core';
 
 export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	constructor(id: string, source: BaseSource) {
@@ -13,109 +12,115 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 		return MLNSymbolStyleLayer.alloc().initWithIdentifierSource(id, source.native);
 	}
 
-	public override get iconAllowsOverlap(): ExpressionOrValue<boolean> {
+	public override get iconAllowsOverlap() {
 		if (super.iconAllowsOverlap === undefined) {
-			super.iconAllowsOverlap = this.extractPropertyValue(this.native.iconAllowsOverlap);
+			super.iconAllowsOverlap = (Expression.initWithNative(this.native.iconAllowsOverlap) as Expression).toJSON();
 		}
 		return super.iconAllowsOverlap;
 	}
 
-	public override set iconAllowsOverlap(value: ExpressionOrValue<boolean>) {
+	public override set iconAllowsOverlap(value) {
+		const expression = Expression.propertyValue(value);
+
 		super.iconAllowsOverlap = value;
-		this.native.iconAllowsOverlap = this.expressionValueToNative(value);
+		this.native.iconAllowsOverlap = expression?.native;
 	}
 
-	public override get iconScale(): ExpressionOrValue<number> {
+	public override get iconScale() {
 		if (super.iconScale === undefined) {
-			super.iconScale = this.extractPropertyValue(this.native.iconScale);
+			super.iconScale = (Expression.initWithNative(this.native.iconScale) as Expression).toJSON();
 		}
 		return super.iconScale;
 	}
 
-	public override set iconScale(value: ExpressionOrValue<number>) {
+	public override set iconScale(value) {
+		const expression = Expression.propertyValue(value);
+
 		super.iconScale = value;
-		this.native.iconScale = this.expressionValueToNative(value);
+		this.native.iconScale = expression?.native;
 	}
 
-	public override get iconImageName(): ExpressionOrValue<string> {
+	public override get iconImageName() {
 		if (super.iconImageName === undefined) {
-			super.iconImageName = this.extractPropertyValue(this.native.iconImageName);
+			super.iconImageName = (Expression.initWithNative(this.native.iconImageName) as Expression).toJSON();
 		}
 		return super.iconImageName;
 	}
 
-	public override set iconImageName(value: ExpressionOrValue<string>) {
+	public override set iconImageName(value) {
+		const expression = Expression.propertyValue(value);
+
 		super.iconImageName = value;
-		this.native.iconImageName = this.expressionValueToNative(value);
+		this.native.iconImageName = expression?.native;
 	}
 
-	public override get text(): ExpressionOrValue<string> {
+	public override get text() {
 		if (super.text === undefined) {
-			super.text = this.extractPropertyValue(this.native.text);
+			super.text = (Expression.initWithNative(this.native.text) as Expression).toJSON();
 		}
 		return super.text;
 	}
 
-	public override set text(value: ExpressionOrValue<string>) {
+	public override set text(value) {
+		const expression = Expression.propertyValue(value);
+
 		super.text = value;
-		this.native.text = this.expressionValueToNative(value);
+		this.native.text = expression?.native;
 	}
 
-	public override get textAllowsOverlap(): ExpressionOrValue<boolean> {
+	public override get textAllowsOverlap() {
 		if (super.textAllowsOverlap === undefined) {
-			super.textAllowsOverlap = this.extractPropertyValue(this.native.textAllowsOverlap);
+			super.textAllowsOverlap = (Expression.initWithNative(this.native.textAllowsOverlap) as Expression).toJSON();
 		}
 		return super.textAllowsOverlap;
 	}
 
-	public override set textAllowsOverlap(value: ExpressionOrValue<boolean>) {
+	public override set textAllowsOverlap(value) {
+		const expression = Expression.propertyValue(value);
+
 		super.textAllowsOverlap = value;
-		this.native.textAllowsOverlap = this.expressionValueToNative(value);
+		this.native.textAllowsOverlap = expression?.native;
 	}
 
-	public override get textSize(): ExpressionOrValue<number> {
+	public override get textSize() {
 		if (super.textSize === undefined) {
-			super.textSize = this.extractPropertyValue(this.native.textFontSize);
+			super.textSize = (Expression.initWithNative(this.native.textFontSize) as Expression).toJSON();
 		}
 		return super.textSize;
 	}
 
-	public override set textSize(value: ExpressionOrValue<number>) {
+	public override set textSize(value) {
+		const expression = Expression.propertyValue(value);
+
 		super.textSize = value;
-		this.native.textFontSize = this.expressionValueToNative(value);
+		this.native.textFontSize = expression?.native;
 	}
 
-	public override get textColor(): ExpressionOrValue<string | Color> {
+	public override get textColor() {
 		if (super.textColor === undefined) {
-			super.textColor = this.extractPropertyValue(this.native.textColor);
+			super.textColor = (Expression.initWithNative(this.native.textColor) as Expression).toJSON();
 		}
 		return super.textColor;
 	}
 
-	public override set textColor(value: ExpressionOrValue<string | Color>) {
-		if (typeof value === 'string') {
-			if (Color.isValid(value)) {
-				super.textColor = value;
-				this.native.textColor = this.expressionValueToNative(new Color(value));
-			} else {
-				super.textColor = '#000000';
-				this.native.textColor = this.expressionValueToNative(new Color(super.textColor));
-			}
-		} else {
-			super.textColor = value;
-			this.native.textColor = this.expressionValueToNative(value);
-		}
+	public override set textColor(value) {
+		const expression = Expression.propertyValue(typeof value === 'string' ? new Color(value) : value);
+
+		super.textColor = value;
+		this.native.textColor = expression?.native;
 	}
 
-	public override get textFontNames(): ExpressionOrValue<string[]> {
+	public override get textFontNames() {
 		if (super.textFontNames === undefined) {
-			super.textFontNames = this.extractPropertyValue(this.native.textFontNames);
+			super.textFontNames = (Expression.initWithNative(this.native.textFontNames) as Expression).toJSON();
 		}
 		return super.textFontNames;
 	}
 
-	public override set textFontNames(value: ExpressionOrValue<string[]>) {
+	public override set textFontNames(value) {
+		const expression = Expression.propertyValue(value);
+
 		super.textFontNames = value;
-		this.native.textFontNames = this.expressionValueToNative(value);
+		this.native.textFontNames = expression?.native;
 	}
 }

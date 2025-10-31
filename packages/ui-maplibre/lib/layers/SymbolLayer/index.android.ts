@@ -1,9 +1,5 @@
-import { Color } from '@nativescript/core';
 import { BaseSource } from '../../sources/BaseSource';
 import { SymbolLayerCommon } from './common';
-import { ExpressionOrValue } from '../BaseLayer';
-import { Expression } from '../../expressions/Expression';
-import { ExpressionValue } from '../../expressions';
 
 export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.layers.SymbolLayer> {
 	constructor(id: string, source: BaseSource) {
@@ -14,121 +10,99 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 		return new org.maplibre.android.style.layers.SymbolLayer(id, source.getId());
 	}
 
-	public override get iconAllowsOverlap(): ExpressionOrValue<boolean> {
+	public override get iconAllowsOverlap() {
 		if (super.iconAllowsOverlap === undefined) {
-			super.iconAllowsOverlap = this.extractPropertyValue(this.native.getIconAllowOverlap());
+			super.iconAllowsOverlap = this.native.getIconAllowOverlap().value.booleanValue();
 		}
 		return super.iconAllowsOverlap;
 	}
 
-	public override set iconAllowsOverlap(value: ExpressionOrValue<boolean>) {
+	public override set iconAllowsOverlap(value) {
 		super.iconAllowsOverlap = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.iconAllowOverlap(this.expressionValueToNative(value)));
 	}
 
-	public override get iconScale(): ExpressionOrValue<number> {
+	public override get iconScale() {
 		if (super.iconScale === undefined) {
-			super.iconScale = this.extractPropertyValue(this.native.getIconSize());
+			super.iconScale = this.native.getIconSize().value.floatValue();
 		}
 		return super.iconScale;
 	}
 
-	public override set iconScale(value: ExpressionOrValue<number>) {
+	public override set iconScale(value) {
 		super.iconScale = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.iconSize(this.expressionValueToNative(value)));
 	}
 
-	public override get iconImageName(): ExpressionOrValue<string> {
+	public override get iconImageName() {
 		if (super.iconImageName === undefined) {
-			super.iconImageName = this.extractPropertyValue(this.native.getIconImage());
+			super.iconImageName = this.native.getIconImage().value;
 		}
 		return super.iconImageName;
 	}
 
-	public override set iconImageName(value: ExpressionOrValue<string>) {
+	public override set iconImageName(value) {
 		super.iconImageName = value;
-
-		let nativeValue;
-
-		if (value instanceof ExpressionValue) {
-			nativeValue = org.maplibre.android.style.expressions.Expression.image(value.native);
-		} else {
-			nativeValue = this.expressionValueToNative(value);
-		}
-
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.iconImage(nativeValue));
 	}
 
-	public override get text(): ExpressionOrValue<string> {
+	public override get text() {
 		if (super.text === undefined) {
-			super.text = this.extractPropertyValue(this.native.getTextField());
+			super.text = this.native.getTextField().value.toString();
 		}
 		return super.text;
 	}
 
-	public override set text(value: ExpressionOrValue<string>) {
+	public override set text(value) {
 		super.text = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.textField(this.expressionValueToNative(value)));
 	}
 
-	public override get textAllowsOverlap(): ExpressionOrValue<boolean> {
+	public override get textAllowsOverlap() {
 		if (super.textAllowsOverlap === undefined) {
-			super.textAllowsOverlap = this.extractPropertyValue(this.native.getTextAllowOverlap());
+			super.textAllowsOverlap = this.native.getTextAllowOverlap().value.booleanValue();
 		}
 		return super.textAllowsOverlap;
 	}
 
-	public override set textAllowsOverlap(value: ExpressionOrValue<boolean>) {
+	public override set textAllowsOverlap(value) {
 		super.textAllowsOverlap = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.textAllowOverlap(this.expressionValueToNative(value)));
 	}
 
-	public override get textSize(): ExpressionOrValue<number> {
+	public override get textSize() {
 		if (super.textSize === undefined) {
-			super.textSize = this.extractPropertyValue(this.native.getTextSize());
+			super.textSize = this.native.getTextSize().value.floatValue();
 		}
 		return super.textSize;
 	}
 
-	public override set textSize(value: ExpressionOrValue<number>) {
+	public override set textSize(value) {
 		super.textSize = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.textSize(this.expressionValueToNative(value)));
 	}
 
-	public override get textColor(): ExpressionOrValue<string | Color> {
+	public override get textColor() {
 		if (super.textColor === undefined) {
-			super.textColor = this.extractPropertyValue(this.native.getTextColor());
+			super.textColor = this.native.getTextColor().value;
 		}
 		return super.textColor;
 	}
 
-	public override set textColor(value: ExpressionOrValue<string | Color>) {
+	public override set textColor(value) {
 		super.textColor = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.textColor(this.expressionValueToNative(value)));
 	}
 
-	public override get textFontNames(): ExpressionOrValue<string[]> {
+	public override get textFontNames() {
 		if (super.textFontNames === undefined) {
-			super.textFontNames = this.extractPropertyValue(this.native.getTextFont());
+			const nativeArray = this.native.getTextFont().value;
+			const length = nativeArray?.length ?? 0;
+			const result = new Array<string>(length);
+
+			for (let i = 0; i < length; i++) {
+				result[i] = nativeArray[i];
+			}
+
+			super.textFontNames = result;
 		}
 		return super.textFontNames;
 	}
 
-	public override set textFontNames(value: ExpressionOrValue<string[]>) {
-		let finalValue;
-
+	public override set textFontNames(value) {
 		super.textFontNames = value;
-
-		if (Array.isArray(value)) {
-			const length = value.length;
-			const nativeArray = Array.create(java.lang.String, length);
-			for (let i = 0; i < length; i++) {
-				nativeArray[i] = value[i];
-			}
-			finalValue = nativeArray;
-		} else {
-			finalValue = this.expressionValueToNative(value);
-		}
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.textFont(finalValue));
 	}
 }

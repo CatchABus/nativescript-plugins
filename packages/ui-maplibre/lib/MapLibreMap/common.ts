@@ -4,9 +4,9 @@ import { Style } from '../Style';
 import { Projection } from '../Projection';
 import { IPoint, LatLngBounds } from '../position';
 import { IRect } from '../position/IRect';
-import { Expression } from '../expressions';
 import { Feature } from '../geojson';
 import { MapLibreMap as IMapLibreMap } from '.';
+import { ExpressionFilterSpecification } from '../Expression';
 
 export abstract class MapLibreMapCommon<T> extends NativeObject<T> implements IMapLibreMap {
 	protected mStyle: Style;
@@ -44,7 +44,7 @@ export abstract class MapLibreMapCommon<T> extends NativeObject<T> implements IM
 	public abstract getMetersPerPixelAtLatitude(latitude: number): number;
 	public abstract getVisibleCoordinateBounds(): LatLngBounds;
 	public abstract setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean): void;
-	public abstract queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: Expression): Feature[];
+	public abstract queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: ExpressionFilterSpecification): Feature[];
 
 	public abstract get minZoom(): number;
 	public abstract set minZoom(value: number);

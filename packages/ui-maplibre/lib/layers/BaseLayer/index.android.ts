@@ -1,5 +1,4 @@
-import { Color } from '@nativescript/core';
-import { ExpressionValue } from '../../expressions/ExpressionValue';
+import { Expression } from '../../Expression';
 import { BaseLayerCommon } from './common';
 
 export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Layer> extends BaseLayerCommon<T> {
@@ -16,52 +15,32 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 		return this.native.getId();
 	}
 
-	public override expressionValueToNative(value): any {
-		let result;
+	public override setPropertyValueInternal(name: string, value: any): void {
+		const expression = Expression.propertyValue(value);
+		let nativeValue: org.maplibre.android.style.layers.PropertyValue<unknown>;
 
-		if (value instanceof ExpressionValue) {
-			result = value.native;
-		} else if (value instanceof Color) {
-			result = value.android;
-		} else if (typeof value === 'number') {
-			result = java.lang.Float.valueOf(value);
-		} else if (typeof value === 'boolean') {
-			result = java.lang.Boolean.valueOf(value);
+		super.setPropertyValueInternal(name, value);
+
+		if (BaseLayer.layoutPropertyMappings.has(name)) {
+			nativeValue = new org.maplibre.android.style.layers.LayoutPropertyValue(name, expression?.native);
+		} else if (BaseLayer.paintPropertyMappings.has(name)) {
+			nativeValue = new org.maplibre.android.style.layers.LayoutPropertyValue(name, expression?.native);
 		} else {
-			result = value;
+			nativeValue = null;
 		}
 
-		return result;
-	}
-
-	public override extractPropertyValue(value: org.maplibre.android.style.layers.PropertyValue<any>) {
-		let result;
-
-		if (value.isExpression()) {
-			result = ExpressionValue.initWithNative(value.getExpression());
-		} else if (value.isValue()) {
-			result = value.getValue();
-		} else {
-			result = null;
-		}
-
-		return result;
-	}
-
-	public override setWrappedPropertyValue(value: org.maplibre.android.style.layers.PropertyValue<any>): void {
-		this.nativePropsArray[0] = value;
+		this.nativePropsArray[0] = nativeValue;
 		this.native.setProperties(this.nativePropsArray);
 	}
 
-	public override get visible(): boolean {
-		if (!super.visible) {
-			super.visible = this.extractPropertyValue(this.native.getVisibility()) === 'visible';
+	public override get visible(): 'visible' | 'none' {
+		if (super.visible === undefined) {
+			super.visible = this.native.getVisibility().value === 'visible' ? 'visible' : 'none';
 		}
 		return super.visible;
 	}
 
-	public override set visible(value: boolean) {
+	public override set visible(value) {
 		super.visible = value;
-		this.setWrappedPropertyValue(org.maplibre.android.style.layers.PropertyFactory.visibility(value ? 'visible' : 'none'));
 	}
 }

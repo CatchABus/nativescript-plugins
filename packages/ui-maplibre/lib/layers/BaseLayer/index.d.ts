@@ -1,13 +1,13 @@
-import { ExpressionValue } from '../../expressions/ExpressionValue';
+import { PropertyValueSpecification } from '../../Expression';
 import { NativeObject } from '../../nativeWrappers/NativeObject';
 
-export type ExpressionOrValue<T> = ExpressionValue<T> | T;
-
 export declare abstract class BaseLayer<T = any> extends NativeObject<T> {
+	public static readonly layoutPropertyMappings: Map<string, string>;
+	public static readonly paintPropertyMappings: Map<string, string>;
+
 	public getId(): string;
-	public expressionValueToNative(value): any;
-	public extractPropertyValue<T>(value): ExpressionValue<T> | T;
-	public setWrappedPropertyValue(value: any): void;
-	public get visible(): boolean;
-	public set visible(value: boolean);
+	public getPropertyValueInternal(name: string): PropertyValueSpecification<any>;
+	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): void;
+	public get visible(): 'visible' | 'none';
+	public set visible(value: 'visible' | 'none');
 }

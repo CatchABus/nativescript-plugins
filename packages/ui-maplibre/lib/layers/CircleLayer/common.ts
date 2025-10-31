@@ -1,25 +1,24 @@
-import { Color } from '@nativescript/core';
-import { ExpressionOrValue } from '../BaseLayer';
 import { CircleLayer as ICircleLayer } from '.';
 import { AbstractVectorLayer } from '../AbstractVectorLayer';
+import { ColorSpecification, PropertyValueSpecification } from '../../Expression';
+import { PaintProperty } from '../../utils/decorators';
 
 export abstract class CircleLayerCommon<T> extends AbstractVectorLayer<T> implements ICircleLayer {
-	private mCircleColor: ExpressionOrValue<string | Color>;
-	private mCircleRadius: ExpressionOrValue<number>;
-
-	public get circleColor(): ExpressionOrValue<string | Color> {
-		return this.mCircleColor;
+	@PaintProperty('circle-color')
+	public get circleColor(): PropertyValueSpecification<ColorSpecification> {
+		return this.getPropertyValueInternal('circle-color');
 	}
 
-	public set circleColor(value: ExpressionOrValue<string | Color>) {
-		this.mCircleColor = value;
+	public set circleColor(value: PropertyValueSpecification<ColorSpecification>) {
+		this.setPropertyValueInternal('circle-color', value);
 	}
 
-	public get circleRadius(): ExpressionOrValue<number> {
-		return this.mCircleRadius;
+	@PaintProperty('circle-radius')
+	public get circleRadius(): PropertyValueSpecification<number> {
+		return this.getPropertyValueInternal('circle-radius');
 	}
 
-	public set circleRadius(value: ExpressionOrValue<number>) {
-		this.mCircleRadius = value;
+	public set circleRadius(value: PropertyValueSpecification<number>) {
+		this.setPropertyValueInternal('circle-radius', value);
 	}
 }

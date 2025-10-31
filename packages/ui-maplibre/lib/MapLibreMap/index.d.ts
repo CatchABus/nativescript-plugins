@@ -1,4 +1,4 @@
-import { Expression } from '../expressions';
+import { ExpressionFilterSpecification } from '../Expression';
 import { Feature } from '../geojson';
 import { NativeObject } from '../nativeWrappers/NativeObject';
 import { IPoint, LatLngBounds } from '../position';
@@ -22,7 +22,7 @@ export declare class MapLibreMap extends NativeObject<any> {
 	public getMetersPerPixelAtLatitude(latitude: number): number;
 	public getVisibleCoordinateBounds(): LatLngBounds;
 	public setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean): void;
-	public queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: Expression): Feature[];
+	public queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: ExpressionFilterSpecification): Feature[];
 	public get minZoom(): number;
 	public set minZoom(value: number);
 	public get maxZoom(): number;

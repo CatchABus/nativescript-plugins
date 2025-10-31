@@ -1,33 +1,33 @@
-import { Color } from '@nativescript/core';
-import { BaseLayer, ExpressionOrValue } from '../BaseLayer';
+import { BaseLayer } from '../BaseLayer';
 import { BackgroundLayer as IBackgroundLayer } from '.';
+import { ColorSpecification, DataDrivenPropertyValueSpecification, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
+import { PaintProperty } from '../../utils/decorators';
 
 export abstract class BackgroundLayerCommon<T> extends BaseLayer<T> implements IBackgroundLayer {
-	private mBackgroundColor: ExpressionOrValue<string | Color>;
-	private mBackgroundOpacity: ExpressionOrValue<number>;
-	private mBackgroundPattern: ExpressionOrValue<string>;
-
-	public get backgroundColor(): ExpressionOrValue<string | Color> {
-		return this.mBackgroundColor;
+	@PaintProperty('background-color')
+	public get backgroundColor(): PropertyValueSpecification<ColorSpecification> {
+		return this.getPropertyValueInternal('background-color');
 	}
 
-	public set backgroundColor(value: ExpressionOrValue<string | Color>) {
-		this.mBackgroundColor = value;
+	public set backgroundColor(value: PropertyValueSpecification<ColorSpecification>) {
+		this.setPropertyValueInternal('background-color', value);
 	}
 
-	public get backgroundOpacity(): ExpressionOrValue<number> {
-		return this.mBackgroundOpacity;
+	@PaintProperty('background-opacity')
+	public get backgroundOpacity(): PropertyValueSpecification<number> {
+		return this.getPropertyValueInternal('background-opacity');
 	}
 
-	public set backgroundOpacity(value: ExpressionOrValue<number>) {
-		this.mBackgroundOpacity = value;
+	public set backgroundOpacity(value: PropertyValueSpecification<number>) {
+		this.setPropertyValueInternal('background-opacity', value);
 	}
 
-	public get backgroundPattern(): ExpressionOrValue<string> {
-		return this.mBackgroundPattern;
+	@PaintProperty('background-pattern')
+	public get backgroundPattern(): DataDrivenPropertyValueSpecification<ResolvedImageSpecification> {
+		return this.getPropertyValueInternal('background-pattern');
 	}
 
-	public set backgroundPattern(value: ExpressionOrValue<string>) {
-		this.mBackgroundPattern = value;
+	public set backgroundPattern(value: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>) {
+		this.setPropertyValueInternal('background-pattern', value);
 	}
 }

@@ -1,5 +1,5 @@
 import { GeoJsonOptions } from '.';
-import { Expression } from '../../expressions';
+import { Expression, ExpressionFilterSpecification } from '../../Expression';
 import { BaseGeoJson, Feature, FeatureCollection, Geometry } from '../../geojson';
 import { GeoJsonSourceCommon } from './common';
 
@@ -61,8 +61,13 @@ export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 			const entries = Object.entries(options.clusterProperties);
 			const dict = NSMutableDictionary.alloc().initWithCapacity(entries.length);
 
-			for (const [key, value] of entries) {
-				dict.setValueForKey([value.operatorExpression, value.mapExpression], key);
+			for (const [key, data] of entries) {
+				if (Array.isArray(data)) {
+					const operatorExpression = Expression.propertyValue(data[0]);
+					const mapExpression = Expression.propertyValue(data[1]);
+
+					dict.setValueForKey([operatorExpression?.native, mapExpression?.native], key);
+				}
 			}
 
 			native.setValueForKey(dict, MLNShapeSourceOptionClusterProperties);
@@ -123,9 +128,10 @@ export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 		return Object.freeze(result);
 	}
 
-	public override querySourceFeatures(filter?: Expression): Feature[] {
+	public override querySourceFeatures(filter?: ExpressionFilterSpecification): Feature[] {
 		const result: Feature[] = [];
-		const nFeatures = this.native.featuresMatchingPredicate(filter?.native);
+		const expression = Expression.filter(filter);
+		const nFeatures = this.native.featuresMatchingPredicate(expression?.native);
 
 		for (let i = 0, length = nFeatures.count; i < length; i++) {
 			const nFeature: org.maplibre.geojson.Feature = nFeatures.objectAtIndex(i);
