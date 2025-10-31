@@ -16,20 +16,21 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 	}
 
 	public override setPropertyValueInternal(name: string, value: any): void {
-		const expression = Expression.propertyValue(value);
-		let nativeValue: org.maplibre.android.style.layers.PropertyValue<unknown>;
+		// Use literal value when possible otherwise expression will have no effect for special cases like images, patterns, etc
+		const nativeValue = Array.isArray(value) ? Expression.propertyValue(value)?.native : value;
+		let nativePair: org.maplibre.android.style.layers.PropertyValue<unknown>;
 
 		super.setPropertyValueInternal(name, value);
 
 		if (BaseLayer.layoutPropertyMappings.has(name)) {
-			nativeValue = new org.maplibre.android.style.layers.LayoutPropertyValue(name, expression?.native);
+			nativePair = new org.maplibre.android.style.layers.LayoutPropertyValue(name, nativeValue);
 		} else if (BaseLayer.paintPropertyMappings.has(name)) {
-			nativeValue = new org.maplibre.android.style.layers.LayoutPropertyValue(name, expression?.native);
+			nativePair = new org.maplibre.android.style.layers.PaintPropertyValue(name, nativeValue);
 		} else {
-			nativeValue = null;
+			nativePair = null;
 		}
 
-		this.nativePropsArray[0] = nativeValue;
+		this.nativePropsArray[0] = nativePair;
 		this.native.setProperties(this.nativePropsArray);
 	}
 
