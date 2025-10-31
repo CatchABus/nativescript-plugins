@@ -1,6 +1,6 @@
 import { BaseLayer } from '../BaseLayer';
 import { BackgroundLayer as IBackgroundLayer } from '.';
-import { ColorSpecification, DataDrivenPropertyValueSpecification, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
+import type { ColorSpecification, DataDrivenPropertyValueSpecification, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
 import { PaintProperty } from '../../utils/decorators';
 
 export abstract class BackgroundLayerCommon<T> extends BaseLayer<T> implements IBackgroundLayer {

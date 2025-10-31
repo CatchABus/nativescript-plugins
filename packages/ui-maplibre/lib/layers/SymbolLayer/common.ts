@@ -1,6 +1,6 @@
 import { SymbolLayer as ISymbolLayer } from '.';
 import { AbstractVectorLayer } from '../AbstractVectorLayer';
-import { ColorSpecification, DataDrivenPropertyValueSpecification, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
+import type { ColorSpecification, DataDrivenPropertyValueSpecification, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
 import { LayoutProperty, PaintProperty } from '../../utils/decorators';
 
 export abstract class SymbolLayerCommon<T> extends AbstractVectorLayer<T> implements ISymbolLayer {

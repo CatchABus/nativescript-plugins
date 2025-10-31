@@ -1,5 +1,4 @@
 import { BackgroundLayerCommon } from './common';
-import { ColorSpecification, DataDrivenPropertyValueSpecification, Expression, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
 
 export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.style.layers.BackgroundLayer> {
 	constructor(id: string) {
@@ -10,7 +9,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 		return new org.maplibre.android.style.layers.BackgroundLayer(id);
 	}
 
-	public override get backgroundColor(): PropertyValueSpecification<ColorSpecification> {
+	public override get backgroundColor() {
 		if (super.backgroundColor === undefined) {
 			super.backgroundColor = this.native.getBackgroundColor().value;
 		}
@@ -21,7 +20,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 		super.backgroundColor = value;
 	}
 
-	public override get backgroundOpacity(): PropertyValueSpecification<number> {
+	public override get backgroundOpacity() {
 		if (super.backgroundOpacity === undefined) {
 			super.backgroundOpacity = this.native.getBackgroundOpacity().value.floatValue();
 		}
@@ -32,7 +31,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 		super.backgroundOpacity = value;
 	}
 
-	public override get backgroundPattern(): DataDrivenPropertyValueSpecification<ResolvedImageSpecification> {
+	public override get backgroundPattern() {
 		if (super.backgroundPattern === undefined) {
 			super.backgroundPattern = this.native.getBackgroundPattern().value;
 		}

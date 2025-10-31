@@ -1,5 +1,5 @@
 import { BaseLayer as IBaseLayer } from '.';
-import { PropertyValueSpecification } from '../../Expression';
+import type { PropertyValueSpecification } from '../../Expression';
 import { NativeObject } from '../../nativeWrappers/NativeObject';
 import { LayoutProperty } from '../../utils/decorators';
 

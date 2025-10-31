@@ -1,6 +1,6 @@
 import { CircleLayer as ICircleLayer } from '.';
 import { AbstractVectorLayer } from '../AbstractVectorLayer';
-import { ColorSpecification, PropertyValueSpecification } from '../../Expression';
+import type { ColorSpecification, PropertyValueSpecification } from '../../Expression';
 import { PaintProperty } from '../../utils/decorators';
 
 export abstract class CircleLayerCommon<T> extends AbstractVectorLayer<T> implements ICircleLayer {
