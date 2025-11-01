@@ -82,7 +82,7 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 		return this.mVisibleBounds;
 	}
 
-	public override setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean): void {
+	public override setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean, completion?: () => void): void {
 		let insets: UIEdgeInsets;
 
 		if (padding) {
@@ -101,7 +101,11 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 		}
 
 		this._runWithNativeView((nativeView) => {
-			nativeView.setVisibleCoordinateBoundsEdgePaddingAnimated(bounds.native, insets, !!animated);
+			if (typeof completion === 'function') {
+				nativeView.setVisibleCoordinateBoundsEdgePaddingAnimatedCompletionHandler(bounds.native, insets, !!animated, completion);
+			} else {
+				nativeView.setVisibleCoordinateBoundsEdgePaddingAnimated(bounds.native, insets, !!animated);
+			}
 		});
 	}
 

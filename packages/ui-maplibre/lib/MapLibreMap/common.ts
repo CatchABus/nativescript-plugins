@@ -43,7 +43,7 @@ export abstract class MapLibreMapCommon<T> extends NativeObject<T> implements IM
 	public abstract setCamera(camera: CameraPosition, animated?: boolean): void;
 	public abstract getMetersPerPixelAtLatitude(latitude: number): number;
 	public abstract getVisibleCoordinateBounds(): LatLngBounds;
-	public abstract setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean): void;
+	public abstract setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean, completion?: () => void): void;
 	public abstract queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: ExpressionFilterSpecification): Feature[];
 
 	public abstract get minZoom(): number;

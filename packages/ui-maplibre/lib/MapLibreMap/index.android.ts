@@ -61,8 +61,9 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 		return this.mVisibleBounds;
 	}
 
-	public override setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean): void {
+	public override setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean, completion?: () => void): void {
 		let cameraBounds: org.maplibre.android.camera.CameraUpdate;
+		let completionCallback: org.maplibre.android.maps.MapLibreMap.CancelableCallback;
 
 		if (padding) {
 			if (typeof padding === 'number') {
@@ -74,12 +75,25 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 			cameraBounds = org.maplibre.android.camera.CameraUpdateFactory.newLatLngBounds(bounds.native, 0);
 		}
 
-		if (animated) {
-			setTimeout(() => {
-				this.native.animateCamera(cameraBounds);
+		if (typeof completion === 'function') {
+			completionCallback = new org.maplibre.android.maps.MapLibreMap.CancelableCallback({
+				onCancel() {
+					completion();
+				},
+				onFinish() {
+					completion();
+				},
 			});
 		} else {
-			this.native.moveCamera(cameraBounds);
+			completionCallback = null;
+		}
+
+		if (animated) {
+			setTimeout(() => {
+				this.native.animateCamera(cameraBounds, completionCallback);
+			});
+		} else {
+			this.native.moveCamera(cameraBounds, completionCallback);
 		}
 	}
 

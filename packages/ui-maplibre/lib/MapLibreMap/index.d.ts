@@ -21,7 +21,7 @@ export declare class MapLibreMap extends NativeObject<any> {
 	public setCamera(camera: CameraPosition, animated?: boolean): void;
 	public getMetersPerPixelAtLatitude(latitude: number): number;
 	public getVisibleCoordinateBounds(): LatLngBounds;
-	public setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean): void;
+	public setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean, completion?: () => void): void;
 	public queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: ExpressionFilterSpecification): Feature[];
 	public get minZoom(): number;
 	public set minZoom(value: number);
