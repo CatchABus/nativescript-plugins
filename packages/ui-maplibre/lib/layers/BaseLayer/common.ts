@@ -8,9 +8,16 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	public static readonly layoutPropertyMappings = new Map<string, string>();
 	public static readonly paintPropertyMappings = new Map<string, string>();
 
-	private readonly mCachedPropertyValues = new Map<string, PropertyValueSpecification<any>>();
+	private mCachedPropertyValues: Map<string, PropertyValueSpecification<any>>;
 
 	public abstract getId(): string;
+
+	private get cachedPropertyValues() {
+		if (!this.mCachedPropertyValues) {
+			this.mCachedPropertyValues = new Map();
+		}
+		return this.mCachedPropertyValues;
+	}
 
 	@LayoutProperty('visibility')
 	public get visible(): boolean {
@@ -22,7 +29,7 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	}
 
 	public getPropertyValueInternal(name: string): PropertyValueSpecification<any> {
-		return this.mCachedPropertyValues.get(name);
+		return this.cachedPropertyValues.get(name);
 	}
 
 	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean {
@@ -31,7 +38,7 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 			return false;
 		}
 
-		this.mCachedPropertyValues.set(name, value);
+		this.cachedPropertyValues.set(name, value);
 		return true;
 	}
 
