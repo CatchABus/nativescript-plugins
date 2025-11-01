@@ -1,3 +1,4 @@
+import { Trace } from '@nativescript/core';
 import { BaseLayer as IBaseLayer } from '.';
 import type { PropertyValueSpecification } from '../../Expression';
 import { NativeObject } from '../../nativeWrappers/NativeObject';
@@ -24,8 +25,14 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 		return this.mCachedPropertyValues.get(name);
 	}
 
-	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): void {
+	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean {
+		if (!BaseLayerCommon.layoutPropertyMappings.has(name) && !BaseLayerCommon.paintPropertyMappings.has(name)) {
+			Trace.write(`Invalid layer property '${name}' with value '${value}'`, Trace.categories.All, Trace.messageType.warn);
+			return false;
+		}
+
 		this.mCachedPropertyValues.set(name, value);
+		return true;
 	}
 
 	public toJSON() {
