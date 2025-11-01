@@ -63,7 +63,8 @@ export class GeoJsonSource extends GeoJsonSourceCommon<MLNShapeSource> {
 
 			for (const [key, data] of entries) {
 				if (Array.isArray(data)) {
-					const operatorExpression = Expression.propertyValue(data[0]);
+					const operatorExpSpec = Array.isArray(data[0]) ? data[0] : [data[0], ['accumulated'], ['get', key]];
+					const operatorExpression = Expression.propertyValue(operatorExpSpec as any);
 					const mapExpression = Expression.propertyValue(data[1]);
 
 					dict.setValueForKey([operatorExpression?.native, mapExpression?.native], key);

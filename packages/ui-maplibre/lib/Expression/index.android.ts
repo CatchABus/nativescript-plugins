@@ -17,6 +17,8 @@ export class Expression extends ExpressionCommon<org.maplibre.android.style.expr
 
 			if (typeof value === 'number') {
 				nativeValue = java.lang.Float.valueOf(value);
+			} else if (typeof value === 'boolean') {
+				nativeValue = new java.lang.Boolean(value);
 			} else {
 				nativeValue = value;
 			}

@@ -66,7 +66,8 @@ export class GeoJsonSource extends GeoJsonSourceCommon<org.maplibre.android.styl
 				const data = options.clusterProperties[key];
 
 				if (Array.isArray(data)) {
-					const operatorExpression = Expression.propertyValue(data[0]);
+					const operatorExpSpec = Array.isArray(data[0]) ? data[0] : [data[0], ['accumulated'], ['get', key]];
+					const operatorExpression = Expression.propertyValue(operatorExpSpec as any);
 					const mapExpression = Expression.propertyValue(data[1]);
 
 					native.withClusterProperty(key, operatorExpression?.native, mapExpression?.native);
