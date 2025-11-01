@@ -45,6 +45,8 @@ export abstract class MapLibreMapCommon<T> extends NativeObject<T> implements IM
 	public abstract getVisibleCoordinateBounds(): LatLngBounds;
 	public abstract setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean, completion?: () => void): void;
 	public abstract queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: ExpressionFilterSpecification): Feature[];
+	public abstract getZoom(): number;
+	public abstract setZoom(value: number, animated?: boolean): void;
 
 	public abstract get minZoom(): number;
 	public abstract set minZoom(value: number);

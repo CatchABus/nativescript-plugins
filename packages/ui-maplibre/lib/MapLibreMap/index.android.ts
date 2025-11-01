@@ -7,6 +7,8 @@ import { Projection } from '../Projection';
 import { MapLibreMapCommon } from './common';
 import { Expression, ExpressionFilterSpecification } from '../Expression';
 
+const ANIMATION_DURATION = org.maplibre.android.constants.MapLibreConstants.ANIMATION_DURATION;
+
 export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.MapLibreMap> {
 	private mNativeVisibleBounds: androidNative.Array<number>;
 
@@ -138,6 +140,16 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 		return result;
 	}
 
+	public override getZoom(): number {
+		return this.native.getZoom();
+	}
+
+	public override setZoom(value: number, animated?: boolean): void {
+		const width = this.native.getWidth();
+		const height = this.native.getHeight();
+		this.native.setZoom(value, new android.graphics.PointF(width / 2, height / 2), !!animated ? ANIMATION_DURATION : 0);
+	}
+
 	public override get minZoom(): number {
 		return this.native.getMinZoomLevel();
 	}
@@ -196,10 +208,18 @@ export class MapLibreMap extends MapLibreMapCommon<org.maplibre.android.maps.Map
 
 	public override get anchorRotateOrZoomGesturesToCenterCoordinate(): boolean {
 		const focalPoint = this.native.getUiSettings().getFocalPoint();
-		const width = this.native.getUiSettings().getWidth();
-		const height = this.native.getUiSettings().getHeight();
+		let result: boolean;
 
-		return focalPoint.x === width / 2 && focalPoint.y === height / 2;
+		if (focalPoint) {
+			const width = this.native.getUiSettings().getWidth();
+			const height = this.native.getUiSettings().getHeight();
+
+			result = focalPoint.x === width / 2 && focalPoint.y === height / 2;
+		} else {
+			result = false;
+		}
+
+		return result;
 	}
 
 	public override set anchorRotateOrZoomGesturesToCenterCoordinate(value: boolean) {

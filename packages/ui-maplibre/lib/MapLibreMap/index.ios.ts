@@ -147,6 +147,21 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 		return result;
 	}
 
+	public override getZoom(): number {
+		let value: number;
+
+		this._runWithNativeView((nativeView) => {
+			value = nativeView.zoomLevel;
+		});
+		return value;
+	}
+
+	public override setZoom(value: number, animated?: boolean): void {
+		this._runWithNativeView((nativeView) => {
+			nativeView.setZoomLevelAnimated(value, !!animated);
+		});
+	}
+
 	public override get minZoom(): number {
 		let value: number;
 

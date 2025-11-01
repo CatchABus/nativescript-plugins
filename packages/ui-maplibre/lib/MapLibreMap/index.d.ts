@@ -23,6 +23,8 @@ export declare class MapLibreMap extends NativeObject<any> {
 	public getVisibleCoordinateBounds(): LatLngBounds;
 	public setVisibleCoordinateBounds(bounds: LatLngBounds, padding?: IRect | number, animated?: boolean, completion?: () => void): void;
 	public queryRenderedFeatures(pointOrRect: IPoint | IRect, layerIds?: string[], filter?: ExpressionFilterSpecification): Feature[];
+	public abstract getZoom(): number;
+	public abstract setZoom(value: number, animated?: boolean): void;
 	public get minZoom(): number;
 	public set minZoom(value: number);
 	public get maxZoom(): number;
