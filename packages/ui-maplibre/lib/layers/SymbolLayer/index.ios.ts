@@ -2,6 +2,7 @@ import { BaseSource } from '../../sources/BaseSource';
 import { SymbolLayerCommon } from './common';
 import { Expression } from '../../Expression';
 import { Color } from '@nativescript/core';
+import { NativeExpressionValue } from '../../nativeWrappers/NativeExpressionValue';
 
 export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	constructor(id: string, source: BaseSource) {
@@ -54,6 +55,34 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 		this.native.iconImageName = expression?.native;
 	}
 
+	public override get iconOffset() {
+		if (super.iconOffset === undefined) {
+			super.iconOffset = (Expression.initWithNative(this.native.iconOffset) as Expression).toJSON();
+		}
+		return super.iconOffset;
+	}
+
+	public override set iconOffset(value) {
+		let finalValue;
+
+		if (Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number') {
+			finalValue = new NativeExpressionValue(
+				NSValue.valueWithCGVector(
+					new CGVector({
+						dx: value[0],
+						dy: value[1],
+					})
+				)
+			);
+		} else {
+			finalValue = value;
+		}
+		const expression = Expression.propertyValue(finalValue);
+
+		super.iconOffset = value;
+		this.native.iconOffset = expression?.native;
+	}
+
 	public override get text() {
 		if (super.text === undefined) {
 			super.text = (Expression.initWithNative(this.native.text) as Expression).toJSON();
@@ -104,7 +133,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override set textColor(value) {
-		const expression = Expression.propertyValue(typeof value === 'string' ? new Color(value) : value);
+		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeExpressionValue(new Color(value).ios) : value);
 
 		super.textColor = value;
 		this.native.textColor = expression?.native;

@@ -31,6 +31,15 @@ export abstract class SymbolLayerCommon<T> extends AbstractVectorLayer<T> implem
 		this.setPropertyValueInternal('icon-image', value);
 	}
 
+	@LayoutProperty('icon-offset')
+	public get iconOffset(): DataDrivenPropertyValueSpecification<[number, number]> {
+		return this.getPropertyValueInternal('icon-offset');
+	}
+
+	public set iconOffset(value: DataDrivenPropertyValueSpecification<[number, number]>) {
+		this.setPropertyValueInternal('icon-offset', value);
+	}
+
 	@LayoutProperty('text-field')
 	public get text(): PropertyValueSpecification<string> {
 		return this.getPropertyValueInternal('text-field');

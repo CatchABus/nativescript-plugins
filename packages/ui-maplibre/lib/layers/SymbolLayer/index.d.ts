@@ -10,6 +10,8 @@ export declare class SymbolLayer extends AbstractVectorLayer<any> {
 	public set iconScale(value: PropertyValueSpecification<number>);
 	public get iconImageName(): DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
 	public set iconImageName(value: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>);
+	public get iconOffset(): DataDrivenPropertyValueSpecification<[number, number]>;
+	public set iconOffset(value: DataDrivenPropertyValueSpecification<[number, number]>);
 	public get text(): PropertyValueSpecification<string>;
 	public set text(value: PropertyValueSpecification<string>);
 	public get textAllowsOverlap(): PropertyValueSpecification<boolean>;

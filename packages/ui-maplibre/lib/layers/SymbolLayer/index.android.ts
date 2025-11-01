@@ -43,6 +43,25 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 		super.iconImageName = value;
 	}
 
+	public override get iconOffset() {
+		if (super.iconOffset === undefined) {
+			const nativeArray = this.native.getIconOffset().value;
+			const length = nativeArray?.length ?? 0;
+			const result = new Array<number>(length);
+
+			for (let i = 0; i < length; i++) {
+				result[i] = nativeArray[i].floatValue();
+			}
+
+			super.iconOffset = result as [number, number];
+		}
+		return super.iconOffset;
+	}
+
+	public override set iconOffset(value) {
+		super.iconOffset = value;
+	}
+
 	public override get text() {
 		if (super.text === undefined) {
 			super.text = this.native.getTextField().value.toString();

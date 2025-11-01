@@ -1,9 +1,10 @@
 import { ExpressionCommon } from './common';
 import { DataDrivenPropertyValueSpecification, ExpressionFilterSpecification, ExpressionSpecification, PropertyValuePrimitive, PropertyValueSpecification } from '.';
-import { Color } from '@nativescript/core';
+import { NativeExpressionValue } from '../nativeWrappers/NativeExpressionValue';
+import { Utils } from '@nativescript/core';
 
 export class Expression extends ExpressionCommon<org.maplibre.android.style.expressions.Expression> {
-	public static propertyValue<T extends PropertyValuePrimitive>(value: PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T> | Color): Expression {
+	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeExpressionValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression {
 		if (value == null) {
 			return null;
 		}
@@ -11,14 +12,26 @@ export class Expression extends ExpressionCommon<org.maplibre.android.style.expr
 		let native: org.maplibre.android.style.expressions.Expression;
 
 		if (Array.isArray(value)) {
-			native = org.maplibre.android.style.expressions.Expression.raw(JSON.stringify(value));
+			// When it comes to expressions, the first array value is always a string
+			if (typeof value[0] === 'string') {
+				native = org.maplibre.android.style.expressions.Expression.raw(JSON.stringify(value));
+			} else {
+				const length = value.length;
+				const nativeArray = Array.create(java.lang.Object, length);
+
+				for (let i = 0; i < length; i++) {
+					nativeArray[i] = Utils.dataSerialize(value[i]);
+				}
+
+				native = org.maplibre.android.style.expressions.Expression.literal(nativeArray);
+			}
 		} else {
 			let nativeValue;
 
-			if (typeof value === 'number') {
+			if (value instanceof NativeExpressionValue) {
+				nativeValue = value.native;
+			} else if (typeof value === 'number') {
 				nativeValue = java.lang.Float.valueOf(value);
-			} else if (typeof value === 'boolean') {
-				nativeValue = new java.lang.Boolean(value);
 			} else {
 				nativeValue = value;
 			}
