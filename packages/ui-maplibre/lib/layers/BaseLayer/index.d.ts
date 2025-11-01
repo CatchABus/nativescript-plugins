@@ -8,6 +8,6 @@ export declare abstract class BaseLayer<T = any> extends NativeObject<T> {
 	public getId(): string;
 	public getPropertyValueInternal(name: string): PropertyValueSpecification<any>;
 	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): void;
-	public get visible(): 'visible' | 'none';
-	public set visible(value: 'visible' | 'none');
+	public get visible(): boolean;
+	public set visible(value: boolean);
 }

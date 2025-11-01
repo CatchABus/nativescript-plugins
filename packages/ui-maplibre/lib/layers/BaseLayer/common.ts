@@ -12,12 +12,12 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	public abstract getId(): string;
 
 	@LayoutProperty('visibility')
-	public get visible(): 'visible' | 'none' {
-		return this.getPropertyValueInternal('visible');
+	public get visible(): boolean {
+		return this.getPropertyValueInternal('visibility');
 	}
 
-	public set visible(value: 'visible' | 'none') {
-		this.setPropertyValueInternal('visible', value);
+	public set visible(value: boolean) {
+		this.setPropertyValueInternal('visibility', value);
 	}
 
 	public getPropertyValueInternal(name: string): PropertyValueSpecification<any> {
