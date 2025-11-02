@@ -2,7 +2,7 @@ import { BaseSource } from '../../sources/BaseSource';
 import { SymbolLayerCommon } from './common';
 import { Expression } from '../../Expression';
 import { Color } from '@nativescript/core';
-import { NativeExpressionValue } from '../../nativeWrappers/NativeExpressionValue';
+import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
 
 export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	constructor(id: string, source: BaseSource) {
@@ -66,7 +66,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 		let finalValue;
 
 		if (Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number') {
-			finalValue = new NativeExpressionValue(
+			finalValue = new NativeBoxedValue(
 				NSValue.valueWithCGVector(
 					new CGVector({
 						dx: value[0],
@@ -133,7 +133,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override set textColor(value) {
-		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeExpressionValue(new Color(value).ios) : value);
+		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeBoxedValue(new Color(value).ios) : value);
 
 		super.textColor = value;
 		this.native.textColor = expression?.native;

@@ -1,10 +1,10 @@
 import { ExpressionCommon } from './common';
 import { DataDrivenPropertyValueSpecification, ExpressionFilterSpecification, ExpressionSpecification, PropertyValuePrimitive, PropertyValueSpecification } from '.';
-import { NativeExpressionValue } from '../nativeWrappers/NativeExpressionValue';
+import { NativeBoxedValue } from '../nativeWrappers/NativeBoxedValue';
 import { Utils } from '@nativescript/core';
 
 export class Expression extends ExpressionCommon<org.maplibre.android.style.expressions.Expression> {
-	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeExpressionValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression {
+	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeBoxedValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression {
 		if (value == null) {
 			return null;
 		}
@@ -28,7 +28,7 @@ export class Expression extends ExpressionCommon<org.maplibre.android.style.expr
 		} else {
 			let nativeValue;
 
-			if (value instanceof NativeExpressionValue) {
+			if (value instanceof NativeBoxedValue) {
 				nativeValue = value.native;
 			} else if (typeof value === 'number') {
 				nativeValue = java.lang.Float.valueOf(value);

@@ -1,9 +1,9 @@
 import { ExpressionCommon } from './common';
 import { DataDrivenPropertyValueSpecification, ExpressionFilterSpecification, ExpressionSpecification, PropertyValuePrimitive, PropertyValueSpecification } from '.';
-import { NativeExpressionValue } from '../nativeWrappers/NativeExpressionValue';
+import { NativeBoxedValue } from '../nativeWrappers/NativeBoxedValue';
 
 export class Expression extends ExpressionCommon<NSExpression | NSPredicate> {
-	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeExpressionValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression {
+	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeBoxedValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression {
 		if (value == null) {
 			return null;
 		}
@@ -13,7 +13,7 @@ export class Expression extends ExpressionCommon<NSExpression | NSPredicate> {
 		if (Array.isArray(value)) {
 			native = NSExpression.expressionWithMLNJSONObject(value);
 		} else {
-			native = NSExpression.expressionForConstantValue(value instanceof NativeExpressionValue ? value.native : value);
+			native = NSExpression.expressionForConstantValue(value instanceof NativeBoxedValue ? value.native : value);
 		}
 		return Expression.initWithNative(native) as Expression;
 	}

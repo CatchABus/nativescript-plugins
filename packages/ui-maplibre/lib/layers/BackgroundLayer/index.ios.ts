@@ -1,7 +1,7 @@
 import { BackgroundLayerCommon } from './common';
 import { Expression } from '../../Expression';
 import { Color } from '@nativescript/core';
-import { NativeExpressionValue } from '../../nativeWrappers/NativeExpressionValue';
+import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
 
 export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLayer> {
 	constructor(id: string) {
@@ -20,7 +20,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLay
 	}
 
 	public override set backgroundColor(value) {
-		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeExpressionValue(new Color(value).ios) : value);
+		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeBoxedValue(new Color(value).ios) : value);
 
 		super.backgroundColor = value;
 		this.native.backgroundColor = expression?.native;

@@ -1,8 +1,8 @@
-import { NativeExpressionValue } from '../nativeWrappers/NativeExpressionValue';
+import { NativeBoxedValue } from '../nativeWrappers/NativeBoxedValue';
 import { NativeObject } from '../nativeWrappers/NativeObject';
 
 export declare class Expression extends NativeObject<any> {
-	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeExpressionValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression;
+	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeBoxedValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression;
 	public static filter(filter: ExpressionFilterSpecification): Expression;
 	public toJSON(): ExpressionSpecification;
 }
