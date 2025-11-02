@@ -47,10 +47,7 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 	}
 
 	public override get visibility() {
-		if (super.visibility === undefined) {
-			super.visibility = this.native.getVisibility().value === 'visible' ? 'visible' : 'none';
-		}
-		return super.visibility;
+		return this.getOrSetPropertyValueInternal('visibility', () => (this.native.getVisibility().value?.toString?.() === 'visible' ? 'visible' : 'none'));
 	}
 
 	public override set visibility(value) {

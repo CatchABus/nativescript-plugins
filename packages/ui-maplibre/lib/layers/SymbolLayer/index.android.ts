@@ -11,10 +11,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get iconAllowsOverlap() {
-		if (super.iconAllowsOverlap === undefined) {
-			super.iconAllowsOverlap = this.native.getIconAllowOverlap().value.booleanValue();
-		}
-		return super.iconAllowsOverlap;
+		return this.getOrSetPropertyValueInternal('icon-allow-overlap', () => this.native.getIconAllowOverlap().value?.booleanValue?.());
 	}
 
 	public override set iconAllowsOverlap(value) {
@@ -22,10 +19,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get iconScale() {
-		if (super.iconScale === undefined) {
-			super.iconScale = this.native.getIconSize().value.floatValue();
-		}
-		return super.iconScale;
+		return this.getOrSetPropertyValueInternal('icon-size', () => this.native.getIconSize().value?.floatValue?.());
 	}
 
 	public override set iconScale(value) {
@@ -33,10 +27,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get iconImageName() {
-		if (super.iconImageName === undefined) {
-			super.iconImageName = this.native.getIconImage().value;
-		}
-		return super.iconImageName;
+		return this.getOrSetPropertyValueInternal('icon-image', () => this.native.getIconImage().value);
 	}
 
 	public override set iconImageName(value) {
@@ -44,7 +35,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get iconOffset() {
-		if (super.iconOffset === undefined) {
+		return this.getOrSetPropertyValueInternal('icon-offset', () => {
 			const nativeArray = this.native.getIconOffset().value;
 			const length = nativeArray?.length ?? 0;
 			const result = new Array<number>(length);
@@ -53,9 +44,8 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 				result[i] = nativeArray[i].floatValue();
 			}
 
-			super.iconOffset = result as [number, number];
-		}
-		return super.iconOffset;
+			return result;
+		});
 	}
 
 	public override set iconOffset(value) {
@@ -63,10 +53,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get text() {
-		if (super.text === undefined) {
-			super.text = this.native.getTextField().value.toString();
-		}
-		return super.text;
+		return this.getOrSetPropertyValueInternal('text-field', () => this.native.getTextField().value?.toString?.());
 	}
 
 	public override set text(value) {
@@ -74,10 +61,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get textAllowsOverlap() {
-		if (super.textAllowsOverlap === undefined) {
-			super.textAllowsOverlap = this.native.getTextAllowOverlap().value.booleanValue();
-		}
-		return super.textAllowsOverlap;
+		return this.getOrSetPropertyValueInternal('text-allow-overlap', () => this.native.getTextAllowOverlap().value?.booleanValue?.());
 	}
 
 	public override set textAllowsOverlap(value) {
@@ -85,10 +69,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get textSize() {
-		if (super.textSize === undefined) {
-			super.textSize = this.native.getTextSize().value.floatValue();
-		}
-		return super.textSize;
+		return this.getOrSetPropertyValueInternal('text-size', () => this.native.getTextSize().value?.floatValue?.());
 	}
 
 	public override set textSize(value) {
@@ -96,10 +77,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get textColor() {
-		if (super.textColor === undefined) {
-			super.textColor = this.native.getTextColor().value;
-		}
-		return super.textColor;
+		return this.getOrSetPropertyValueInternal('text-color', () => this.native.getTextColor().value);
 	}
 
 	public override set textColor(value) {
@@ -107,7 +85,7 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get textFontNames() {
-		if (super.textFontNames === undefined) {
+		return this.getOrSetPropertyValueInternal('text-font', () => {
 			const nativeArray = this.native.getTextFont().value;
 			const length = nativeArray?.length ?? 0;
 			const result = new Array<string>(length);
@@ -116,9 +94,8 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 				result[i] = nativeArray[i];
 			}
 
-			super.textFontNames = result;
-		}
-		return super.textFontNames;
+			return result;
+		});
 	}
 
 	public override set textFontNames(value) {

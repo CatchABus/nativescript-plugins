@@ -14,10 +14,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get iconAllowsOverlap() {
-		if (super.iconAllowsOverlap === undefined) {
-			super.iconAllowsOverlap = (Expression.initWithNative(this.native.iconAllowsOverlap) as Expression).toJSON();
-		}
-		return super.iconAllowsOverlap;
+		return this.getOrSetPropertyValueInternal('icon-allow-overlap', () => (Expression.initWithNative(this.native.iconAllowsOverlap) as Expression).toJSON());
 	}
 
 	public override set iconAllowsOverlap(value) {
@@ -28,10 +25,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get iconScale() {
-		if (super.iconScale === undefined) {
-			super.iconScale = (Expression.initWithNative(this.native.iconScale) as Expression).toJSON();
-		}
-		return super.iconScale;
+		return this.getOrSetPropertyValueInternal('icon-size', () => (Expression.initWithNative(this.native.iconScale) as Expression).toJSON());
 	}
 
 	public override set iconScale(value) {
@@ -42,10 +36,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get iconImageName() {
-		if (super.iconImageName === undefined) {
-			super.iconImageName = (Expression.initWithNative(this.native.iconImageName) as Expression).toJSON();
-		}
-		return super.iconImageName;
+		return this.getOrSetPropertyValueInternal('icon-image', () => (Expression.initWithNative(this.native.iconImageName) as Expression).toJSON());
 	}
 
 	public override set iconImageName(value) {
@@ -56,10 +47,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get iconOffset() {
-		if (super.iconOffset === undefined) {
-			super.iconOffset = (Expression.initWithNative(this.native.iconOffset) as Expression).toJSON();
-		}
-		return super.iconOffset;
+		return this.getOrSetPropertyValueInternal('icon-offset', () => (Expression.initWithNative(this.native.iconOffset) as Expression).toJSON());
 	}
 
 	public override set iconOffset(value) {
@@ -84,10 +72,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get text() {
-		if (super.text === undefined) {
-			super.text = (Expression.initWithNative(this.native.text) as Expression).toJSON();
-		}
-		return super.text;
+		return this.getOrSetPropertyValueInternal('text-field', () => (Expression.initWithNative(this.native.text) as Expression).toJSON());
 	}
 
 	public override set text(value) {
@@ -98,10 +83,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get textAllowsOverlap() {
-		if (super.textAllowsOverlap === undefined) {
-			super.textAllowsOverlap = (Expression.initWithNative(this.native.textAllowsOverlap) as Expression).toJSON();
-		}
-		return super.textAllowsOverlap;
+		return this.getOrSetPropertyValueInternal('text-allow-overlap', () => (Expression.initWithNative(this.native.textAllowsOverlap) as Expression).toJSON());
 	}
 
 	public override set textAllowsOverlap(value) {
@@ -112,10 +94,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get textSize() {
-		if (super.textSize === undefined) {
-			super.textSize = (Expression.initWithNative(this.native.textFontSize) as Expression).toJSON();
-		}
-		return super.textSize;
+		return this.getOrSetPropertyValueInternal('text-size', () => (Expression.initWithNative(this.native.textFontSize) as Expression).toJSON());
 	}
 
 	public override set textSize(value) {
@@ -126,10 +105,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get textColor() {
-		if (super.textColor === undefined) {
-			super.textColor = (Expression.initWithNative(this.native.textColor) as Expression).toJSON();
-		}
-		return super.textColor;
+		return this.getOrSetPropertyValueInternal('text-color', () => (Expression.initWithNative(this.native.textColor) as Expression).toJSON());
 	}
 
 	public override set textColor(value) {
@@ -140,10 +116,7 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override get textFontNames() {
-		if (super.textFontNames === undefined) {
-			super.textFontNames = (Expression.initWithNative(this.native.textFontNames) as Expression).toJSON();
-		}
-		return super.textFontNames;
+		return this.getOrSetPropertyValueInternal('text-font', () => (Expression.initWithNative(this.native.textFontNames) as Expression).toJSON());
 	}
 
 	public override set textFontNames(value) {

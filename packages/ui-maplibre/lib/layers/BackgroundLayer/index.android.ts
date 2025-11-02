@@ -10,10 +10,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 	}
 
 	public override get backgroundColor() {
-		if (super.backgroundColor === undefined) {
-			super.backgroundColor = this.native.getBackgroundColor().value;
-		}
-		return super.backgroundColor;
+		return this.getOrSetPropertyValueInternal('background-color', () => this.native.getBackgroundColor().value);
 	}
 
 	public override set backgroundColor(value) {
@@ -21,10 +18,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 	}
 
 	public override get backgroundOpacity() {
-		if (super.backgroundOpacity === undefined) {
-			super.backgroundOpacity = this.native.getBackgroundOpacity().value.floatValue();
-		}
-		return super.backgroundOpacity;
+		return this.getOrSetPropertyValueInternal('background-opacity', () => this.native.getBackgroundOpacity().value);
 	}
 
 	public override set backgroundOpacity(value) {
@@ -32,10 +26,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 	}
 
 	public override get backgroundPattern() {
-		if (super.backgroundPattern === undefined) {
-			super.backgroundPattern = this.native.getBackgroundPattern().value;
-		}
-		return super.backgroundPattern;
+		return this.getOrSetPropertyValueInternal('background-pattern', () => this.native.getBackgroundPattern().value);
 	}
 
 	public override set backgroundPattern(value) {

@@ -14,10 +14,7 @@ export class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
 	}
 
 	public override get circleColor() {
-		if (super.circleColor === undefined) {
-			super.circleColor = (Expression.initWithNative(this.native.circleColor) as Expression).toJSON();
-		}
-		return super.circleColor;
+		return this.getOrSetPropertyValueInternal('circle-color', () => (Expression.initWithNative(this.native.circleColor) as Expression).toJSON());
 	}
 
 	public override set circleColor(value) {
@@ -28,10 +25,7 @@ export class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
 	}
 
 	public override get circleRadius() {
-		if (super.circleRadius === undefined) {
-			super.circleRadius = (Expression.initWithNative(this.native.circleRadius) as Expression).toJSON();
-		}
-		return super.circleRadius;
+		return this.getOrSetPropertyValueInternal('circle-radius', () => (Expression.initWithNative(this.native.circleRadius) as Expression).toJSON());
 	}
 
 	public override set circleRadius(value) {

@@ -11,10 +11,7 @@ export class CircleLayer extends CircleLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get circleColor() {
-		if (super.circleColor === undefined) {
-			super.circleColor = this.native.getCircleColor().value;
-		}
-		return super.circleColor;
+		return this.getOrSetPropertyValueInternal('circle-color', () => this.native.getCircleColor().value);
 	}
 
 	public override set circleColor(value) {
@@ -22,10 +19,7 @@ export class CircleLayer extends CircleLayerCommon<org.maplibre.android.style.la
 	}
 
 	public override get circleRadius() {
-		if (super.circleRadius === undefined) {
-			super.circleRadius = this.native.getCircleRadius().value.floatValue();
-		}
-		return super.circleRadius;
+		return this.getOrSetPropertyValueInternal('circle-radius', () => this.native.getCircleRadius().value?.floatValue?.());
 	}
 
 	public override set circleRadius(value) {

@@ -20,15 +20,18 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	}
 
 	@LayoutProperty('visibility')
-	public get visibility(): 'visible' | 'none' {
-		return this.getPropertyValueInternal('visibility');
-	}
-
 	public set visibility(value: 'visible' | 'none') {
 		this.setPropertyValueInternal('visibility', value);
 	}
 
 	public getPropertyValueInternal(name: string): PropertyValueSpecification<any> {
+		return this.cachedPropertyValues.get(name);
+	}
+
+	public getOrSetPropertyValueInternal<T>(name: string, lazyValue: () => T): PropertyValueSpecification<any> {
+		if (!this.cachedPropertyValues.has(name)) {
+			this.cachedPropertyValues.set(name, lazyValue());
+		}
 		return this.cachedPropertyValues.get(name);
 	}
 

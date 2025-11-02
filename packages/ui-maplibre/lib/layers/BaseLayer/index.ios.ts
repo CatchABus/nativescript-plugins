@@ -6,10 +6,7 @@ export abstract class BaseLayer<T extends MLNStyleLayer> extends BaseLayerCommon
 	}
 
 	public override get visibility() {
-		if (super.visibility === undefined) {
-			super.visibility = this.native.visible ? 'visible' : 'none';
-		}
-		return super.visibility;
+		return this.getOrSetPropertyValueInternal('visibility', () => (this.native.visible ? 'visible' : 'none'));
 	}
 
 	public override set visibility(value) {

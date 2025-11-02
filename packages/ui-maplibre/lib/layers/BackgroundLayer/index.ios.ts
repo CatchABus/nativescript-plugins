@@ -13,10 +13,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLay
 	}
 
 	public override get backgroundColor() {
-		if (super.backgroundColor === undefined) {
-			super.backgroundColor = (Expression.initWithNative(this.native.backgroundColor) as Expression).toJSON();
-		}
-		return super.backgroundColor;
+		return this.getOrSetPropertyValueInternal('background-color', () => (Expression.initWithNative(this.native.backgroundColor) as Expression).toJSON());
 	}
 
 	public override set backgroundColor(value) {
@@ -27,10 +24,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLay
 	}
 
 	public override get backgroundOpacity() {
-		if (super.backgroundOpacity === undefined) {
-			super.backgroundOpacity = (Expression.initWithNative(this.native.backgroundOpacity) as Expression).toJSON();
-		}
-		return super.backgroundOpacity;
+		return this.getOrSetPropertyValueInternal('background-opacity', () => (Expression.initWithNative(this.native.backgroundOpacity) as Expression).toJSON());
 	}
 
 	public override set backgroundOpacity(value) {
@@ -41,10 +35,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLay
 	}
 
 	public override get backgroundPattern() {
-		if (super.backgroundPattern === undefined) {
-			super.backgroundPattern = (Expression.initWithNative(this.native.backgroundPattern) as Expression).toJSON();
-		}
-		return super.backgroundPattern;
+		return this.getOrSetPropertyValueInternal('background-pattern', () => (Expression.initWithNative(this.native.backgroundPattern) as Expression).toJSON());
 	}
 
 	public override set backgroundPattern(value) {
