@@ -20,11 +20,11 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	}
 
 	@LayoutProperty('visibility')
-	public get visible(): boolean {
+	public get visibility(): 'visible' | 'none' {
 		return this.getPropertyValueInternal('visibility');
 	}
 
-	public set visible(value: boolean) {
+	public set visibility(value: 'visible' | 'none') {
 		this.setPropertyValueInternal('visibility', value);
 	}
 

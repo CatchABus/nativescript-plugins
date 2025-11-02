@@ -5,14 +5,14 @@ export abstract class BaseLayer<T extends MLNStyleLayer> extends BaseLayerCommon
 		return this.native.identifier;
 	}
 
-	public override get visible() {
-		if (super.visible === undefined) {
-			super.visible = this.native.visible;
+	public override get visibility() {
+		if (super.visibility === undefined) {
+			super.visibility = this.native.visible ? 'visible' : 'none';
 		}
-		return super.visible;
+		return super.visibility;
 	}
 
-	public override set visible(value) {
-		this.native.visible = value;
+	public override set visibility(value) {
+		this.native.visible = value === 'visible';
 	}
 }
