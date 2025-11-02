@@ -34,10 +34,16 @@ export class Expression extends ExpressionCommon<NSExpression | NSPredicate> {
 	}
 
 	public toJSON(): ExpressionSpecification {
-		if (!this.mJson && this.native?.mgl_jsonExpressionObject) {
-			const data = NSJSONSerialization.dataWithJSONObjectOptionsError(this.native.mgl_jsonExpressionObject, 0 as number);
-			const json = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding).toString();
-			this.mJson = JSON.parse(json);
+		if (!this.mJson && this.native) {
+			if (typeof this.native.mgl_jsonExpressionObject !== 'object') {
+				this.mJson = this.native.mgl_jsonExpressionObject;
+			} else {
+				const data = NSJSONSerialization.dataWithJSONObjectOptionsError(this.native.mgl_jsonExpressionObject, 0 as number);
+				const json = NSString.alloc().initWithDataEncoding(data, NSUTF8StringEncoding).toString();
+				const object = JSON.parse(json);
+				// In the case of arrays, iOS appends the expression type as first parameter and the expression itself as second parameter
+				this.mJson = Array.isArray(object) && object.length > 1 ? object[1] : object;
+			}
 		}
 		return this.mJson;
 	}
