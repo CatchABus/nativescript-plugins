@@ -71,6 +71,10 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 				}
 
 				if (nativePair) {
+					if (this.cachedPropertyValues.has(key)) {
+						this.cachedPropertyValues.delete(key);
+					}
+
 					propertyValues.push(nativePair);
 				} else {
 					Trace.write(`Unsupported property '${key}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);

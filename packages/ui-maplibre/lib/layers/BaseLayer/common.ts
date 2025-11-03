@@ -12,7 +12,7 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 
 	public abstract getId(): string;
 
-	private get cachedPropertyValues() {
+	protected get cachedPropertyValues() {
 		if (!this.mCachedPropertyValues) {
 			this.mCachedPropertyValues = new Map();
 		}
