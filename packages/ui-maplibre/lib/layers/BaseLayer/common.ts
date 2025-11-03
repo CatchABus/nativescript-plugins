@@ -45,27 +45,44 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 		return true;
 	}
 
+	public getProperty<K extends keyof LayerProperties>(name: K): LayerProperties[K] {
+		const propertyName = this._getClassPropertyName(name);
+		return propertyName != null ? this[propertyName] : undefined;
+	}
+
+	public setProperty<K extends keyof LayerProperties>(name: K, value: LayerProperties[K]): void {
+		const propertyName = this._getClassPropertyName(name);
+		if (propertyName != null) {
+			this[propertyName] = value;
+		}
+	}
+
 	public setProperties(value: Partial<LayerProperties>): void {
 		if (value) {
-			const entries = Object.entries(value);
+			const entries = Object.entries(value) as [keyof LayerProperties, LayerProperties[keyof LayerProperties]][];
 			for (const [key, value] of entries) {
-				let setterName: string;
-
-				if (this.layoutPropertyMappings?.has(key)) {
-					setterName = this.layoutPropertyMappings.get(key);
-				} else if (this.paintPropertyMappings?.has(key)) {
-					setterName = this.paintPropertyMappings.get(key);
-				} else {
-					setterName = null;
-				}
-
-				if (setterName && setterName in this) {
-					this[setterName] = value;
-				} else {
-					Trace.write(`Unsupported property '${key}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
-				}
+				this.setProperty(key, value);
 			}
 		}
+	}
+
+	private _getClassPropertyName<K extends keyof LayerProperties>(name: K): string {
+		let propertyName: string;
+
+		if (this.layoutPropertyMappings?.has(name)) {
+			propertyName = this.layoutPropertyMappings.get(name);
+		} else if (this.paintPropertyMappings?.has(name)) {
+			propertyName = this.paintPropertyMappings.get(name);
+		} else {
+			propertyName = null;
+		}
+
+		if (propertyName == null || !(propertyName in this)) {
+			Trace.write(`Unsupported property '${name}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
+			return null;
+		}
+
+		return propertyName;
 	}
 
 	public toJSON() {

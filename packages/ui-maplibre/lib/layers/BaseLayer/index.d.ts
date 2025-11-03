@@ -13,6 +13,8 @@ export declare abstract class BaseLayer<T = any, U extends LayerProperties = Lay
 	public getPropertyValueInternal(name: string): PropertyValueSpecification<any>;
 	public getOrSetPropertyValueInternal<V>(name: string, lazyValue: () => V): PropertyValueSpecification<any>;
 	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean;
+	public getProperty<K extends keyof U>(name: K): U[K];
+	public setProperty<K extends keyof U>(name: K, value: U[K]): void;
 	public setProperties(value: Partial<U>): void;
 	public get visibility(): 'visible' | 'none';
 	public set visibility(value: 'visible' | 'none');

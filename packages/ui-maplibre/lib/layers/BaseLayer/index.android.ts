@@ -46,12 +46,18 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 
 		if (this.layoutPropertyMappings?.has(name)) {
 			nativePair = new org.maplibre.android.style.layers.LayoutPropertyValue(name, nativeValue);
-		} else {
+		} else if (this.paintPropertyMappings?.has(name)) {
 			nativePair = new org.maplibre.android.style.layers.PaintPropertyValue(name, nativeValue);
+		} else {
+			nativePair = null;
 		}
 
-		this.nativePropsArray[0] = nativePair;
-		this.native.setProperties(this.nativePropsArray);
+		if (nativePair) {
+			this.nativePropsArray[0] = nativePair;
+			this.native.setProperties(this.nativePropsArray);
+		} else {
+			Trace.write(`Unsupported property '${name}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
+		}
 	}
 
 	public override setProperties(value: LayerProperties): void {
