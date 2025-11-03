@@ -1,12 +1,12 @@
 import { Trace } from '@nativescript/core';
-import { BaseLayer as IBaseLayer } from '.';
+import { BaseLayer as IBaseLayer, LayerProperties } from '.';
 import type { PropertyValueSpecification } from '../../Expression';
 import { NativeObject } from '../../nativeWrappers/NativeObject';
 import { LayoutProperty } from '../../utils/decorators';
 
-export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBaseLayer<T> {
-	public static readonly layoutPropertyMappings = new Map<string, string>();
-	public static readonly paintPropertyMappings = new Map<string, string>();
+export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBaseLayer<T, LayerProperties> {
+	declare layoutPropertyMappings: Map<string, string> | undefined;
+	declare paintPropertyMappings: Map<string, string> | undefined;
 
 	private mCachedPropertyValues: Map<string, PropertyValueSpecification<any>>;
 
@@ -36,13 +36,36 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	}
 
 	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean {
-		if (!BaseLayerCommon.layoutPropertyMappings.has(name) && !BaseLayerCommon.paintPropertyMappings.has(name)) {
-			Trace.write(`Invalid layer property '${name}' with value '${value}'`, Trace.categories.All, Trace.messageType.warn);
+		if (!this.layoutPropertyMappings?.has(name) && !this.paintPropertyMappings?.has(name)) {
+			Trace.write(`Unsupported property '${name}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
 			return false;
 		}
 
 		this.cachedPropertyValues.set(name, value);
 		return true;
+	}
+
+	public setProperties(value: Partial<LayerProperties>): void {
+		if (value) {
+			const entries = Object.entries(value);
+			for (const [key, value] of entries) {
+				let setterName: string;
+
+				if (this.layoutPropertyMappings?.has(key)) {
+					setterName = this.layoutPropertyMappings.get(key);
+				} else if (this.paintPropertyMappings?.has(key)) {
+					setterName = this.paintPropertyMappings.get(key);
+				} else {
+					setterName = null;
+				}
+
+				if (setterName && setterName in this) {
+					this[setterName] = value;
+				} else {
+					Trace.write(`Unsupported property '${key}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
+				}
+			}
+		}
 	}
 
 	public toJSON() {

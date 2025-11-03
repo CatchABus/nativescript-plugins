@@ -35,23 +35,29 @@ export async function onMapStyleLoaded(args: MapStyleLoadedEventData) {
 
 	const markerLayer = new CircleLayer('marker-layer', source);
 	markerLayer.filter = ['!=', ['get', 'cluster'], true];
-	markerLayer.circleColor = 'orange';
-	markerLayer.circleRadius = 8;
+	markerLayer.setProperties({
+		'circle-color': 'orange',
+		'circle-radius': 8,
+	});
 
 	const countLayer = new SymbolLayer('count-layer', source);
-	countLayer.text = ['get', 'point_count'];
-	countLayer.textSize = 14;
-	countLayer.textColor = '#fff';
-	countLayer.textAllowsOverlap = true;
-	countLayer.textFontNames = ['Noto Sans Regular'];
+	countLayer.setProperties({
+		'text-field': ['get', 'point_count'],
+		'text-size': 14,
+		'text-color': '#fff',
+		'text-allow-overlap': true,
+		'text-font': ['Noto Sans Regular'],
+	});
 
 	style.addSource(source);
 
 	for (let i = 0, length = CLUSTER_ZONE_ENTRIES.length; i < length; i++) {
 		const entry = CLUSTER_ZONE_ENTRIES[i];
 		const l = new CircleLayer(`cluster-${i}`, source);
-		l.circleColor = entry[1];
-		l.circleRadius = 18;
+		l.setProperties({
+			'circle-color': entry[1],
+			'circle-radius': 18,
+		});
 
 		const countExpression: ExpressionSpecification = ['get', 'point_count'];
 		if (i === 0) {

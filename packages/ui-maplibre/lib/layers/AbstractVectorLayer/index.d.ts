@@ -1,7 +1,7 @@
 import { ExpressionFilterSpecification } from '../../Expression';
-import { BaseLayer } from '../BaseLayer';
+import { BaseLayer, LayerProperties } from '../BaseLayer';
 
-export declare abstract class AbstractVectorLayer<T = any> extends BaseLayer<T> {
+export declare abstract class AbstractVectorLayer<T = any, U extends LayerProperties> extends BaseLayer<T, U> {
 	public get filter(): ExpressionFilterSpecification;
 	public set filter(value: ExpressionFilterSpecification);
 	public getSourceId(): string;

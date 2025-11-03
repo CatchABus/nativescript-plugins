@@ -1,9 +1,9 @@
-import { CircleLayer as ICircleLayer } from '.';
+import { CircleLayerProperties, CircleLayer as ICircleLayer } from '.';
 import { AbstractVectorLayer } from '../AbstractVectorLayer';
 import type { ColorSpecification, PropertyValueSpecification } from '../../Expression';
 import { PaintProperty } from '../../utils/decorators';
 
-export abstract class CircleLayerCommon<T> extends AbstractVectorLayer<T> implements ICircleLayer {
+export abstract class CircleLayerCommon<T> extends AbstractVectorLayer<T, CircleLayerProperties> implements ICircleLayer {
 	@PaintProperty('circle-color')
 	public set circleColor(value: PropertyValueSpecification<ColorSpecification>) {
 		this.setPropertyValueInternal('circle-color', value);

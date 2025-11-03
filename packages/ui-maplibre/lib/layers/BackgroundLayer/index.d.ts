@@ -1,7 +1,13 @@
 import { ColorSpecification, DataDrivenPropertyValueSpecification, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
 import { BaseLayer } from '../BaseLayer';
 
-export declare class BackgroundLayer extends BaseLayer<any> {
+export type BackgroundLayerProperties = LayerProperties & {
+	'background-color': PropertyValueSpecification<ColorSpecification>;
+	'background-opacity': PropertyValueSpecification<number>;
+	'background-pattern': DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
+};
+
+export declare class BackgroundLayer extends BaseLayer<any, BackgroundLayerProperties> {
 	constructor(id: string);
 	public get backgroundColor(): PropertyValueSpecification<ColorSpecification>;
 	public set backgroundColor(value: PropertyValueSpecification<ColorSpecification>);

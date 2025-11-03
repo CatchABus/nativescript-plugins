@@ -1,8 +1,8 @@
 import { AbstractVectorLayer as IAbstractVectorLayer } from '.';
 import { ExpressionFilterSpecification } from '../../Expression';
-import { BaseLayer } from '../BaseLayer';
+import { BaseLayer, LayerProperties } from '../BaseLayer';
 
-export abstract class AbstractVectorLayerCommon<T> extends BaseLayer<T> implements IAbstractVectorLayer<T> {
+export abstract class AbstractVectorLayerCommon<T> extends BaseLayer<T, LayerProperties> implements IAbstractVectorLayer<T, LayerProperties> {
 	protected mFilter: ExpressionFilterSpecification;
 
 	public abstract get filter(): ExpressionFilterSpecification;

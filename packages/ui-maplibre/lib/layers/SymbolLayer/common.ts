@@ -1,9 +1,9 @@
-import { SymbolLayer as ISymbolLayer } from '.';
+import { SymbolLayer as ISymbolLayer, SymbolLayerProperties } from '.';
 import { AbstractVectorLayer } from '../AbstractVectorLayer';
 import type { ColorSpecification, DataDrivenPropertyValueSpecification, PropertyValueSpecification, ResolvedImageSpecification } from '../../Expression';
 import { LayoutProperty, PaintProperty } from '../../utils/decorators';
 
-export abstract class SymbolLayerCommon<T> extends AbstractVectorLayer<T> implements ISymbolLayer {
+export abstract class SymbolLayerCommon<T> extends AbstractVectorLayer<T, SymbolLayerProperties> implements ISymbolLayer {
 	@LayoutProperty('icon-allow-overlap')
 	public set iconAllowsOverlap(value: PropertyValueSpecification<boolean>) {
 		this.setPropertyValueInternal('icon-allow-overlap', value);
