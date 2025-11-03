@@ -5,7 +5,7 @@ export type LayerProperties = {
 	visibility: 'visible' | 'none';
 };
 
-export declare abstract class BaseLayer<T = any, U extends LayerProperties> extends NativeObject<T> {
+export declare abstract class BaseLayer<T = any, U extends LayerProperties = LayerProperties> extends NativeObject<T> {
 	public layoutPropertyMappings: Map<string, string> | undefined;
 	public paintPropertyMappings: Map<string, string> | undefined;
 
