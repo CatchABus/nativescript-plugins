@@ -59,6 +59,11 @@ function _refresh(this: NeumorphicLayout): void {
 }
 
 function _updateSublayerBounds(view: NeumorphicLayout) {
+	// Check this for cases like when view does not belong to the view tree and something triggers a layout update
+	if (!view.nativeViewProtected) {
+		return;
+	}
+
 	const { width, height } = view.getActualSize();
 	const cornerRadiusDip = Utils.layout.toDeviceIndependentPixels(Length.toDevicePixels(view.borderTopLeftRadius));
 	const cornerRadius = Math.min(Math.min(width, height) / 2, cornerRadiusDip);
