@@ -1,5 +1,8 @@
 import { CoreTypes, heightProperty, Trace, Utils, View, widthProperty } from '@nativescript/core';
-import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty } from './common';
+import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty, horizontalBiasProperty, verticalBiasProperty, DEFAULT_BIAS } from './common';
+import { isCssWideKeyword } from '@nativescript/core/ui/core/properties';
+
+export * from './common';
 
 type ConstraintLayoutParams = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams;
 type AndroidView = android.view.View;
@@ -71,7 +74,7 @@ applyViewMixin((originals) => {
 
 				if (typeof value === 'number') {
 					layoutParams.height = layout.toDevicePixels(value);
-				} else if (value === 'auto') {
+				} else if (value === 'auto' || isCssWideKeyword(value)) {
 					layoutParams.height = WRAP_CONTENT;
 				} else if (value.unit === 'dip') {
 					layoutParams.height = layout.toDevicePixels(value.value);
@@ -106,7 +109,7 @@ applyViewMixin((originals) => {
 
 				if (typeof value === 'number') {
 					layoutParams.width = layout.toDevicePixels(value);
-				} else if (value === 'auto') {
+				} else if (value === 'auto' || isCssWideKeyword(value)) {
 					layoutParams.width = WRAP_CONTENT;
 				} else if (value.unit === 'dip') {
 					layoutParams.width = layout.toDevicePixels(value.value);
@@ -286,6 +289,28 @@ applyViewMixin((originals) => {
 			const id = getConstraintNativeTargetId(value, this);
 
 			layoutParams.endToEnd = id;
+			nativeView.setLayoutParams(layoutParams);
+		},
+		[horizontalBiasProperty.setNative](this: View, value: number) {
+			if (!ConstraintLayout.isConstrainedChild(this)) {
+				return;
+			}
+
+			const nativeView = this.nativeViewProtected as AndroidView;
+			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
+
+			layoutParams.horizontalBias = isNaN(value) ? DEFAULT_BIAS : value;
+			nativeView.setLayoutParams(layoutParams);
+		},
+		[verticalBiasProperty.setNative](this: View, value: number) {
+			if (!ConstraintLayout.isConstrainedChild(this)) {
+				return;
+			}
+
+			const nativeView = this.nativeViewProtected as AndroidView;
+			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
+
+			layoutParams.verticalBias = isNaN(value) ? DEFAULT_BIAS : value;
 			nativeView.setLayoutParams(layoutParams);
 		},
 	};

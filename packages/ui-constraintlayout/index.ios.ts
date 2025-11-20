@@ -1,19 +1,21 @@
 import { Utils, View } from '@nativescript/core';
-import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty } from './common';
-import { ConstrainedChild, ConstrainedItem } from '.';
+import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, DEFAULT_BIAS, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty } from './common';
+import { IPositionConstraints } from '.';
+
+export * from './common';
 
 const { layout } = Utils;
 
-interface iOSConstrainedChild extends ConstrainedChild {
-	_constraints: Map<keyof ConstrainedItem, string>;
+interface iOSConstrainedChild extends View {
+	mPositionConstraints: Map<keyof IPositionConstraints, string>;
 }
 
-function getConstraintMap(view: iOSConstrainedChild): Map<keyof ConstrainedItem, string> {
-	if (!view._constraints) {
-		view._constraints = new Map();
+function getPositionConstraintMap(view: iOSConstrainedChild): Map<keyof IPositionConstraints, string> {
+	if (!view.mPositionConstraints) {
+		view.mPositionConstraints = new Map();
 	}
 
-	return view._constraints;
+	return view.mPositionConstraints;
 }
 
 function getBaseline(view: View): number {
@@ -36,18 +38,46 @@ function getBaseline(view: View): number {
 	return nativeFont ? layout.toDevicePixels(nativeFont.lineHeight + nativeFont.descender) : -1;
 }
 
-function handleConstraintChange(view: iOSConstrainedChild, constraintProperty: keyof ConstrainedItem, constraintValue: string): void {
-	const constraintMap = getConstraintMap(view);
+function updatePositionConstraint(view: iOSConstrainedChild, constraintName: keyof IPositionConstraints, targetId: string): void {
+	if (!ConstraintLayout.isConstrainedChild(view)) {
+		return;
+	}
 
-	if (constraintValue) {
-		constraintMap.set(constraintProperty, constraintValue);
+	const constraintMap = getPositionConstraintMap(view);
+
+	if (targetId) {
+		constraintMap.set(constraintName, targetId);
 	} else {
-		constraintMap.delete(constraintProperty);
+		constraintMap.delete(constraintName);
 	}
 }
 
 export class ConstraintLayout extends ConstraintLayoutBase {
-	public nativeViewProtected: NSConstraintLayout;
+	public nativeViewProtected: UIView;
+
+	private _getActualConstraintName(key: keyof IPositionConstraints): keyof IPositionConstraints {
+		let constraintName: keyof IPositionConstraints;
+
+		switch (key) {
+			case 'startToStartOf':
+				constraintName = this.isRtl ? 'rightToRightOf' : 'leftToLeftOf';
+				break;
+			case 'startToEndOf':
+				constraintName = this.isRtl ? 'rightToLeftOf' : 'leftToRightOf';
+				break;
+			case 'endToEndOf':
+				constraintName = this.isRtl ? 'leftToLeftOf' : 'rightToRightOf';
+				break;
+			case 'endToStartOf':
+				constraintName = this.isRtl ? 'leftToRightOf' : 'rightToLeftOf';
+				break;
+			default:
+				constraintName = key;
+				break;
+		}
+
+		return constraintName;
+	}
 
 	public onMeasure(widthMeasureSpec: number, heightMeasureSpec: number): void {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -87,7 +117,6 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 		const insets = this.getSafeAreaInsets();
 		const horizontalPadding = this.effectivePaddingLeft + this.effectivePaddingRight + this.effectiveBorderLeftWidth + this.effectiveBorderRightWidth;
 		const verticalPadding = this.effectivePaddingTop + this.effectivePaddingBottom + this.effectiveBorderTopWidth + this.effectiveBorderBottomWidth;
-		const parentConstrainedViews: iOSConstrainedChild[] = [];
 
 		const layoutWidth = Math.max(0, right - left - horizontalPadding - insets.left - insets.right);
 		const layoutHeight = Math.max(0, bottom - top - verticalPadding - insets.top - insets.bottom);
@@ -98,15 +127,21 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 
 		// Handle children with parent constraints first to render sibling constraints properly later
 		this.eachLayoutChild((child: iOSConstrainedChild) => {
-			const constraintMap = getConstraintMap(child);
+			const posConstraintMap = getPositionConstraintMap(child);
 			const childWidth = child.getMeasuredWidth() + child.effectiveMarginLeft + child.effectiveMarginRight;
 			const childHeight = child.getMeasuredHeight() + child.effectiveMarginTop + child.effectiveMarginBottom;
+			const hBias = isNaN(child.horizontalBias) ? DEFAULT_BIAS : Math.max(0, Math.min(1, child.horizontalBias));
+			const vBias = isNaN(child.verticalBias) ? DEFAULT_BIAS : Math.max(0, Math.min(1, child.verticalBias));
 
-			let childLeft: number = x;
-			let childTop: number = y;
+			let childLeft: number;
+			let childTop: number;
 
-			// TODO: Add proper support for start and end constraints
-			for (const [constraint, targetId] of constraintMap) {
+			let fromTop: number = null;
+			let fromBottom: number = null;
+			let fromLeft: number = null;
+			let fromRight: number = null;
+
+			for (const [key, targetId] of posConstraintMap) {
 				const isConstrainedToParent = targetId === PARENT_CONSTRAINT_IDENTIFIER;
 				const targetView = isConstrainedToParent ? this : laidOutChildren.get(targetId);
 
@@ -114,9 +149,10 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 					continue;
 				}
 
+				const constraintName = this._getActualConstraintName(key);
 				const targetBounds = targetView._getCurrentLayoutBounds();
 
-				switch (constraint) {
+				switch (constraintName) {
 					case 'baselineToBaselineOf': {
 						const baseline = getBaseline(child);
 
@@ -131,87 +167,53 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 						}
 						break;
 					}
-					case 'topToTopOf': {
-						const isPulledByBothSides = constraintMap.has('bottomToBottomOf') && constraintMap.get('bottomToBottomOf') === targetId;
-
-						if (isPulledByBothSides) {
-							childTop = isConstrainedToParent ? y + (layoutHeight - childHeight) / 2 : (targetBounds.bottom + targetBounds.top - childHeight) / 2;
-						} else {
-							childTop = isConstrainedToParent ? y : targetBounds.top;
-						}
+					case 'topToTopOf':
+						fromTop = isConstrainedToParent ? y : targetBounds.top;
 						break;
-					}
 					case 'topToBottomOf':
-						if (isConstrainedToParent) {
-							childTop = insets.bottom + insets.top + layoutHeight + verticalPadding;
-						} else {
-							childTop = targetBounds.bottom;
-						}
+						fromTop = isConstrainedToParent ? insets.bottom + insets.top + layoutHeight + verticalPadding : targetBounds.bottom;
 						break;
 					case 'bottomToTopOf':
-						childTop = isConstrainedToParent ? insets.top - childHeight : targetBounds.top - childHeight;
+						fromBottom = isConstrainedToParent ? insets.top - childHeight : targetBounds.top - childHeight;
 						break;
-					case 'bottomToBottomOf': {
-						const isPulledByBothSides = constraintMap.has('topToTopOf') && constraintMap.get('topToTopOf') === targetId;
-
-						if (isPulledByBothSides) {
-							childTop = isConstrainedToParent ? y + (layoutHeight - childHeight) / 2 : (targetBounds.bottom + targetBounds.top - childHeight) / 2;
-						} else {
-							childTop = isConstrainedToParent ? y + layoutHeight - childHeight : targetBounds.bottom - childHeight;
-						}
+					case 'bottomToBottomOf':
+						fromBottom = isConstrainedToParent ? y + layoutHeight - childHeight : targetBounds.bottom - childHeight;
 						break;
-					}
-					case 'startToStartOf': {
-						const isPulledByBothSides = constraintMap.has('endToEndOf') && constraintMap.get('endToEndOf') === targetId;
-
-						if (isPulledByBothSides) {
-							childLeft = isConstrainedToParent ? x + (layoutWidth - childWidth) / 2 : (targetBounds.right + targetBounds.left - childWidth) / 2;
-						} else {
-							childLeft = isConstrainedToParent ? x : targetBounds.left;
-						}
+					case 'leftToLeftOf':
+						fromLeft = isConstrainedToParent ? x : targetBounds.left;
 						break;
-					}
-					case 'leftToLeftOf': {
-						const isPulledByBothSides = constraintMap.has('rightToRightOf') && constraintMap.get('rightToRightOf') === targetId;
-
-						if (isPulledByBothSides) {
-							childLeft = isConstrainedToParent ? x + (layoutWidth - childWidth) / 2 : (targetBounds.right + targetBounds.left - childWidth) / 2;
-						} else {
-							childLeft = isConstrainedToParent ? x : targetBounds.left;
-						}
-						break;
-					}
-					case 'startToEndOf':
 					case 'leftToRightOf':
-						childLeft = isConstrainedToParent ? insets.left + insets.right + layoutWidth + horizontalPadding : targetBounds.right;
+						fromLeft = isConstrainedToParent ? insets.left + insets.right + layoutWidth + horizontalPadding : targetBounds.right;
 						break;
-					case 'endToStartOf':
 					case 'rightToLeftOf':
-						childLeft = isConstrainedToParent ? insets.left - childWidth : targetBounds.left - childWidth;
+						fromRight = isConstrainedToParent ? insets.left - childWidth : targetBounds.left - childWidth;
 						break;
-					case 'endToEndOf': {
-						const isPulledByBothSides = constraintMap.has('startToStartOf') && constraintMap.get('startToStartOf') === targetId;
-
-						if (isPulledByBothSides) {
-							childLeft = isConstrainedToParent ? x + (layoutWidth - childWidth) / 2 : (targetBounds.right + targetBounds.left - childWidth) / 2;
-						} else {
-							childLeft = isConstrainedToParent ? x + layoutWidth - childWidth : targetBounds.right - childWidth;
-						}
+					case 'rightToRightOf':
+						fromRight = isConstrainedToParent ? x + layoutWidth - childWidth : targetBounds.right - childWidth;
 						break;
-					}
-					case 'rightToRightOf': {
-						const isPulledByBothSides = constraintMap.has('leftToLeftOf') && constraintMap.get('leftToLeftOf') === targetId;
-
-						if (isPulledByBothSides) {
-							childLeft = isConstrainedToParent ? x + (layoutWidth - childWidth) / 2 : (targetBounds.right + targetBounds.left - childWidth) / 2;
-						} else {
-							childLeft = isConstrainedToParent ? x + layoutWidth - childWidth : targetBounds.right - childWidth;
-						}
-						break;
-					}
 					default:
 						break;
 				}
+			}
+
+			if (fromTop != null && fromBottom != null) {
+				childTop = fromTop + (fromBottom - fromTop) * vBias;
+			} else if (fromTop != null) {
+				childTop = fromTop;
+			} else if (fromBottom != null) {
+				childTop = fromBottom;
+			} else {
+				childTop = y;
+			}
+
+			if (fromLeft != null && fromRight != null) {
+				childLeft = fromLeft + (fromRight - fromLeft) * hBias;
+			} else if (fromLeft != null) {
+				childLeft = fromLeft;
+			} else if (fromRight != null) {
+				childLeft = fromRight;
+			} else {
+				childLeft = x;
 			}
 
 			laidOutChildren.set(child.id, child);
@@ -220,98 +222,46 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 	}
 }
 
-applyViewMixin((originals) => {
+applyViewMixin((_originals) => {
 	return {
 		[leftToLeftOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'leftToLeftOf', value);
+			updatePositionConstraint(this, 'leftToLeftOf', value);
 		},
 		[leftToRightOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'leftToRightOf', value);
+			updatePositionConstraint(this, 'leftToRightOf', value);
 		},
 		[rightToLeftOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'rightToLeftOf', value);
+			updatePositionConstraint(this, 'rightToLeftOf', value);
 		},
 		[rightToRightOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'rightToRightOf', value);
+			updatePositionConstraint(this, 'rightToRightOf', value);
 		},
 		[topToTopOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'topToTopOf', value);
+			updatePositionConstraint(this, 'topToTopOf', value);
 		},
 		[topToBottomOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'topToBottomOf', value);
+			updatePositionConstraint(this, 'topToBottomOf', value);
 		},
 		[bottomToTopOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'bottomToTopOf', value);
+			updatePositionConstraint(this, 'bottomToTopOf', value);
 		},
 		[bottomToBottomOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'bottomToBottomOf', value);
+			updatePositionConstraint(this, 'bottomToBottomOf', value);
 		},
 		[baselineToBaselineOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'baselineToBaselineOf', value);
+			updatePositionConstraint(this, 'baselineToBaselineOf', value);
 		},
 		[startToEndOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'startToEndOf', value);
+			updatePositionConstraint(this, 'startToEndOf', value);
 		},
 		[startToStartOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'startToStartOf', value);
+			updatePositionConstraint(this, 'startToStartOf', value);
 		},
 		[endToStartOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'endToStartOf', value);
+			updatePositionConstraint(this, 'endToStartOf', value);
 		},
 		[endToEndOfProperty.setNative](this: iOSConstrainedChild, value: string) {
-			if (!ConstraintLayout.isConstrainedChild(this)) {
-				return;
-			}
-
-			handleConstraintChange(this, 'endToEndOf', value);
+			updatePositionConstraint(this, 'endToEndOf', value);
 		},
 	};
 });

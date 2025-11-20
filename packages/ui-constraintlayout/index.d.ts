@@ -1,6 +1,10 @@
-import { LayoutBase, View } from '@nativescript/core';
+import { LayoutBase, Property, View } from '@nativescript/core';
 
-export interface ConstrainedItem {
+declare module '@nativescript/core/ui/core/view' {
+	interface View extends IConstrainedView {}
+}
+
+export interface IPositionConstraints {
 	leftToLeftOf: string;
 	leftToRightOf: string;
 	rightToLeftOf: string;
@@ -16,114 +20,28 @@ export interface ConstrainedItem {
 	endToEndOf: string;
 }
 
-export interface ConstrainedChild extends View, ConstrainedItem {}
-
-export class ConstraintLayout extends LayoutBase {
-	public static isConstrainedChild(child: View): boolean {
-		return child.parent && child.parent instanceof ConstraintLayoutBase;
-	}
-
-	public static getLeftToLeftOf(child: View): string {
-		return (child as ConstrainedChild).leftToLeftOf;
-	}
-
-	public static setLeftToLeftOf(child: View, value: string): void {
-		(child as ConstrainedChild).leftToLeftOf = value;
-	}
-
-	public static getLeftToRightOf(child: View): string {
-		return (child as ConstrainedChild).leftToRightOf;
-	}
-
-	public static setLeftToRightOf(child: View, value: string): void {
-		(child as ConstrainedChild).leftToRightOf = value;
-	}
-
-	public static getRightToLeftOf(child: View): string {
-		return (child as ConstrainedChild).rightToLeftOf;
-	}
-
-	public static setRightToLeftOf(child: View, value: string): void {
-		(child as ConstrainedChild).rightToLeftOf = value;
-	}
-
-	public static getRightToRightOf(child: View): string {
-		return (child as ConstrainedChild).rightToRightOf;
-	}
-
-	public static setRightToRightOf(child: View, value: string): void {
-		(child as ConstrainedChild).rightToRightOf = value;
-	}
-
-	public static getTopToTopOf(child: View): string {
-		return (child as ConstrainedChild).topToTopOf;
-	}
-
-	public static setTopToTopOf(child: View, value: string): void {
-		(child as ConstrainedChild).topToTopOf = value;
-	}
-
-	public static getTopToBottomOf(child: View): string {
-		return (child as ConstrainedChild).topToBottomOf;
-	}
-
-	public static setTopToBottomOf(child: View, value: string): void {
-		(child as ConstrainedChild).topToBottomOf = value;
-	}
-
-	public static getBottomToTopOf(child: View): string {
-		return (child as ConstrainedChild).bottomToTopOf;
-	}
-
-	public static setBottomToTopOf(child: View, value: string): void {
-		(child as ConstrainedChild).bottomToTopOf = value;
-	}
-
-	public static getBottomToBottomOf(child: View): string {
-		return (child as ConstrainedChild).bottomToBottomOf;
-	}
-
-	public static setBottomToBottomOf(child: View, value: string): void {
-		(child as ConstrainedChild).bottomToBottomOf = value;
-	}
-
-	public static getBaselineToBaselineOf(child: View): string {
-		return (child as ConstrainedChild).baselineToBaselineOf;
-	}
-
-	public static setBaselineToBaselineOf(child: View, value: string): void {
-		(child as ConstrainedChild).baselineToBaselineOf = value;
-	}
-
-	public static getStartToEndOf(child: View): string {
-		return (child as ConstrainedChild).startToEndOf;
-	}
-
-	public static setStartToEndOf(child: View, value: string): void {
-		(child as ConstrainedChild).startToEndOf = value;
-	}
-
-	public static getStartToStartOf(child: View): string {
-		return (child as ConstrainedChild).startToStartOf;
-	}
-
-	public static setStartToStartOf(child: View, value: string): void {
-		(child as ConstrainedChild).startToStartOf = value;
-	}
-
-	public static getEndToStartOf(child: View): string {
-		return (child as ConstrainedChild).endToStartOf;
-	}
-
-	public static setEndToStartOf(child: View, value: string): void {
-		(child as ConstrainedChild).endToStartOf = value;
-	}
-
-	public static getEndToEndOf(child: View): string {
-		return (child as ConstrainedChild).endToEndOf;
-	}
-
-	public static setEndToEndOf(child: View, value: string): void {
-		(child as ConstrainedChild).endToEndOf = value;
-	}
+export interface IConstrainedView extends IPositionConstraints {
+	horizontalBias: number;
+	verticalBias: number;
 }
+
+export declare class ConstraintLayout extends LayoutBase {
+	public static isConstrainedChild(child: View): boolean;
+	public get isRtl(): boolean;
+}
+
+export const leftToLeftOfProperty: Property<View, string>;
+export const leftToRightOfProperty: Property<View, string>;
+export const rightToLeftOfProperty: Property<View, string>;
+export const rightToRightOfProperty: Property<View, string>;
+export const topToTopOfProperty: Property<View, string>;
+export const topToBottomOfProperty: Property<View, string>;
+export const bottomToTopOfProperty: Property<View, string>;
+export const bottomToBottomOfProperty: Property<View, string>;
+export const baselineToBaselineOfProperty: Property<View, string>;
+export const startToEndOfProperty: Property<View, string>;
+export const startToStartOfProperty: Property<View, string>;
+export const endToStartOfProperty: Property<View, string>;
+export const endToEndOfProperty: Property<View, string>;
+export const horizontalBiasProperty: Property<View, number>;
+export const verticalBiasProperty: Property<View, number>;
