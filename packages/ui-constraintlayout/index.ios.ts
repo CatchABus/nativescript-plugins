@@ -210,7 +210,8 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 									if (targetBaseline > -1) {
 										const childPadding = child.effectivePaddingTop + child.effectiveBorderTopWidth;
 										const targetPadding = targetView.effectivePaddingTop + targetView.effectiveBorderTopWidth;
-										childTop = targetBounds.top - childPadding + targetPadding + (targetBaseline - baseline);
+										fromTop = targetBounds.top - childPadding + targetPadding + (targetBaseline - baseline);
+										fromBottom = null;
 									}
 								}
 								break;

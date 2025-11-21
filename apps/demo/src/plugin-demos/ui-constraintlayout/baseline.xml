@@ -1,0 +1,12 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:ui="@nativescript-community/ui-constraintlayout" navigatingTo="navigatingTo" class="page">
+  <Page.actionBar>
+    <ActionBar title="baseline" icon="" class="action-bar">
+    </ActionBar>
+  </Page.actionBar>
+  <StackLayout padding="30">
+    <ui:ConstraintLayout height="100%">
+      <Label id="text1" text="Hello " topToTopOf="parent" bottomToBottomOf="parent" marginLeft="64"/>
+      <Label text="NativeScript!" fontSize="32" baselineToBaselineOf="text1" leftToRightOf="text1"/>
+    </ui:ConstraintLayout>
+  </StackLayout>
+</Page>
