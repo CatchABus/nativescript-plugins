@@ -4,9 +4,15 @@
     </ActionBar>
   </Page.actionBar>
   <StackLayout padding="30">
-    <ui:ConstraintLayout height="100%">
-      <Button id="button1" text="ltr" width="150" height="150" startToStartOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="red"/>
-      <Button id="button1" text="rtl" width="150" height="150" direction="rtl" startToStartOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="yellow"/>
+    <Label text="LTR" marginBottom="16"/>
+    <ui:ConstraintLayout direction="ltr">
+      <Button id="button1" text="startToStartOf" width="150" height="150" startToStartOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="red"/>
+      <Button id="button1" text="endToEndOf" width="150" height="150" endToEndOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="yellow"/>
+    </ui:ConstraintLayout>
+    <Label text="RTL" marginTop="32" marginBottom="16"/>
+    <ui:ConstraintLayout direction="rtl">
+      <Button id="button1" text="startToStartOf" width="150" height="150" startToStartOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="red"/>
+      <Button id="button1" text="endToEndOf" width="150" height="150" endToEndOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="yellow"/>
     </ui:ConstraintLayout>
   </StackLayout>
 </Page>

@@ -1,6 +1,5 @@
 import { CoreTypes, heightProperty, Length, Trace, Utils, View, widthProperty } from '@nativescript/core';
 import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty, horizontalBiasProperty, verticalBiasProperty, circleConstraintProperty, circleAngleProperty, circleRadiusProperty, DEFAULT_BIAS } from './common';
-import { isCssWideKeyword } from '@nativescript/core/ui/core/properties';
 
 export * from './common';
 
@@ -74,7 +73,7 @@ applyViewMixin((originals) => {
 
 				if (typeof value === 'number') {
 					layoutParams.height = layout.toDevicePixels(value);
-				} else if (value === 'auto' || isCssWideKeyword(value)) {
+				} else if (typeof value === 'string') {
 					layoutParams.height = WRAP_CONTENT;
 				} else if (value.unit === 'dip') {
 					layoutParams.height = layout.toDevicePixels(value.value);
@@ -109,7 +108,7 @@ applyViewMixin((originals) => {
 
 				if (typeof value === 'number') {
 					layoutParams.width = layout.toDevicePixels(value);
-				} else if (value === 'auto' || isCssWideKeyword(value)) {
+				} else if (typeof value === 'string') {
 					layoutParams.width = WRAP_CONTENT;
 				} else if (value.unit === 'dip') {
 					layoutParams.width = layout.toDevicePixels(value.value);
