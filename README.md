@@ -26,14 +26,6 @@ At the prompt, enter the name of the new package.
 - Updates the `npm start` interactive display
 - Updates the README here to list the new package
 
-## How to add Angular compatibility to a package
-
-```
-npm run add-angular
-```
-
-At the prompt, enter the name of the package to add an `angular` folder to it with the necessary boilerplate to provide Angular support to the package.
-
 ## How to focus on just 1 package to develop in isolation
 
 ```

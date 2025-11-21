@@ -5,7 +5,6 @@ import { NativeObject } from '../NativeObject';
 function onNativeMutableArrayChange<T extends NativeObject<any>>(args: ChangedData<T>): void {
 	const oa = args.object as NativeMutableArray<T>;
 	const native = oa.native as NSMutableArray<T>;
-	console.log(native instanceof NSMutableArray);
 
 	switch (args.action) {
 		case ChangeType.Add:
