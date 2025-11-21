@@ -1,0 +1,12 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:ui="@nativescript-community/ui-constraintlayout" navigatingTo="navigatingTo" class="page">
+  <Page.actionBar>
+    <ActionBar title="layout-direction" icon="" class="action-bar">
+    </ActionBar>
+  </Page.actionBar>
+  <StackLayout padding="30">
+    <ui:ConstraintLayout height="100%">
+      <Button id="button1" text="ltr" width="150" height="150" startToStartOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="red"/>
+      <Button id="button1" text="rtl" width="150" height="150" direction="rtl" startToStartOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="yellow"/>
+    </ui:ConstraintLayout>
+  </StackLayout>
+</Page>

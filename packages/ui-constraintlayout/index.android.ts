@@ -1,5 +1,5 @@
-import { CoreTypes, heightProperty, Trace, Utils, View, widthProperty } from '@nativescript/core';
-import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty, horizontalBiasProperty, verticalBiasProperty, DEFAULT_BIAS } from './common';
+import { CoreTypes, heightProperty, Length, Trace, Utils, View, widthProperty } from '@nativescript/core';
+import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty, horizontalBiasProperty, verticalBiasProperty, circleConstraintProperty, circleAngleProperty, circleRadiusProperty, DEFAULT_BIAS } from './common';
 import { isCssWideKeyword } from '@nativescript/core/ui/core/properties';
 
 export * from './common';
@@ -311,6 +311,40 @@ applyViewMixin((originals) => {
 			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
 
 			layoutParams.verticalBias = isNaN(value) ? DEFAULT_BIAS : value;
+			nativeView.setLayoutParams(layoutParams);
+		},
+		[circleConstraintProperty.setNative](this: View, value: string) {
+			if (!ConstraintLayout.isConstrainedChild(this)) {
+				return;
+			}
+
+			const nativeView = this.nativeViewProtected as AndroidView;
+			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
+			const id = getConstraintNativeTargetId(value, this);
+
+			layoutParams.circleConstraint = id;
+			nativeView.setLayoutParams(layoutParams);
+		},
+		[circleAngleProperty.setNative](this: View, value: number) {
+			if (!ConstraintLayout.isConstrainedChild(this)) {
+				return;
+			}
+
+			const nativeView = this.nativeViewProtected as AndroidView;
+			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
+
+			layoutParams.circleAngle = value;
+			nativeView.setLayoutParams(layoutParams);
+		},
+		[circleRadiusProperty.setNative](this: View, value: CoreTypes.LengthType) {
+			if (!ConstraintLayout.isConstrainedChild(this)) {
+				return;
+			}
+
+			const nativeView = this.nativeViewProtected as AndroidView;
+			const layoutParams = nativeView.getLayoutParams() as ConstraintLayoutParams;
+
+			layoutParams.circleRadius = Length.toDevicePixels(value);
 			nativeView.setLayoutParams(layoutParams);
 		},
 	};

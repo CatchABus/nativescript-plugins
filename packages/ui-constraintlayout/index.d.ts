@@ -1,4 +1,4 @@
-import { LayoutBase, Property, View } from '@nativescript/core';
+import { CoreTypes, LayoutBase, Property, View } from '@nativescript/core';
 
 declare module '@nativescript/core/ui/core/view' {
 	interface View extends IConstrainedView {}
@@ -23,6 +23,9 @@ export interface IPositionConstraints {
 export interface IConstrainedView extends IPositionConstraints {
 	horizontalBias: number;
 	verticalBias: number;
+	circleConstraint: string;
+	circleAngle: number;
+	circleRadius: CoreTypes.LengthType;
 }
 
 export declare class ConstraintLayout extends LayoutBase {

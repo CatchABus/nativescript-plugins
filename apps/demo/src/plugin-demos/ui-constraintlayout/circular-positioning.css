@@ -1,0 +1,9 @@
+.circle {
+  width: 50;
+  height: 50;
+  border-radius: 25;
+}
+
+.circle.constrained {
+  circle-radius: 100;
+}

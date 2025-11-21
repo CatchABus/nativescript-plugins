@@ -1,0 +1,12 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:ui="@nativescript-community/ui-constraintlayout" navigatingTo="navigatingTo" class="page">
+  <Page.actionBar>
+    <ActionBar title="bias" icon="" class="action-bar">
+    </ActionBar>
+  </Page.actionBar>
+  <StackLayout padding="30">
+    <ui:ConstraintLayout height="100%">
+      <Button id="button1" text="h-bias 0.3" width="150" height="150" horizontalBias="0.3" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="red"/>
+      <Button id="button1" text="v-bias 0.2" width="150" height="150" verticalBias="0.2" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="yellow"/>
+    </ui:ConstraintLayout>
+  </StackLayout>
+</Page>

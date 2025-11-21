@@ -1,5 +1,5 @@
-import { Utils, View } from '@nativescript/core';
-import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, ConstraintLayoutBase, DEFAULT_BIAS, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty } from './common';
+import { Length, Utils, View } from '@nativescript/core';
+import { applyViewMixin, baselineToBaselineOfProperty, bottomToBottomOfProperty, bottomToTopOfProperty, circleConstraintProperty, ConstraintLayoutBase, DEFAULT_BIAS, endToEndOfProperty, endToStartOfProperty, leftToLeftOfProperty, leftToRightOfProperty, PARENT_CONSTRAINT_IDENTIFIER, rightToLeftOfProperty, rightToRightOfProperty, startToEndOfProperty, startToStartOfProperty, topToBottomOfProperty, topToTopOfProperty } from './common';
 import { IPositionConstraints } from '.';
 
 export * from './common';
@@ -93,7 +93,7 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 
 		const childMeasureSpec = layout.makeMeasureSpec(0, layout.UNSPECIFIED);
 
-		this.eachLayoutChild((child, last) => {
+		this.eachLayoutChild((child) => {
 			const childSize = View.measureChild(this, child, childMeasureSpec, childMeasureSpec);
 			measureWidth = Math.max(measureWidth, childSize.measuredWidth);
 			measureHeight = Math.max(measureHeight, childSize.measuredHeight);
@@ -125,9 +125,7 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 
 		const laidOutChildren = new Map<string, iOSConstrainedChild>();
 
-		// Handle children with parent constraints first to render sibling constraints properly later
 		this.eachLayoutChild((child: iOSConstrainedChild) => {
-			const posConstraintMap = getPositionConstraintMap(child);
 			const childWidth = child.getMeasuredWidth() + child.effectiveMarginLeft + child.effectiveMarginRight;
 			const childHeight = child.getMeasuredHeight() + child.effectiveMarginTop + child.effectiveMarginBottom;
 			const hBias = isNaN(child.horizontalBias) ? DEFAULT_BIAS : Math.max(0, Math.min(1, child.horizontalBias));
@@ -141,58 +139,110 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 			let fromLeft: number = null;
 			let fromRight: number = null;
 
-			for (const [key, targetId] of posConstraintMap) {
-				const isConstrainedToParent = targetId === PARENT_CONSTRAINT_IDENTIFIER;
-				const targetView = isConstrainedToParent ? this : laidOutChildren.get(targetId);
+			// Circle constraint has more priority than other position constraints
+			if (child.circleConstraint && (child.circleConstraint === PARENT_CONSTRAINT_IDENTIFIER || laidOutChildren.has(child.circleConstraint))) {
+				const angleDegrees = isNaN(child.circleAngle) ? 0 : child.circleAngle;
+				const angleRadians = (angleDegrees - 90) * (Math.PI / 180);
+				const circleRadius = Length.toDevicePixels(child.circleRadius);
 
-				if (!targetView) {
-					continue;
+				if (child.circleConstraint === PARENT_CONSTRAINT_IDENTIFIER) {
+					fromLeft = (x + layoutWidth - childWidth) / 2 + circleRadius * Math.cos(angleRadians);
+					fromTop = (y + layoutHeight - childHeight) / 2 + circleRadius * Math.sin(angleRadians);
+				} else {
+					const targetView = laidOutChildren.get(child.circleConstraint);
+					const targetBounds = targetView._getCurrentLayoutBounds();
+					const targetWidth = targetBounds.right - targetBounds.left;
+					const targetHeight = targetBounds.bottom - targetBounds.top;
+
+					fromLeft = targetBounds.left - (childWidth - targetWidth) / 2 + circleRadius * Math.cos(angleRadians);
+					fromTop = targetBounds.top - (childHeight - targetHeight) / 2 + circleRadius * Math.sin(angleRadians);
 				}
+			} else {
+				const posConstraintMap = getPositionConstraintMap(child);
 
-				const constraintName = this._getActualConstraintName(key);
-				const targetBounds = targetView._getCurrentLayoutBounds();
+				for (const [key, targetId] of posConstraintMap) {
+					const constraintName = this._getActualConstraintName(key);
 
-				switch (constraintName) {
-					case 'baselineToBaselineOf': {
-						const baseline = getBaseline(child);
-
-						if (baseline > -1) {
-							const targetBaseline = getBaseline(targetView);
-
-							if (targetBaseline > -1) {
-								const childPadding = child.effectivePaddingTop + child.effectiveBorderTopWidth;
-								const targetPadding = targetView.effectivePaddingTop + targetView.effectiveBorderTopWidth;
-								childTop = targetBounds.top - childPadding + targetPadding + (targetBaseline - baseline);
-							}
+					if (targetId === PARENT_CONSTRAINT_IDENTIFIER) {
+						switch (constraintName) {
+							case 'topToTopOf':
+								fromTop = y;
+								break;
+							case 'topToBottomOf':
+								fromTop = insets.bottom + insets.top + layoutHeight + verticalPadding;
+								break;
+							case 'bottomToTopOf':
+								fromBottom = insets.top - childHeight;
+								break;
+							case 'bottomToBottomOf':
+								fromBottom = y + layoutHeight - childHeight;
+								break;
+							case 'leftToLeftOf':
+								fromLeft = x;
+								break;
+							case 'leftToRightOf':
+								fromLeft = insets.left + insets.right + layoutWidth + horizontalPadding;
+								break;
+							case 'rightToLeftOf':
+								fromRight = insets.left - childWidth;
+								break;
+							case 'rightToRightOf':
+								fromRight = x + layoutWidth - childWidth;
+								break;
+							default:
+								break;
 						}
-						break;
+					} else {
+						const targetView = laidOutChildren.get(targetId);
+						if (!targetView) {
+							continue;
+						}
+
+						const targetBounds = targetView._getCurrentLayoutBounds();
+
+						switch (constraintName) {
+							case 'baselineToBaselineOf': {
+								const baseline = getBaseline(child);
+
+								if (baseline > -1) {
+									const targetBaseline = getBaseline(targetView);
+
+									if (targetBaseline > -1) {
+										const childPadding = child.effectivePaddingTop + child.effectiveBorderTopWidth;
+										const targetPadding = targetView.effectivePaddingTop + targetView.effectiveBorderTopWidth;
+										childTop = targetBounds.top - childPadding + targetPadding + (targetBaseline - baseline);
+									}
+								}
+								break;
+							}
+							case 'topToTopOf':
+								fromTop = targetBounds.top;
+								break;
+							case 'topToBottomOf':
+								fromTop = targetBounds.bottom;
+								break;
+							case 'bottomToTopOf':
+								fromBottom = targetBounds.top - childHeight;
+								break;
+							case 'bottomToBottomOf':
+								fromBottom = targetBounds.bottom - childHeight;
+								break;
+							case 'leftToLeftOf':
+								fromLeft = targetBounds.left;
+								break;
+							case 'leftToRightOf':
+								fromLeft = targetBounds.right;
+								break;
+							case 'rightToLeftOf':
+								fromRight = targetBounds.left - childWidth;
+								break;
+							case 'rightToRightOf':
+								fromRight = targetBounds.right - childWidth;
+								break;
+							default:
+								break;
+						}
 					}
-					case 'topToTopOf':
-						fromTop = isConstrainedToParent ? y : targetBounds.top;
-						break;
-					case 'topToBottomOf':
-						fromTop = isConstrainedToParent ? insets.bottom + insets.top + layoutHeight + verticalPadding : targetBounds.bottom;
-						break;
-					case 'bottomToTopOf':
-						fromBottom = isConstrainedToParent ? insets.top - childHeight : targetBounds.top - childHeight;
-						break;
-					case 'bottomToBottomOf':
-						fromBottom = isConstrainedToParent ? y + layoutHeight - childHeight : targetBounds.bottom - childHeight;
-						break;
-					case 'leftToLeftOf':
-						fromLeft = isConstrainedToParent ? x : targetBounds.left;
-						break;
-					case 'leftToRightOf':
-						fromLeft = isConstrainedToParent ? insets.left + insets.right + layoutWidth + horizontalPadding : targetBounds.right;
-						break;
-					case 'rightToLeftOf':
-						fromRight = isConstrainedToParent ? insets.left - childWidth : targetBounds.left - childWidth;
-						break;
-					case 'rightToRightOf':
-						fromRight = isConstrainedToParent ? x + layoutWidth - childWidth : targetBounds.right - childWidth;
-						break;
-					default:
-						break;
 				}
 			}
 

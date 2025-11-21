@@ -1,4 +1,4 @@
-import { LayoutBase, Property, View } from '@nativescript/core';
+import { CoreTypes, LayoutBase, Length, Property, View } from '@nativescript/core';
 
 export const PARENT_CONSTRAINT_IDENTIFIER = 'parent';
 export const DEFAULT_BIAS = 0.5;
@@ -17,9 +17,15 @@ export class ConstraintLayoutBase extends LayoutBase {
 export function applyViewMixin(callback: (originals: Partial<View>) => Partial<View>): void {
 	const originals = {};
 	const mixin = callback(originals);
+	const propertySymbols = Object.getOwnPropertySymbols(mixin);
+	const propertyNames = Object.getOwnPropertyNames(mixin);
 
-	for (const key in mixin) {
-		originals[key] = View.prototype[key];
+	for (const propertyName of propertySymbols) {
+		originals[propertyName] = View.prototype[propertyName];
+	}
+
+	for (const propertyName of propertyNames) {
+		originals[propertyName] = View.prototype[propertyName];
 	}
 
 	Object.assign(View.prototype, mixin);
@@ -131,3 +137,27 @@ export const verticalBiasProperty = new Property<View, number>({
 	affectsLayout: global.isIOS,
 });
 verticalBiasProperty.register(View);
+
+export const circleConstraintProperty = new Property<View, string>({
+	name: 'circleConstraint',
+	defaultValue: null,
+	affectsLayout: global.isIOS,
+});
+circleConstraintProperty.register(View);
+
+export const circleAngleProperty = new Property<View, number>({
+	name: 'circleAngle',
+	defaultValue: 0,
+	valueConverter: (value) => Number(value),
+	affectsLayout: global.isIOS,
+});
+circleAngleProperty.register(View);
+
+export const circleRadiusProperty = new Property<View, CoreTypes.LengthType>({
+	name: 'circleRadius',
+	defaultValue: 0,
+	valueConverter: Length.parse,
+	equalityComparer: Length.equals,
+	affectsLayout: global.isIOS,
+});
+circleRadiusProperty.register(View);
