@@ -21,10 +21,10 @@
 		"iOS",
 		"Android",
 		"ConstraintLayout",
-		"AutoLayout",
 		"constraints",
 		"layout",
-		"positioning"
+		"positioning",
+		"size"
 	],
 	"author": {
 		"name": "CatchABus",
