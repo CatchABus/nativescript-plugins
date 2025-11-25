@@ -7,10 +7,7 @@
 		"paths": {
 			"~/*": ["src/*"],
 			"@demo/shared": ["../../tools/demo/index.ts"],
-			"@nativescript-community/*": ["../../packages/*"],
-			"@nativescript-community/nordic-dfu": ["../../packages/nordic-dfu/index.d.ts"],
-			"@nativescript-community/dns-lookup": ["../../packages/dns-lookup/index.d.ts"],
-			"@nativescript-community/ui-maplibre": ["../../packages/ui-maplibre/lib/ui/indexf.ts"]
+			"@nativescript-community/*": ["../../packages/*"]
 		}
 	}
 }

@@ -1,5 +1,5 @@
 import { DfuProgressEventData } from '.';
-import { _addExecutingInitiator, _removeExecutingInitiator, DFUInitiatorCommon, DfuState } from './common';
+import { _addExecutingInitiator, _removeExecutingInitiator, DFUControllerInternal, DFUInitiatorCommon, DfuState } from './common';
 import { DFUController } from '../DFUController';
 
 @NativeClass
@@ -15,7 +15,7 @@ class DFUServiceDelegateImpl extends NSObject implements DFUServiceDelegate {
 		return delegate;
 	}
 
-	dfuErrorDidOccurWithMessage(error: DFUError, message: string): void {
+	dfuErrorDidOccurWithMessage(_error: DFUError, message: string): void {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			_removeExecutingInitiator(owner.peripheralUUID);
@@ -113,27 +113,27 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		this.mNative.progressDelegate = this.mProgressDelegate;
 	}
 
-	public override setAndroidDeviceName(name: string): DFUInitiator {
+	public override setAndroidDeviceName(_name: string): DFUInitiator {
 		// Not implemented on iOS
 		return this;
 	}
 
-	public override setAndroidDisableNotification(val: boolean): DFUInitiator {
+	public override setAndroidDisableNotification(_val: boolean): DFUInitiator {
 		// Not implemented on iOS
 		return this;
 	}
 
-	public override setAndroidForeground(val: boolean): DFUInitiator {
+	public override setAndroidForeground(_val: boolean): DFUInitiator {
 		// Not implemented on iOS
 		return this;
 	}
 
-	public override setAndroidKeepBond(val: boolean): DFUInitiator {
+	public override setAndroidKeepBond(_val: boolean): DFUInitiator {
 		// Not implemented on iOS
 		return this;
 	}
 
-	public override setAndroidScanTimeout(val: number): DFUInitiatorCommon {
+	public override setAndroidScanTimeout(_val: number): DFUInitiatorCommon {
 		// Not implemented on iOS
 		return this;
 	}
@@ -181,7 +181,7 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		_addExecutingInitiator(this.peripheralUUID, {
 			object: this,
 		});
-		return new DFUController(nativeController);
+		return Reflect.construct(DFUControllerInternal, [nativeController], DFUController) as any;
 	}
 }
 

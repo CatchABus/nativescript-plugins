@@ -1,5 +1,5 @@
-import { EventData, Page } from '@nativescript/core';
 import { DFUInitiator, DfuProgressEventData, DfuState, DfuStateChangedEventData } from '@nativescript-community/nordic-dfu';
+import { EventData, Page } from '@nativescript/core';
 
 export function navigatingTo(args: EventData) {
 	const page = <Page>args.object;

@@ -1,5 +1,4 @@
 export declare class DFUController {
-	constructor(native: any);
 	public pause(): void;
 	public resume(): void;
 	public abort(): void;

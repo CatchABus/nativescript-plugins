@@ -37,6 +37,15 @@ export function _removeExecutingInitiator(peripheralUUID: string): void {
 	}
 }
 
+// For internal usage
+export class DFUControllerInternal {
+	declare mNative: any;
+
+	constructor(native: any) {
+		this.mNative = native;
+	}
+}
+
 export abstract class DFUInitiatorCommon extends Observable implements IDFUInitiator {
 	public static readonly dfuStateChangedEvent = 'DFUStateChanged';
 	public static readonly dfuProgressEvent = 'DFUProgress';

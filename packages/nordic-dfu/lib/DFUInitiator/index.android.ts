@@ -1,6 +1,6 @@
 import { File, getFileAccess, knownFolders, Utils } from '@nativescript/core';
 import { DfuProgressEventData } from '.';
-import { DfuState, DFUInitiatorCommon, _addExecutingInitiator, _removeExecutingInitiator } from './common';
+import { DfuState, DFUInitiatorCommon, _addExecutingInitiator, _removeExecutingInitiator, DFUControllerInternal } from './common';
 import { DFUController } from '../DFUController';
 
 const DFU_TEMP_FILE_NAME = 'dfu-temp.zip';
@@ -16,42 +16,42 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 		return global.__native(this);
 	}
 
-	public override onDeviceConnecting(deviceAddress: string) {
+	public override onDeviceConnecting(_deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			owner._notifyDfuStateChanged(DfuState.CONNECTING);
 		}
 	}
 
-	public override onDfuProcessStarting(deviceAddress: string) {
+	public override onDfuProcessStarting(_deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			owner._notifyDfuStateChanged(DfuState.DFU_PROCESS_STARTING);
 		}
 	}
 
-	public override onEnablingDfuMode(deviceAddress: string) {
+	public override onEnablingDfuMode(_deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			owner._notifyDfuStateChanged(DfuState.ENABLING_DFU_MODE);
 		}
 	}
 
-	public override onFirmwareValidating(deviceAddress: string) {
+	public override onFirmwareValidating(_deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			owner._notifyDfuStateChanged(DfuState.FIRMWARE_VALIDATING);
 		}
 	}
 
-	public override onDeviceDisconnecting(deviceAddress: string) {
+	public override onDeviceDisconnecting(_deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			owner._notifyDfuStateChanged(DfuState.DEVICE_DISCONNECTING);
 		}
 	}
 
-	public override onDfuCompleted(deviceAddress: string) {
+	public override onDfuCompleted(_deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			_removeExecutingInitiator(owner.peripheralUUID);
@@ -65,7 +65,7 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 		}, 200);
 	}
 
-	public override onDfuAborted(deviceAddress: string) {
+	public override onDfuAborted(_deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			_removeExecutingInitiator(owner.peripheralUUID);
@@ -73,7 +73,7 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 		}
 	}
 
-	public override onProgressChanged(deviceAddress: string, percent: number, speed: number, avgSpeed: number, currentPart: number, totalParts: number) {
+	public override onProgressChanged(_deviceAddress: string, percent: number, speed: number, avgSpeed: number, currentPart: number, totalParts: number) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			owner.notify<DfuProgressEventData>({
@@ -88,7 +88,7 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 		}
 	}
 
-	public override onError(deviceAddress: string, error: number, errorType: number, message: string) {
+	public override onError(_deviceAddress: string, _error: number, _errorType: number, message: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
 			_removeExecutingInitiator(owner.peripheralUUID);
@@ -177,7 +177,7 @@ export class DFUInitiator extends DFUInitiatorCommon {
 			object: this,
 			cleanUpCallback,
 		});
-		return new DFUController(nativeController);
+		return Reflect.construct(DFUControllerInternal, [nativeController], DFUController) as any;
 	}
 
 	private _createDFUFileURI(zipFile: string | ArrayBuffer, context: android.content.Context, callback: (uri: android.net.Uri) => void): () => void {

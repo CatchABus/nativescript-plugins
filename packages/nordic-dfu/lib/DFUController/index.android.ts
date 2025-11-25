@@ -1,12 +1,7 @@
 import { DFUControllerCommon } from './common';
 
 export class DFUController extends DFUControllerCommon {
-	private readonly mNative: no.nordicsemi.android.dfu.DfuServiceController;
-
-	constructor(native: no.nordicsemi.android.dfu.DfuServiceController) {
-		super();
-		this.mNative = native;
-	}
+	private declare readonly mNative: no.nordicsemi.android.dfu.DfuServiceController;
 
 	public pause(): void {
 		if (this.mNative) {

@@ -1,12 +1,7 @@
 import { DFUControllerCommon } from './common';
 
 export class DFUController extends DFUControllerCommon {
-	private readonly mNative: DFUServiceController;
-
-	constructor(native: DFUServiceController) {
-		super();
-		this.mNative = native;
-	}
+	private declare readonly mNative: DFUServiceController;
 
 	public pause(): void {
 		if (this.mNative) {
