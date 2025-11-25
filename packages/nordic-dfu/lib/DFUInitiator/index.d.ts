@@ -1,8 +1,7 @@
-import { EventData } from '@nativescript/core';
-import { DFUInitiatorCommon } from './common';
-import { DfuServiceController } from './serviceController';
+import { EventData, Observable } from '@nativescript/core';
+import { DFUController } from '../DFUController';
 
-export declare class DFUInitiator extends DFUInitiatorCommon {
+export declare class DFUInitiator extends Observable {
 	/**
 	 * The peripheral device address/UUID.
 	 *
@@ -47,7 +46,7 @@ export declare class DFUInitiator extends DFUInitiatorCommon {
 	public setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(val: boolean): DFUInitiator;
 	public setPacketReceiptNotificationParameter(val: number): DFUInitiator;
 	public disableResume(): DFUInitiator;
-	public start(filePath: string): DfuServiceController;
+	public start(zipFile: string | ArrayBuffer): DFUController;
 
 	addEventListener(eventName: 'DFUStateChanged', callback: (data: DfuStateChangedEventData) => void, thisArg?: any, once?: boolean): void;
 	on(eventName: 'DFUStateChanged', callback: (data: DfuStateChangedEventData) => void, thisArg?: any): void;
@@ -67,18 +66,18 @@ export declare enum DfuState {
 }
 
 export interface DfuEventData extends EventData {
-	object: NordicUpdaterCommon;
+	object: Observable;
 }
 
 export interface DfuStateChangedEventData extends DfuEventData {
-	state: DfuState;
+	state?: DfuState;
 	reason?: string;
 }
 
 export interface DfuProgressEventData extends DfuEventData {
-	percent: number;
-	speed: number;
-	avgSpeed: number;
-	currentPart: number;
-	totalParts: number;
+	percent?: number;
+	speed?: number;
+	avgSpeed?: number;
+	currentPart?: number;
+	totalParts?: number;
 }

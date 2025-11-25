@@ -1,11 +1,9 @@
-import { SDK_VERSION } from '@nativescript/core/utils';
+import { File, getFileAccess, knownFolders, Utils } from '@nativescript/core';
 import { DfuProgressEventData } from '.';
-import { DfuState, DFUInitiatorCommon } from './common';
-import { Utils } from '@nativescript/core';
-import { DfuServiceController } from './serviceController';
+import { DfuState, DFUInitiatorCommon, _addExecutingInitiator, _removeExecutingInitiator } from './common';
+import { DFUController } from '../DFUController';
 
-// Keep strong references of the initiators while running
-const executingInitiators = new Map<string, DFUInitiator>();
+const DFU_TEMP_FILE_NAME = 'dfu-temp.zip';
 
 @NativeClass
 class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerAdapter {
@@ -56,9 +54,7 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 	public override onDfuCompleted(deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
-			if (executingInitiators.has(owner.peripheralUUID)) {
-				executingInitiators.delete(owner.peripheralUUID);
-			}
+			_removeExecutingInitiator(owner.peripheralUUID);
 			owner._notifyDfuStateChanged(DfuState.DFU_COMPLETED);
 		}
 
@@ -72,9 +68,7 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 	public override onDfuAborted(deviceAddress: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
-			if (executingInitiators.has(owner.peripheralUUID)) {
-				executingInitiators.delete(owner.peripheralUUID);
-			}
+			_removeExecutingInitiator(owner.peripheralUUID);
 			owner._notifyDfuStateChanged(DfuState.DFU_ABORTED);
 		}
 	}
@@ -97,9 +91,7 @@ class DfuProgressListener extends no.nordicsemi.android.dfu.DfuProgressListenerA
 	public override onError(deviceAddress: string, error: number, errorType: number, message: string) {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
-			if (executingInitiators.has(owner.peripheralUUID)) {
-				executingInitiators.delete(owner.peripheralUUID);
-			}
+			_removeExecutingInitiator(owner.peripheralUUID);
 			owner._notifyDfuStateChanged(DfuState.DFU_FAILED, message);
 		}
 	}
@@ -169,19 +161,65 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		return this;
 	}
 
-	public override start(filePath: string): DfuServiceController {
+	public override start(zipFile: string | ArrayBuffer): DFUController {
 		const appContext = Utils.android.getApplicationContext();
+		const cleanUpCallback = this._createDFUFileURI(zipFile, appContext, (uri) => {
+			this.mNative.setZip(uri);
+		});
 
-		this.mNative.setZip(android.net.Uri.parse(filePath));
-
-		if (SDK_VERSION >= 26) {
+		if (Utils.SDK_VERSION >= 26) {
 			no.nordicsemi.android.dfu.DfuServiceInitiator.createDfuNotificationChannel(appContext);
 		}
 
 		const nativeController = this.mNative.start(appContext, com.nativescript.dfu.DfuService.class);
 
-		executingInitiators.set(this.peripheralUUID, this);
-		return new DfuServiceController(nativeController);
+		_addExecutingInitiator(this.peripheralUUID, {
+			object: this,
+			cleanUpCallback,
+		});
+		return new DFUController(nativeController);
+	}
+
+	private _createDFUFileURI(zipFile: string | ArrayBuffer, context: android.content.Context, callback: (uri: android.net.Uri) => void): () => void {
+		if (!zipFile || !context || !callback) {
+			throw new Error('_createDFUFileURI: Missing DFU parameters for generating file URI');
+		}
+
+		let cleanUpCallback: () => void;
+
+		if (typeof zipFile === 'string') {
+			callback(android.net.Uri.parse(zipFile));
+			cleanUpCallback = () => {};
+		} else if (zipFile instanceof ArrayBuffer) {
+			const cacheFolder = knownFolders.temp();
+			const filePath = cacheFolder.path + '/' + DFU_TEMP_FILE_NAME;
+			const errorCallback = (err) => console.error(err);
+
+			if (File.exists) {
+				const file = File.fromPath(filePath);
+				file.removeSync(errorCallback);
+			}
+
+			const tmpFile = new java.io.File(filePath);
+			const fos = new java.io.FileOutputStream(tmpFile);
+			const channel = fos.getChannel();
+
+			try {
+				channel.write(zipFile as any);
+			} catch (err) {
+				console.error(err);
+			} finally {
+				channel.close();
+				fos.close();
+			}
+
+			callback(androidx.core.content.FileProvider.getUriForFile(context, context.getPackageName() + '.dfufileprovider', tmpFile));
+			cleanUpCallback = () => getFileAccess().deleteFile(filePath, errorCallback);
+		} else {
+			throw new Error(`Incorrect zip file given: ${zipFile}`);
+		}
+
+		return cleanUpCallback;
 	}
 }
 

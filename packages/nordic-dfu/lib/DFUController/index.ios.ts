@@ -1,6 +1,6 @@
-import { DfuServiceControllerCommon } from './common';
+import { DFUControllerCommon } from './common';
 
-export class DfuServiceController extends DfuServiceControllerCommon {
+export class DFUController extends DFUControllerCommon {
 	private readonly mNative: DFUServiceController;
 
 	constructor(native: DFUServiceController) {

@@ -1,9 +1,6 @@
 import { DfuProgressEventData } from '.';
-import { DFUInitiatorCommon, DfuState } from './common';
-import { DfuServiceController } from './serviceController';
-
-// Keep strong references of the initiators while running
-const executingInitiators = new Map<string, DFUInitiator>();
+import { _addExecutingInitiator, _removeExecutingInitiator, DFUInitiatorCommon, DfuState } from './common';
+import { DFUController } from '../DFUController';
 
 @NativeClass
 class DFUServiceDelegateImpl extends NSObject implements DFUServiceDelegate {
@@ -21,9 +18,7 @@ class DFUServiceDelegateImpl extends NSObject implements DFUServiceDelegate {
 	dfuErrorDidOccurWithMessage(error: DFUError, message: string): void {
 		const owner = this.mOwner?.deref?.();
 		if (owner) {
-			if (executingInitiators.has(owner.peripheralUUID)) {
-				executingInitiators.delete(owner.peripheralUUID);
-			}
+			_removeExecutingInitiator(owner.peripheralUUID);
 			owner._notifyDfuStateChanged(DfuState.DFU_FAILED, message);
 		}
 	}
@@ -53,15 +48,11 @@ class DFUServiceDelegateImpl extends NSObject implements DFUServiceDelegate {
 					state = DfuState.DEVICE_DISCONNECTING;
 					break;
 				case DFUState.Completed:
-					if (executingInitiators.has(owner.peripheralUUID)) {
-						executingInitiators.delete(owner.peripheralUUID);
-					}
+					_removeExecutingInitiator(owner.peripheralUUID);
 					state = DfuState.DFU_COMPLETED;
 					break;
 				case DFUState.Aborted:
-					if (executingInitiators.has(owner.peripheralUUID)) {
-						executingInitiators.delete(owner.peripheralUUID);
-					}
+					_removeExecutingInitiator(owner.peripheralUUID);
 					state = DfuState.DFU_ABORTED;
 					break;
 				default:
@@ -172,13 +163,25 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		return this;
 	}
 
-	public override start(filePath: string): DfuServiceController {
-		const selectedFirmware = DFUFirmware.alloc().initWithUrlToZipFileError(NSURL.fileURLWithPath(filePath));
+	public override start(zipFile: string | ArrayBuffer): DFUController {
+		let selectedFirmware: DFUFirmware;
+
+		if (typeof zipFile === 'string') {
+			selectedFirmware = DFUFirmware.alloc().initWithUrlToZipFileError(NSURL.fileURLWithPath(zipFile));
+		} else if (zipFile instanceof ArrayBuffer) {
+			const nativeBuffer = NSData.dataWithData(zipFile as any);
+			selectedFirmware = DFUFirmware.alloc().initWithZipFileError(nativeBuffer);
+		} else {
+			throw new Error(`Incorrect zip file given: ${zipFile}`);
+		}
+
 		const identifier = NSUUID.alloc().initWithUUIDString(this.mPeripheralUUID);
 		const nativeController = this.mNative.withFirmware(selectedFirmware).startWithTargetWithIdentifier(identifier);
 
-		executingInitiators.set(this.peripheralUUID, this);
-		return new DfuServiceController(nativeController);
+		_addExecutingInitiator(this.peripheralUUID, {
+			object: this,
+		});
+		return new DFUController(nativeController);
 	}
 }
 

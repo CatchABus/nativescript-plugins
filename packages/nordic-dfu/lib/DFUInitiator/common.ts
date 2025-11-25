@@ -1,6 +1,6 @@
-import { EventData, Observable } from '@nativescript/core';
-import { DfuServiceController } from './serviceController';
-import { DfuStateChangedEventData } from '.';
+import { Observable } from '@nativescript/core';
+import { DFUInitiator as IDFUInitiator, DfuStateChangedEventData } from '.';
+import { DFUController } from '../DFUController';
 
 export enum DfuState {
 	CONNECTING,
@@ -13,7 +13,31 @@ export enum DfuState {
 	DFU_FAILED,
 }
 
-export abstract class DFUInitiatorCommon extends Observable {
+type DfuInitiatorContext = {
+	object: DFUInitiatorCommon;
+	cleanUpCallback?: () => void;
+};
+
+// Keep strong references of the initiators while running
+const executingInitiators = new Map<string, DfuInitiatorContext>();
+
+export function _addExecutingInitiator(peripheralUUID: string, context: DfuInitiatorContext): void {
+	executingInitiators.set(peripheralUUID, context);
+}
+
+export function _removeExecutingInitiator(peripheralUUID: string): void {
+	if (executingInitiators.has(peripheralUUID)) {
+		const context = executingInitiators.get(peripheralUUID);
+
+		if (context?.cleanUpCallback) {
+			context.cleanUpCallback();
+		}
+
+		executingInitiators.delete(peripheralUUID);
+	}
+}
+
+export abstract class DFUInitiatorCommon extends Observable implements IDFUInitiator {
 	public static readonly dfuStateChangedEvent = 'DFUStateChanged';
 	public static readonly dfuProgressEvent = 'DFUProgress';
 
@@ -38,7 +62,7 @@ export abstract class DFUInitiatorCommon extends Observable {
 	public abstract setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(val: boolean): DFUInitiatorCommon;
 	public abstract setPacketReceiptNotificationParameter(val: number): DFUInitiatorCommon;
 	public abstract disableResume(): DFUInitiatorCommon;
-	public abstract start(filePath: string): DfuServiceController;
+	public abstract start(zipFile: string | ArrayBuffer): DFUController;
 
 	public _notifyDfuStateChanged(state: DfuState, reason?: string): void {
 		this.notify<DfuStateChangedEventData>({

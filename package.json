@@ -18,7 +18,7 @@
 		"@nativescript/core": "^9.0.2",
 		"@nativescript/plugin-tools": "5.4.1",
 		"@nativescript/types": "^8.9.1",
-		"@nativescript/webpack": "^5.0.25",
+		"@nativescript/webpack": "5.0.24",
 		"@ngtools/webpack": "^15.1.4",
 		"@typescript-eslint/eslint-plugin": "^5.50.0",
 		"eslint-config-prettier": "^8.6.0",
@@ -30,7 +30,6 @@
 		"prettier": "^2.8.3",
 		"rxjs": "~7.8.0",
 		"typescript": "~5.5.0",
-		"webpack": "^5.103.0",
 		"zone.js": "~0.12.0"
 	},
 	"lint-staged": {
