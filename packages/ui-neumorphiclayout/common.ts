@@ -219,7 +219,7 @@ export class NeumorphicCanvas extends Canvas {
 
 					if (colorStop.offset) {
 						isGradientWithStops = true;
-						positions[i] = Utils.layout.toDeviceIndependentPixels(PercentLength.toDevicePixels(colorStop.offset));
+						positions[i] = Utils.layout.toDeviceIndependentPixels(PercentLength.toDevicePixels(colorStop.offset, 0, 0));
 					}
 				}
 

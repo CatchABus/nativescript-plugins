@@ -1,4 +1,4 @@
-import { backgroundInternalProperty, borderTopColorProperty, borderTopLeftRadiusProperty, borderTopWidthProperty, LayoutBase, Screen, ViewBase } from '@nativescript/core';
+import { backgroundInternalProperty, borderTopColorProperty, borderTopLeftRadiusProperty, borderTopWidthProperty, CustomLayoutView, LayoutBase, Screen, ScrollView, ViewBase } from '@nativescript/core';
 import { NeumorphicLayout } from '.';
 import { darkShadowColorProperty, lightShadowColorProperty, NeumorphicCanvas, NeumorphicType, neumorphismProperty, shadowDistanceProperty, shadowRadiusProperty } from './common';
 
@@ -69,12 +69,16 @@ function _refresh(this: NeumorphicLayout): void {
 }
 
 function _toggleViewClipping(view: ViewBase, clipChildren: boolean): void {
-	const nativeView = view?.nativeViewProtected as android.view.View;
+	// Remove clipping from native layout views to allow shadows overflow
+	if (view instanceof CustomLayoutView && !(view instanceof ScrollView)) {
+		const nativeView = view?.nativeViewProtected as android.view.View;
 
-	// Removing clipping from native views that extend org.nativescript.widgets.LayoutBase (this includes ContentView)
-	if (nativeView != null && nativeView instanceof org.nativescript.widgets.LayoutBase) {
-		nativeView.setClipChildren(clipChildren);
-		nativeView.setClipToPadding(clipChildren);
+		// Check for native view instance in case someone has created a view plugin
+		// that extends CustomLayoutView but native view does not extend ViewGroup
+		if (nativeView != null && nativeView instanceof android.view.ViewGroup) {
+			nativeView.setClipChildren(clipChildren);
+			nativeView.setClipToPadding(clipChildren);
+		}
 	}
 }
 
