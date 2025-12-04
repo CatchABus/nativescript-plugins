@@ -11,6 +11,8 @@ export declare class DFUInitiator extends Observable {
 
 	public get peripheralUUID(): string;
 
+	public getCurrentServiceController(): DFUController;
+
 	/**
 	 * Android only.
 	 *

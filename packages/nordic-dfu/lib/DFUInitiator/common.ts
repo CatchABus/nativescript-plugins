@@ -1,6 +1,6 @@
 import { Observable } from '@nativescript/core';
 import { DFUInitiator as IDFUInitiator, DfuStateChangedEventData } from '.';
-import { DFUController } from '../DFUController';
+import type { DFUController } from '../DFUController';
 
 export enum DfuState {
 	CONNECTING,
@@ -15,6 +15,7 @@ export enum DfuState {
 
 type DfuInitiatorContext = {
 	object: DFUInitiatorCommon;
+	serviceController: DFUController;
 	cleanUpCallback?: () => void;
 };
 
@@ -59,6 +60,18 @@ export abstract class DFUInitiatorCommon extends Observable implements IDFUIniti
 
 	public get peripheralUUID(): string {
 		return this.mPeripheralUUID;
+	}
+
+	public getCurrentServiceController(): DFUController {
+		let serviceController: DFUController;
+
+		if (executingInitiators.has(this.mPeripheralUUID)) {
+			serviceController = executingInitiators.get(this.mPeripheralUUID)?.serviceController;
+		} else {
+			serviceController = null;
+		}
+
+		return serviceController;
 	}
 
 	public abstract setAndroidDeviceName(name: string): DFUInitiatorCommon;

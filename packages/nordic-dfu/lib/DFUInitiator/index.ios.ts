@@ -177,11 +177,13 @@ export class DFUInitiator extends DFUInitiatorCommon {
 
 		const identifier = NSUUID.alloc().initWithUUIDString(this.mPeripheralUUID);
 		const nativeController = this.mNative.withFirmware(selectedFirmware).startWithTargetWithIdentifier(identifier);
+		const serviceController = Reflect.construct(DFUControllerInternal, [nativeController], DFUController) as unknown as DFUController;
 
 		_addExecutingInitiator(this.peripheralUUID, {
 			object: this,
+			serviceController,
 		});
-		return Reflect.construct(DFUControllerInternal, [nativeController], DFUController) as any;
+		return serviceController;
 	}
 }
 

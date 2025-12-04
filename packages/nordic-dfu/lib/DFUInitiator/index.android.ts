@@ -172,12 +172,14 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		}
 
 		const nativeController = this.mNative.start(appContext, com.nativescript.dfu.DfuService.class);
+		const serviceController = Reflect.construct(DFUControllerInternal, [nativeController], DFUController) as unknown as DFUController;
 
 		_addExecutingInitiator(this.peripheralUUID, {
 			object: this,
+			serviceController,
 			cleanUpCallback,
 		});
-		return Reflect.construct(DFUControllerInternal, [nativeController], DFUController) as any;
+		return serviceController;
 	}
 
 	private _createDFUFileURI(zipFile: string | ArrayBuffer, context: android.content.Context, callback: (uri: android.net.Uri) => void): () => void {
