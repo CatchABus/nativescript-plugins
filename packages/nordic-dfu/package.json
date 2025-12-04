@@ -1,6 +1,6 @@
 {
 	"name": "@nativescript-community/nordic-dfu",
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"description": "A NativeScript plugin for performing Nordic Bluetooth device firmware updates.",
 	"main": "index",
 	"types": "index.d.ts",
