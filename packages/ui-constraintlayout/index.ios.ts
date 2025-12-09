@@ -159,6 +159,7 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 					const targetView = identifiedChildren.get(child.circleConstraint);
 					if (targetView) {
 						if (!laidOutChildren.has(targetView)) {
+							laidOutChildren.add(targetView);
 							childLayoutCallback(targetView);
 						}
 
@@ -212,6 +213,7 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 						}
 
 						if (!laidOutChildren.has(targetView)) {
+							laidOutChildren.add(targetView);
 							childLayoutCallback(targetView);
 						}
 
@@ -289,7 +291,11 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 		};
 
 		this.eachLayoutChild(childrenMappingCallback);
-		this.eachLayoutChild(childLayoutCallback);
+		this.eachLayoutChild((child: iOSConstrainedChild) => {
+			if (!laidOutChildren.has(child)) {
+				childLayoutCallback(child);
+			}
+		});
 	}
 }
 
