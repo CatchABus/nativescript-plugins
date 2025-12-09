@@ -6,7 +6,7 @@
   <StackLayout padding="30">
     <ui:ConstraintLayout height="100%">
       <Button id="button1" text="h-bias 0.3" width="150" height="150" horizontalBias="0.3" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="red"/>
-      <Button id="button1" text="v-bias 0.2" width="150" height="150" verticalBias="0.2" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="yellow"/>
+      <Button id="button2" text="v-bias 0.2" width="150" height="150" verticalBias="0.2" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent" backgroundColor="yellow"/>
     </ui:ConstraintLayout>
   </StackLayout>
 </Page>

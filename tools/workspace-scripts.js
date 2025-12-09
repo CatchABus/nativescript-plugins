@@ -26,13 +26,9 @@ module.exports = {
 					script: 'nx run demo:clean',
 					description: '⚆  Clean  🧹',
 				},
-				ios: {
-					script: 'nx run demo:ios',
-					description: '⚆  Run iOS  ',
-				},
-				android: {
-					script: 'nx run demo:android',
-					description: '⚆  Run Android  🤖',
+				debug: {
+					script: 'nx run demo:debug',
+					description: '⚆  Debug  ',
 				},
 			},
 		},

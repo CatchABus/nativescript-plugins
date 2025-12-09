@@ -16,23 +16,19 @@
 				"forDevice": true
 			}
 		},
-		"ios": {
-			"executor": "@nativescript/nx:build",
+		"debug": {
+			"executor": "@nativescript/nx:debug",
 			"options": {
-				"platform": "ios"
-			}
-		},
-		"android": {
-			"executor": "@nativescript/nx:build",
-			"options": {
-				"platform": "android"
+				"noHmr": true,
+				"uglify": false,
+				"release": false,
+				"forDevice": false,
+				"prepare": false
 			}
 		},
 		"clean": {
-			"executor": "@nativescript/nx:build",
-			"options": {
-				"clean": true
-			}
+			"executor": "@nativescript/nx:clean",
+			"options": {}
 		}
 	}
 }

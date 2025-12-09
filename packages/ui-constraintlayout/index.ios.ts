@@ -123,9 +123,16 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 		const x = this.effectiveBorderLeftWidth + this.effectivePaddingLeft + insets.left;
 		const y = this.effectiveBorderTopWidth + this.effectivePaddingTop + insets.top;
 
-		const laidOutChildren = new Map<string, iOSConstrainedChild>();
+		const identifiedChildren = new Map<string, iOSConstrainedChild>();
+		const laidOutChildren = new Set<iOSConstrainedChild>();
 
-		this.eachLayoutChild((child: iOSConstrainedChild) => {
+		const childrenMappingCallback = (child: iOSConstrainedChild) => {
+			if (child.id) {
+				identifiedChildren.set(child.id, child);
+			}
+		};
+
+		const childLayoutCallback = (child: iOSConstrainedChild) => {
 			const childWidth = child.getMeasuredWidth() + child.effectiveMarginLeft + child.effectiveMarginRight;
 			const childHeight = child.getMeasuredHeight() + child.effectiveMarginTop + child.effectiveMarginBottom;
 			const hBias = isNaN(child.horizontalBias) ? DEFAULT_BIAS : Math.max(0, Math.min(1, child.horizontalBias));
@@ -140,7 +147,7 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 			let fromRight: number = null;
 
 			// Circle constraint has more priority than other position constraints
-			if (child.circleConstraint && (child.circleConstraint === PARENT_CONSTRAINT_IDENTIFIER || laidOutChildren.has(child.circleConstraint))) {
+			if (child.circleConstraint && (child.circleConstraint === PARENT_CONSTRAINT_IDENTIFIER || identifiedChildren.has(child.circleConstraint))) {
 				const angleDegrees = isNaN(child.circleAngle) ? 0 : child.circleAngle;
 				const angleRadians = (angleDegrees - 90) * (Math.PI / 180);
 				const circleRadius = Length.toDevicePixels(child.circleRadius);
@@ -149,13 +156,19 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 					fromLeft = (x + layoutWidth - childWidth) / 2 + circleRadius * Math.cos(angleRadians);
 					fromTop = (y + layoutHeight - childHeight) / 2 + circleRadius * Math.sin(angleRadians);
 				} else {
-					const targetView = laidOutChildren.get(child.circleConstraint);
-					const targetBounds = targetView._getCurrentLayoutBounds();
-					const targetWidth = targetBounds.right - targetBounds.left;
-					const targetHeight = targetBounds.bottom - targetBounds.top;
+					const targetView = identifiedChildren.get(child.circleConstraint);
+					if (targetView) {
+						if (!laidOutChildren.has(targetView)) {
+							childLayoutCallback(targetView);
+						}
 
-					fromLeft = targetBounds.left - (childWidth - targetWidth) / 2 + circleRadius * Math.cos(angleRadians);
-					fromTop = targetBounds.top - (childHeight - targetHeight) / 2 + circleRadius * Math.sin(angleRadians);
+						const targetBounds = targetView._getCurrentLayoutBounds();
+						const targetWidth = targetBounds.right - targetBounds.left;
+						const targetHeight = targetBounds.bottom - targetBounds.top;
+
+						fromLeft = targetBounds.left - (childWidth - targetWidth) / 2 + circleRadius * Math.cos(angleRadians);
+						fromTop = targetBounds.top - (childHeight - targetHeight) / 2 + circleRadius * Math.sin(angleRadians);
+					}
 				}
 			} else {
 				const posConstraintMap = getPositionConstraintMap(child);
@@ -193,9 +206,13 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 								break;
 						}
 					} else {
-						const targetView = laidOutChildren.get(targetId);
+						const targetView = identifiedChildren.get(targetId);
 						if (!targetView) {
 							continue;
+						}
+
+						if (!laidOutChildren.has(targetView)) {
+							childLayoutCallback(targetView);
 						}
 
 						const targetBounds = targetView._getCurrentLayoutBounds();
@@ -267,9 +284,12 @@ export class ConstraintLayout extends ConstraintLayoutBase {
 				childLeft = x;
 			}
 
-			laidOutChildren.set(child.id, child);
+			laidOutChildren.add(child);
 			View.layoutChild(this, child, childLeft, childTop, childLeft + childWidth, childTop + childHeight);
-		});
+		};
+
+		this.eachLayoutChild(childrenMappingCallback);
+		this.eachLayoutChild(childLayoutCallback);
 	}
 }
 

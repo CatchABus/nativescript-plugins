@@ -8,10 +8,10 @@
       <StackLayout id="box1" class="circle" backgroundColor="red" leftToLeftOf="parent" rightToRightOf="parent" topToTopOf="parent" bottomToBottomOf="parent"/>
       <StackLayout id="box2" class="circle constrained" backgroundColor="green" circleConstraint="box1" circleAngle="0"/>
       <StackLayout id="box3" class="circle constrained" backgroundColor="blue" circleConstraint="box1" circleAngle="60"/>
-      <StackLayout id="box3" class="circle constrained" backgroundColor="orange" circleConstraint="box1" circleAngle="120"/>
-      <StackLayout id="box3" class="circle constrained" backgroundColor="brown" circleConstraint="box1" circleAngle="180"/>
-      <StackLayout id="box4" class="circle constrained" backgroundColor="pink" circleConstraint="box1" leftToLeftOf="parent" rightToRightOf="parent" circleAngle="240"/>
-      <StackLayout id="box5" class="circle constrained" backgroundColor="deepskyblue" circleConstraint="box1" circleAngle="300"/>
+      <StackLayout id="box4" class="circle constrained" backgroundColor="orange" circleConstraint="box1" circleAngle="120"/>
+      <StackLayout id="box5" class="circle constrained" backgroundColor="brown" circleConstraint="box1" circleAngle="180"/>
+      <StackLayout id="box6" class="circle constrained" backgroundColor="pink" circleConstraint="box1" leftToLeftOf="parent" rightToRightOf="parent" circleAngle="240"/>
+      <StackLayout id="box7" class="circle constrained" backgroundColor="deepskyblue" circleConstraint="box1" circleAngle="300"/>
     </ui:ConstraintLayout>
   </GridLayout>
 </Page>
