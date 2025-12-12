@@ -110,6 +110,11 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		no.nordicsemi.android.dfu.DfuServiceListenerHelper.registerProgressListener(Utils.android.getApplicationContext(), this.mProgressListener);
 	}
 
+	public override setIOSConnectionTimeout(val: number): DFUInitiator {
+		// Not implemented on android
+		return this;
+	}
+
 	public override setAndroidDeviceName(name: string): DFUInitiator {
 		this.mNative.setDeviceName(name);
 		return this;

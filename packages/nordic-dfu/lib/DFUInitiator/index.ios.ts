@@ -133,8 +133,13 @@ export class DFUInitiator extends DFUInitiatorCommon {
 		return this;
 	}
 
-	public override setAndroidScanTimeout(_val: number): DFUInitiatorCommon {
+	public override setAndroidScanTimeout(_val: number): DFUInitiator {
 		// Not implemented on iOS
+		return this;
+	}
+
+	public override setIOSConnectionTimeout(val: number): DFUInitiator {
+		this.mNative.connectionTimeout = val;
 		return this;
 	}
 

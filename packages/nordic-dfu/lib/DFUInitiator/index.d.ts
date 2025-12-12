@@ -43,6 +43,12 @@ export declare class DFUInitiator extends Observable {
 	 * @param val
 	 */
 	public setAndroidScanTimeout(val: number): DFUInitiator;
+	/**
+	 * iOS only.
+	 *
+	 * @param val
+	 */
+	public setIOSConnectionTimeout(val: number): DFUInitiator;
 	public setForceDfu(val: boolean): DFUInitiator;
 	public setForceScanningForNewAddressInLegacyDfu(val: boolean): DFUInitiator;
 	public setUnsafeExperimentalButtonlessServiceInSecureDfuEnabled(val: boolean): DFUInitiator;
