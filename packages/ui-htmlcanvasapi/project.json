@@ -5,7 +5,7 @@
 	"sourceRoot": "packages/ui-htmlcanvasapi",
 	"targets": {
 		"build": {
-			"executor": "@nrwl/js:tsc",
+			"executor": "@nx/js:tsc",
 			"options": {
 				"outputPath": "dist/packages/ui-htmlcanvasapi",
 				"tsConfig": "packages/ui-htmlcanvasapi/tsconfig.json",
@@ -25,6 +25,11 @@
 					{
 						"target": "build.all",
 						"projects": "dependencies"
+					}
+				],
+				"transformers": [
+					{
+						"name": "../tools/transformers/native-class"
 					}
 				]
 			}

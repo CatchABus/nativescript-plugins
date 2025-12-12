@@ -26,6 +26,11 @@
 						"target": "build.all",
 						"projects": "dependencies"
 					}
+				],
+				"transformers": [
+					{
+						"name": "../tools/transformers/native-class"
+					}
 				]
 			}
 		},

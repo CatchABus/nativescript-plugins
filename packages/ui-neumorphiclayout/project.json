@@ -6,7 +6,7 @@
 	"tags": [],
 	"targets": {
 		"build": {
-			"executor": "@nrwl/js:tsc",
+			"executor": "@nx/js:tsc",
 			"options": {
 				"outputPath": "dist/packages/ui-neumorphiclayout",
 				"tsConfig": "packages/ui-neumorphiclayout/tsconfig.json",
@@ -26,6 +26,11 @@
 					{
 						"target": "build.all",
 						"projects": "dependencies"
+					}
+				],
+				"transformers": [
+					{
+						"name": "../tools/transformers/native-class"
 					}
 				]
 			}
