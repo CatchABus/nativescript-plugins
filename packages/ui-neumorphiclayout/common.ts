@@ -42,6 +42,7 @@ stylePropertiesMap.set(
 		name: 'neumorphism',
 		cssName: 'neumorphism',
 		defaultValue: null,
+		valueConverter: (value) => (value === 'none' ? null : value),
 	})
 );
 export const neumorphismProperty = stylePropertiesMap.get('neumorphism');
