@@ -2,4 +2,5 @@ export * from './AbstractVectorLayer';
 export * from './BackgroundLayer';
 export * from './BaseLayer';
 export * from './CircleLayer';
+export * from './LineLayer';
 export * from './SymbolLayer';
