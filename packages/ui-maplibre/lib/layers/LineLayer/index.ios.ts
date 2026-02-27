@@ -34,4 +34,15 @@ export class LineLayer extends LineLayerCommon<MLNLineStyleLayer> {
 		super.lineWidth = value;
 		this.native.lineWidth = expression?.native;
 	}
+
+	public override get lineOpacity() {
+		return this.getOrSetPropertyValueInternal('line-opacity', () => (Expression.initWithNative(this.native.lineOpacity) as Expression).toJSON());
+	}
+
+	public override set lineOpacity(value) {
+		const expression = Expression.propertyValue(value);
+
+		super.lineOpacity = value;
+		this.native.lineOpacity = expression?.native;
+	}
 }

@@ -13,4 +13,9 @@ export abstract class LineLayerCommon<T> extends AbstractVectorLayer<T, LineLaye
 	public set lineWidth(value: PropertyValueSpecification<number>) {
 		this.setPropertyValueInternal('line-width', value);
 	}
+
+	@PaintProperty('line-opacity')
+	public set lineOpacity(value: PropertyValueSpecification<number>) {
+		this.setPropertyValueInternal('line-opacity', value);
+	}
 }

@@ -25,4 +25,12 @@ export class LineLayer extends LineLayerCommon<org.maplibre.android.style.layers
 	public override set lineWidth(value) {
 		super.lineWidth = value;
 	}
+
+	public override get lineOpacity() {
+		return this.getOrSetPropertyValueInternal('line-opacity', () => this.native.getLineOpacity().value?.floatValue?.());
+	}
+
+	public override set lineOpacity(value) {
+		super.lineOpacity = value;
+	}
 }
