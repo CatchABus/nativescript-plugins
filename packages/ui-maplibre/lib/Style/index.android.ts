@@ -1,7 +1,7 @@
 import { ImageSource } from '@nativescript/core';
 import { StyleCommon } from './common';
 import { BaseSource, GeoJsonSource } from '../sources';
-import { BackgroundLayer, BaseLayer, CircleLayer, SymbolLayer } from '../layers';
+import { BackgroundLayer, BaseLayer, CircleLayer, LineLayer, SymbolLayer } from '../layers';
 
 export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
 	public override addImage(name: string, source: ImageSource): void {
@@ -66,6 +66,8 @@ export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
 					layer = BackgroundLayer.initWithNative(nLayer) as BackgroundLayer;
 				} else if (nLayer instanceof org.maplibre.android.style.layers.CircleLayer) {
 					layer = CircleLayer.initWithNative(nLayer) as CircleLayer;
+				} else if (nLayer instanceof org.maplibre.android.style.layers.LineLayer) {
+					layer = LineLayer.initWithNative(nLayer) as LineLayer;
 				} else if (nLayer instanceof org.maplibre.android.style.layers.SymbolLayer) {
 					layer = SymbolLayer.initWithNative(nLayer) as SymbolLayer;
 				} else {
