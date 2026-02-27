@@ -1,7 +1,7 @@
 import { ImageSource } from '@nativescript/core';
 import { StyleCommon } from './common';
 import { BaseSource, GeoJsonSource } from '../sources';
-import { BackgroundLayer, BaseLayer, CircleLayer, SymbolLayer } from '../layers';
+import { BackgroundLayer, BaseLayer, CircleLayer, LineLayer, SymbolLayer } from '../layers';
 
 export class Style extends StyleCommon<MLNStyle> {
 	public override addImage(name: string, source: ImageSource) {
@@ -78,6 +78,8 @@ export class Style extends StyleCommon<MLNStyle> {
 					layer = BackgroundLayer.initWithNative(nLayer) as BackgroundLayer;
 				} else if (nLayer instanceof MLNCircleStyleLayer) {
 					layer = CircleLayer.initWithNative(nLayer) as CircleLayer;
+				} else if (nLayer instanceof MLNLineStyleLayer) {
+					layer = LineLayer.initWithNative(nLayer) as LineLayer;
 				} else if (nLayer instanceof MLNSymbolStyleLayer) {
 					layer = SymbolLayer.initWithNative(nLayer) as SymbolLayer;
 				} else {
