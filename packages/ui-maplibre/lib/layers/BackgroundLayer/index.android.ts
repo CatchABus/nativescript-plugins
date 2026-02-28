@@ -18,7 +18,7 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 	}
 
 	public override get backgroundOpacity() {
-		return this.getOrSetPropertyValueInternal('background-opacity', () => this.native.getBackgroundOpacity().value);
+		return this.getOrSetPropertyValueInternal('background-opacity', () => this.native.getBackgroundOpacity().value?.floatValue?.());
 	}
 
 	public override set backgroundOpacity(value) {
