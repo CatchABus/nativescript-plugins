@@ -2,7 +2,9 @@ import { BackgroundLayerCommon } from './common';
 import { Expression } from '../../Expression';
 import { Color } from '@nativescript/core';
 import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
+import { LayerNativeType } from '../LayerManager';
 
+@LayerNativeType('MLNBackgroundStyleLayer')
 export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLayer> {
 	constructor(id: string) {
 		super(id);

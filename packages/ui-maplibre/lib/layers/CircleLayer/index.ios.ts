@@ -3,7 +3,9 @@ import { BaseSource } from '../../sources';
 import { Expression } from '../../Expression';
 import { Color } from '@nativescript/core';
 import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
+import { LayerNativeType } from '../LayerManager';
 
+@LayerNativeType('MLNCircleStyleLayer')
 export class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);

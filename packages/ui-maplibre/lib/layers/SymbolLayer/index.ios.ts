@@ -3,7 +3,9 @@ import { SymbolLayerCommon } from './common';
 import { Expression } from '../../Expression';
 import { Color } from '@nativescript/core';
 import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
+import { LayerNativeType } from '../LayerManager';
 
+@LayerNativeType('MLNSymbolStyleLayer')
 export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);

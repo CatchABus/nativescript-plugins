@@ -1,6 +1,8 @@
 import { BaseSource } from '../../sources/BaseSource';
+import { LayerNativeType } from '../LayerManager';
 import { SymbolLayerCommon } from './common';
 
+@LayerNativeType('SymbolLayer')
 export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.layers.SymbolLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);

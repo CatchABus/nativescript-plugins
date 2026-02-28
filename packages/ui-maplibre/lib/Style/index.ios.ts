@@ -1,7 +1,8 @@
 import { ImageSource } from '@nativescript/core';
 import { StyleCommon } from './common';
 import { BaseSource, GeoJsonSource } from '../sources';
-import { BackgroundLayer, BaseLayer, CircleLayer, LineLayer, SymbolLayer } from '../layers';
+import { BaseLayer } from '../layers';
+import { LayerManager } from '../layers/LayerManager';
 
 export class Style extends StyleCommon<MLNStyle> {
 	public override addImage(name: string, source: ImageSource) {
@@ -72,20 +73,8 @@ export class Style extends StyleCommon<MLNStyle> {
 
 			for (let i = 0, length = nLayers.count; i < length; i++) {
 				const nLayer = nLayers.objectAtIndex(i) as MLNStyleLayer;
-				let layer: BaseLayer;
-
-				if (nLayer instanceof MLNBackgroundStyleLayer) {
-					layer = BackgroundLayer.initWithNative(nLayer) as BackgroundLayer;
-				} else if (nLayer instanceof MLNCircleStyleLayer) {
-					layer = CircleLayer.initWithNative(nLayer) as CircleLayer;
-				} else if (nLayer instanceof MLNLineStyleLayer) {
-					layer = LineLayer.initWithNative(nLayer) as LineLayer;
-				} else if (nLayer instanceof MLNSymbolStyleLayer) {
-					layer = SymbolLayer.initWithNative(nLayer) as SymbolLayer;
-				} else {
-					layer = BaseLayer.initWithNative(nLayer) as BaseLayer;
-				}
-				result.push(layer);
+				const layerClass = LayerManager.getLayerClassByNativeClassName(NSStringFromClass(nLayer.class())) ?? BaseLayer;
+				result.push(layerClass.initWithNative(nLayer) as BaseLayer);
 			}
 
 			this.mLayers = Object.freeze(result);

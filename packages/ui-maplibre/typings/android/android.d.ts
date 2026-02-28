@@ -7055,7 +7055,7 @@ declare module org {
 		export module android {
 			export module style {
 				export module layers {
-					export abstract class Layer {
+					export abstract class Layer extends java.lang.Object {
 						public static class: java.lang.Class<org.maplibre.android.style.layers.Layer>;
 						public getMaxZoom(): number;
 						public setMinZoom(zoom: number): void;
