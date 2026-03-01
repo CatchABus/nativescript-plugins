@@ -1,7 +1,7 @@
-import { LayerNativeType } from '../LayerManager';
+import { LayerType } from '../LayerManager';
 import { BackgroundLayerCommon } from './common';
 
-@LayerNativeType('BackgroundLayer')
+@LayerType('background')
 export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.style.layers.BackgroundLayer> {
 	constructor(id: string) {
 		super(id);

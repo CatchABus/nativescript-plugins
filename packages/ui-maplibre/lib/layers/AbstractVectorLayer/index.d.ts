@@ -6,4 +6,5 @@ export declare abstract class AbstractVectorLayer<T = any, U extends LayerProper
 	public set filter(value: ExpressionFilterSpecification);
 	public getSourceId(): string;
 	public getSourceLayer(): string;
+	public setSourceLayer(value: string): void;
 }

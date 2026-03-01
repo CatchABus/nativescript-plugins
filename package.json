@@ -15,7 +15,7 @@
 	},
 	"private": true,
 	"devDependencies": {
-		"@nativescript/core": "^9.0.2",
+		"@nativescript/core": "^9.0.16",
 		"@nativescript/plugin-tools": "^5.5.3",
 		"@nativescript/types": "^8.9.1",
 		"@nativescript/webpack": "^5.0.28",

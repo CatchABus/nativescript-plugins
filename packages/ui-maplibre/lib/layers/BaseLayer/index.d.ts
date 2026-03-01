@@ -10,6 +10,7 @@ export declare abstract class BaseLayer<T = any, U extends LayerProperties = Lay
 	public paintPropertyMappings: Map<string, string> | undefined;
 
 	public getId(): string;
+	public getType(): string;
 	public getPropertyValueInternal(name: string): PropertyValueSpecification<any>;
 	public getOrSetPropertyValueInternal<V>(name: string, lazyValue: () => V): PropertyValueSpecification<any>;
 	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean;

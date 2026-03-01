@@ -12,6 +12,11 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 
 	public abstract getId(): string;
 
+	public getType(): string {
+		// This method is overridden by decorators
+		return null;
+	}
+
 	protected get cachedPropertyValues() {
 		if (!this.mCachedPropertyValues) {
 			this.mCachedPropertyValues = new Map();
@@ -88,7 +93,7 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	public toJSON() {
 		return {
 			id: this.getId(),
-			type: this.constructor.name,
+			type: this.getType(),
 		};
 	}
 }

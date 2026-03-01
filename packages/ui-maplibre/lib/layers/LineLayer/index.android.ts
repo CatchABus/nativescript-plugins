@@ -1,8 +1,8 @@
 import { LineLayerCommon } from './common';
 import { BaseSource } from '../../sources';
-import { LayerNativeType } from '../LayerManager';
+import { LayerType } from '../LayerManager';
 
-@LayerNativeType('LineLayer')
+@LayerType('line')
 export class LineLayer extends LineLayerCommon<org.maplibre.android.style.layers.LineLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);

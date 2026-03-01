@@ -9,6 +9,7 @@ export abstract class AbstractVectorLayerCommon<T> extends BaseLayer<T, LayerPro
 	public abstract set filter(value: ExpressionFilterSpecification);
 	public abstract getSourceId(): string;
 	public abstract getSourceLayer(): string;
+	public abstract setSourceLayer(value: string): void;
 
 	public toJSON() {
 		return {

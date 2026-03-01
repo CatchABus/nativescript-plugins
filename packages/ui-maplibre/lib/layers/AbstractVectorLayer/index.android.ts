@@ -26,4 +26,8 @@ export class AbstractVectorLayer<T extends AndroidVectorLayer> extends AbstractV
 	public override getSourceLayer(): string {
 		return this.native.getSourceLayer();
 	}
+
+	public override setSourceLayer(value: string): void {
+		this.native.setSourceLayer(value);
+	}
 }

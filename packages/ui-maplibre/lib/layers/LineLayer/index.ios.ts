@@ -3,9 +3,9 @@ import { BaseSource } from '../../sources';
 import { Expression } from '../../Expression';
 import { Color } from '@nativescript/core';
 import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
-import { LayerNativeType } from '../LayerManager';
+import { LayerType } from '../LayerManager';
 
-@LayerNativeType('MLNLineStyleLayer')
+@LayerType('line')
 export class LineLayer extends LineLayerCommon<MLNLineStyleLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);

@@ -1,8 +1,8 @@
 import { CircleLayerCommon } from './common';
 import { BaseSource } from '../../sources';
-import { LayerNativeType } from '../LayerManager';
+import { LayerType } from '../LayerManager';
 
-@LayerNativeType('CircleLayer')
+@LayerType('circle')
 export class CircleLayer extends CircleLayerCommon<org.maplibre.android.style.layers.CircleLayer> {
 	constructor(id: string, source: BaseSource) {
 		super(id, source);

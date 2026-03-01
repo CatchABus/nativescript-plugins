@@ -24,4 +24,8 @@ export class AbstractVectorLayer<T extends MLNVectorStyleLayer> extends Abstract
 	public override getSourceLayer(): string {
 		return this.native.sourceLayerIdentifier;
 	}
+
+	public override setSourceLayer(value: string): void {
+		this.native.sourceLayerIdentifier = value;
+	}
 }

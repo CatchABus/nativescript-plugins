@@ -14,8 +14,8 @@
 		"@nativescript/core": "file:../../node_modules/@nativescript/core"
 	},
 	"devDependencies": {
-		"@nativescript/android": "9.0.0",
-		"@nativescript/ios": "9.0.0",
+		"@nativescript/android": "9.0.2",
+		"@nativescript/ios": "9.0.3",
 		"@nativescript/webpack": "file:../../node_modules/@nativescript/webpack"
 	}
 }

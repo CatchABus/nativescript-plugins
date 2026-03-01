@@ -3,6 +3,10 @@ import { StyleCommon } from './common';
 import { BaseSource, GeoJsonSource } from '../sources';
 import { BaseLayer } from '../layers';
 import { LayerManager } from '../layers/LayerManager';
+import { toKebabCase } from '../utils/helpers';
+
+const NATIVE_CLASS_PREFIX = 'MLN';
+const NATIVE_LAYER_SUFFIX = 'StyleLayer';
 
 export class Style extends StyleCommon<MLNStyle> {
 	public override addImage(name: string, source: ImageSource) {
@@ -73,7 +77,9 @@ export class Style extends StyleCommon<MLNStyle> {
 
 			for (let i = 0, length = nLayers.count; i < length; i++) {
 				const nLayer = nLayers.objectAtIndex(i) as MLNStyleLayer;
-				const layerClass = LayerManager.getLayerClassByNativeClassName(NSStringFromClass(nLayer.class())) ?? BaseLayer;
+				const className = NSStringFromClass(nLayer.class());
+				const layerType = toKebabCase(className.substring(NATIVE_CLASS_PREFIX.length, className.length - NATIVE_LAYER_SUFFIX.length), false);
+				const layerClass = LayerManager.getLayerClassByType(layerType) ?? BaseLayer;
 				result.push(layerClass.initWithNative(nLayer) as BaseLayer);
 			}
 
@@ -82,8 +88,16 @@ export class Style extends StyleCommon<MLNStyle> {
 		return this.mLayers;
 	}
 
-	public override removeLayer(layer: BaseLayer): void {
+	public override removeLayer(layerOrId: string | BaseLayer): void {
+		let nLayer: MLNStyleLayer;
+
+		if (typeof layerOrId === 'string') {
+			nLayer = this.native.layerWithIdentifier(layerOrId);
+		} else {
+			nLayer = layerOrId?.native;
+		}
+
 		this.mLayers = null;
-		this.native.removeLayer(layer?.native);
+		this.native.removeLayer(nLayer);
 	}
 }

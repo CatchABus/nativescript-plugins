@@ -3,6 +3,9 @@ import { StyleCommon } from './common';
 import { BaseSource, GeoJsonSource } from '../sources';
 import { BaseLayer } from '../layers';
 import { LayerManager } from '../layers/LayerManager';
+import { toKebabCase } from '../utils/helpers';
+
+const NATIVE_LAYER_SUFFIX = 'Layer';
 
 export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
 	public override addImage(name: string, source: ImageSource): void {
@@ -61,7 +64,9 @@ export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
 
 			for (let i = 0, length = nLayers.size(); i < length; i++) {
 				const nLayer = nLayers.get(i) as org.maplibre.android.style.layers.Layer;
-				const layerClass = LayerManager.getLayerClassByNativeClassName(nLayer.getClass().getSimpleName()) ?? BaseLayer;
+				const className = nLayer.getClass().getSimpleName();
+				const layerType = toKebabCase(className.substring(0, className.length - NATIVE_LAYER_SUFFIX.length), false);
+				const layerClass = LayerManager.getLayerClassByType(layerType) ?? BaseLayer;
 				result.push(layerClass.initWithNative(nLayer) as BaseLayer);
 			}
 
@@ -70,8 +75,8 @@ export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
 		return this.mLayers;
 	}
 
-	public override removeLayer(layer: BaseLayer): void {
+	public override removeLayer(layerOrId: string | BaseLayer): void {
 		this.mLayers = null;
-		this.native.removeLayer(layer?.native);
+		this.native.removeLayer(typeof layerOrId === 'string' ? layerOrId : layerOrId?.native);
 	}
 }

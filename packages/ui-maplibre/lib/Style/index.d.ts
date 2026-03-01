@@ -14,5 +14,5 @@ export declare class Style extends NativeObject<any> {
 	public addLayer(layer: BaseLayer): void;
 	public getLayer(id: string): BaseLayer;
 	public getLayers(): readonly BaseLayer[];
-	public removeLayer(layer: BaseLayer): void;
+	public removeLayer(layerOrId: string | BaseLayer): void;
 }
