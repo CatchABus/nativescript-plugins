@@ -2,7 +2,7 @@ import { ImageSource } from '@nativescript/core';
 import { NativeObject } from '../nativeWrappers/NativeObject';
 import { BaseSource } from '../sources';
 import { BaseLayer } from '../layers';
-import { Style as IStyle } from '.';
+import { Style as IStyle, LightOptions } from '.';
 
 export abstract class StyleCommon<T> extends NativeObject<T> implements IStyle {
 	protected mLayers: readonly BaseLayer[];
@@ -29,4 +29,5 @@ export abstract class StyleCommon<T> extends NativeObject<T> implements IStyle {
 	public abstract addLayer(layer: BaseLayer): void;
 	public abstract getLayers(): readonly BaseLayer[];
 	public abstract removeLayer(layer: BaseLayer): void;
+	public abstract setLightOptions(options: LightOptions): void;
 }

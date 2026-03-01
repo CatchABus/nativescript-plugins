@@ -11,6 +11,10 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	private mCachedPropertyValues: Map<string, PropertyValueSpecification<any>>;
 
 	public abstract getId(): string;
+	public abstract get minZoom(): number;
+	public abstract set minZoom(value: number);
+	public abstract get maxZoom(): number;
+	public abstract set maxZoom(value: number);
 
 	public getType(): string {
 		// This method is overridden by decorators

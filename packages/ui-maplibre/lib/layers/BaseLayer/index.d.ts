@@ -17,6 +17,10 @@ export declare abstract class BaseLayer<T = any, U extends LayerProperties = Lay
 	public getProperty<K extends keyof U>(name: K): U[K];
 	public setProperty<K extends keyof U>(name: K, value: U[K]): void;
 	public setProperties(value: Partial<U>): void;
+	public get minZoom(): number;
+	public set minZoom(value: number);
+	public get maxZoom(): number;
+	public set maxZoom(value: number);
 	public get visibility(): 'visible' | 'none';
 	public set visibility(value: 'visible' | 'none');
 }

@@ -109,6 +109,22 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 		}
 	}
 
+	public override get minZoom(): number {
+		return this.native.getMinZoom();
+	}
+
+	public override set minZoom(value: number) {
+		this.native.setMinZoom(value);
+	}
+
+	public override get maxZoom(): number {
+		return this.native.getMaxZoom();
+	}
+
+	public override set maxZoom(value: number) {
+		this.native.setMaxZoom(value);
+	}
+
 	public override get visibility() {
 		return this.getOrSetPropertyValueInternal('visibility', () => (this.native.getVisibility().value?.toString?.() === 'visible' ? 'visible' : 'none'));
 	}

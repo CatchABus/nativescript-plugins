@@ -2,6 +2,14 @@ import { ImageSource } from '@nativescript/core';
 import { NativeObject } from '../nativeWrappers/NativeObject';
 import { BaseSource } from '../sources';
 import { BaseLayer } from '../layers';
+import { ILightPosition } from '../position';
+
+export interface LightOptions {
+	anchor?: 'map' | 'viewport';
+	color?: string;
+	intensity?: number;
+	position?: ILightPosition;
+}
 
 export declare class Style extends NativeObject<any> {
 	constructor();
@@ -15,4 +23,5 @@ export declare class Style extends NativeObject<any> {
 	public getLayer(id: string): BaseLayer;
 	public getLayers(): readonly BaseLayer[];
 	public removeLayer(layerOrId: string | BaseLayer): void;
+	public setLightOptions(options: LightOptions): void;
 }

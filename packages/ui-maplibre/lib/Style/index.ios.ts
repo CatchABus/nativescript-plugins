@@ -1,9 +1,12 @@
-import { ImageSource } from '@nativescript/core';
+import { Color, ImageSource, Trace } from '@nativescript/core';
 import { StyleCommon } from './common';
 import { BaseSource, GeoJsonSource } from '../sources';
 import { BaseLayer } from '../layers';
 import { LayerManager } from '../layers/LayerManager';
 import { toKebabCase } from '../utils/helpers';
+import { LightOptions } from '.';
+import { Expression } from '../Expression';
+import { NativeBoxedValue } from '../nativeWrappers/NativeBoxedValue';
 
 const NATIVE_CLASS_PREFIX = 'MLN';
 const NATIVE_LAYER_SUFFIX = 'StyleLayer';
@@ -50,21 +53,6 @@ export class Style extends StyleCommon<MLNStyle> {
 		this.native.removeSource(source?.native);
 	}
 
-	public override getSource(id: string): BaseSource {
-		const nativeSource = this.native.sourceWithIdentifier(id);
-		let source: BaseSource;
-
-		if (!nativeSource) {
-			source = null;
-		} else if (nativeSource instanceof MLNShapeSource) {
-			source = GeoJsonSource.initWithNative(nativeSource) as GeoJsonSource;
-		} else {
-			source = null;
-		}
-
-		return source;
-	}
-
 	public override addLayer(layer: BaseLayer): void {
 		this.mLayers = null;
 		this.native.addLayer(layer?.native);
@@ -99,5 +87,43 @@ export class Style extends StyleCommon<MLNStyle> {
 
 		this.mLayers = null;
 		this.native.removeLayer(nLayer);
+	}
+
+	public override setLightOptions(options: LightOptions): void {
+		if (options && typeof options === 'object') {
+			const nativeLight = this.native.light ?? MLNLight.alloc().init();
+
+			if (options.anchor) {
+				nativeLight.anchor = Expression.propertyValue(options.anchor)?.native;
+			}
+
+			if (options.color) {
+				const val = options.color;
+				const expression = Expression.propertyValue(typeof val === 'string' ? new NativeBoxedValue(new Color(val).ios) : val);
+				nativeLight.color = expression?.native;
+			}
+
+			if (options.intensity) {
+				nativeLight.intensity = Expression.propertyValue(options.intensity)?.native;
+			}
+
+			if (options.position) {
+				const finalValue = options.position
+					? NSValue.valueWithMLNSphericalPosition(
+							new MLNSphericalPosition({
+								radial: options.position.radialCoordinate,
+								azimuthal: options.position.azimuthalAngle,
+								polar: options.position.polarAngle,
+							})
+					  )
+					: options.position;
+				const expression = Expression.propertyValue(new NativeBoxedValue(finalValue));
+				nativeLight.position = expression?.native;
+			}
+
+			this.native.light = nativeLight;
+		} else {
+			Trace.write(`Incorrect style light options: ${JSON.stringify(options)}`, Trace.categories.Error, Trace.messageType.warn);
+		}
 	}
 }

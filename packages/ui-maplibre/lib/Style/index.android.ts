@@ -1,9 +1,10 @@
-import { ImageSource } from '@nativescript/core';
+import { ImageSource, Trace } from '@nativescript/core';
 import { StyleCommon } from './common';
 import { BaseSource, GeoJsonSource } from '../sources';
 import { BaseLayer } from '../layers';
 import { LayerManager } from '../layers/LayerManager';
 import { toKebabCase } from '../utils/helpers';
+import { LightOptions } from '.';
 
 const NATIVE_LAYER_SUFFIX = 'Layer';
 
@@ -78,5 +79,30 @@ export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
 	public override removeLayer(layerOrId: string | BaseLayer): void {
 		this.mLayers = null;
 		this.native.removeLayer(typeof layerOrId === 'string' ? layerOrId : layerOrId?.native);
+	}
+
+	public override setLightOptions(options: LightOptions): void {
+		if (options && typeof options === 'object') {
+			const nativeLight = this.native.getLight();
+
+			if (options.anchor) {
+				nativeLight.setAnchor(options.anchor);
+			}
+
+			if (options.color) {
+				nativeLight.setColor(options.color);
+			}
+
+			if (options.intensity) {
+				nativeLight.setIntensity(options.intensity);
+			}
+
+			if (options.position) {
+				const val = options.position;
+				nativeLight.setPosition(val ? new org.maplibre.android.style.light.Position(val.radialCoordinate, val.azimuthalAngle, val.polarAngle) : null);
+			}
+		} else {
+			Trace.write(`Incorrect style light options: ${JSON.stringify(options)}`, Trace.categories.Error, Trace.messageType.warn);
+		}
 	}
 }
