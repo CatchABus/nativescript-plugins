@@ -55,7 +55,9 @@ function getConstraintTargetId(id: string, view: View): number {
 applyViewMixin((originals) => {
 	return {
 		[idProperty.setNative](this: View, value: string) {
-			(this.nativeViewProtected as android.view.View).setId(value ? hashViewId(value) : NO_ID);
+			if (ConstraintLayout.isConstrainedChild(this)) {
+				(this.nativeViewProtected as android.view.View).setId(value ? hashViewId(value) : NO_ID);
+			}
 		},
 		[heightProperty.setNative](this: View, value: CoreTypes.PercentLengthType) {
 			if (ConstraintLayout.isConstrainedChild(this)) {
