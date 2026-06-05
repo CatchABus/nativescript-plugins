@@ -17,17 +17,29 @@ export abstract class StyleCommon<T> extends NativeObject<T> implements IStyle {
 		return this.getLayers().find((layer) => layer.getId() === id);
 	}
 
+	public addLayer(_layer: BaseLayer): void {
+		this.mLayers = null;
+	}
+
+	public removeLayer(_layerOrId: string | BaseLayer): void {
+		this.mLayers = null;
+	}
+
 	public getSource(id: string): BaseSource {
 		return this.getSources().find((source) => source.getId() === id);
 	}
 
+	public addSource(_source: BaseSource): void {
+		this.mSources = null;
+	}
+
+	public removeSource(_source: BaseSource): void {
+		this.mSources = null;
+	}
+
 	public abstract addImage(name: string, source: ImageSource): void;
 	public abstract removeImage(name: string): void;
-	public abstract addSource(source: BaseSource): void;
 	public abstract getSources(): readonly BaseSource[];
-	public abstract removeSource(source: BaseSource): void;
-	public abstract addLayer(layer: BaseLayer): void;
 	public abstract getLayers(): readonly BaseLayer[];
-	public abstract removeLayer(layer: BaseLayer): void;
 	public abstract setLightOptions(options: LightOptions): void;
 }

@@ -24,6 +24,7 @@ export class Style extends StyleCommon<MLNStyle> {
 	}
 
 	public override addSource(source: BaseSource): void {
+		super.addSource(source);
 		this.native.addSource(source?.native);
 	}
 
@@ -50,11 +51,12 @@ export class Style extends StyleCommon<MLNStyle> {
 	}
 
 	public override removeSource(source: BaseSource): void {
+		super.removeSource(source);
 		this.native.removeSource(source?.native);
 	}
 
 	public override addLayer(layer: BaseLayer): void {
-		this.mLayers = null;
+		super.addLayer(layer);
 		this.native.addLayer(layer?.native);
 	}
 
@@ -85,7 +87,7 @@ export class Style extends StyleCommon<MLNStyle> {
 			nLayer = layerOrId?.native;
 		}
 
-		this.mLayers = null;
+		super.removeLayer(layerOrId);
 		this.native.removeLayer(nLayer);
 	}
 
