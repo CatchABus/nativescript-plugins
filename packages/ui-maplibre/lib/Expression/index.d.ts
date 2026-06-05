@@ -3,6 +3,7 @@ import { NativeObject } from '../nativeWrappers/NativeObject';
 
 export declare class Expression extends NativeObject<any> {
 	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeBoxedValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression;
+	public static colorValue(value: PropertyValueSpecification<ColorSpecification>): Expression;
 	public static filter(filter: ExpressionFilterSpecification): Expression;
 	public toJSON(): ExpressionSpecification;
 }

@@ -1,6 +1,7 @@
 import { ExpressionCommon } from './common';
-import { DataDrivenPropertyValueSpecification, ExpressionFilterSpecification, ExpressionSpecification, PropertyValuePrimitive, PropertyValueSpecification } from '.';
+import { ColorSpecification, DataDrivenPropertyValueSpecification, ExpressionFilterSpecification, ExpressionSpecification, PropertyValuePrimitive, PropertyValueSpecification } from '.';
 import { NativeBoxedValue } from '../nativeWrappers/NativeBoxedValue';
+import { Color } from '@nativescript/core';
 
 export class Expression extends ExpressionCommon<NSExpression | NSPredicate> {
 	public static propertyValue<T extends PropertyValuePrimitive>(value: NativeBoxedValue | PropertyValueSpecification<T> | DataDrivenPropertyValueSpecification<T>): Expression {
@@ -14,6 +15,26 @@ export class Expression extends ExpressionCommon<NSExpression | NSPredicate> {
 			native = NSExpression.expressionWithMLNJSONObject(value);
 		} else {
 			native = NSExpression.expressionForConstantValue(value instanceof NativeBoxedValue ? value.native : value);
+		}
+		return Expression.initWithNative(native) as Expression;
+	}
+
+	public static colorValue(value: PropertyValueSpecification<ColorSpecification>): Expression {
+		if (value == null) {
+			return null;
+		}
+
+		let native: NSExpression;
+
+		if (Array.isArray(value)) {
+			native = NSExpression.expressionWithMLNJSONObject(value);
+
+			// This is a handling for color literals
+			if (typeof native.constantValue === 'string' && Color.isValid(native.constantValue)) {
+				native = NSExpression.expressionForConstantValue(new Color(native.constantValue).ios);
+			}
+		} else {
+			native = NSExpression.expressionForConstantValue(new Color(value as any).ios);
 		}
 		return Expression.initWithNative(native) as Expression;
 	}

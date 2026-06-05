@@ -1,8 +1,6 @@
 import { FillExtrusionLayerCommon } from './common';
 import { BaseSource } from '../../sources';
 import { Expression } from '../../Expression';
-import { Color } from '@nativescript/core';
-import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
 import { LayerType } from '../LayerManager';
 
 @LayerType('fill-extrusion')
@@ -20,10 +18,8 @@ export class FillExtrusionLayer extends FillExtrusionLayerCommon<MLNFillExtrusio
 	}
 
 	public override set fillExtrusionColor(value) {
-		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeBoxedValue(new Color(value).ios) : value);
-
 		super.fillExtrusionColor = value;
-		this.native.fillExtrusionColor = expression?.native;
+		this.native.fillExtrusionColor = Expression.colorValue(value)?.native;
 	}
 
 	public override get fillExtrusionHeight() {

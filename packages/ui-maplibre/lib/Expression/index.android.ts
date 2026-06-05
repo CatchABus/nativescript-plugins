@@ -1,5 +1,5 @@
 import { ExpressionCommon } from './common';
-import { DataDrivenPropertyValueSpecification, ExpressionFilterSpecification, ExpressionSpecification, PropertyValuePrimitive, PropertyValueSpecification } from '.';
+import { ColorSpecification, DataDrivenPropertyValueSpecification, ExpressionFilterSpecification, ExpressionSpecification, PropertyValuePrimitive, PropertyValueSpecification } from '.';
 import { NativeBoxedValue } from '../nativeWrappers/NativeBoxedValue';
 import { Utils } from '@nativescript/core';
 
@@ -39,6 +39,10 @@ export class Expression extends ExpressionCommon<org.maplibre.android.style.expr
 			native = org.maplibre.android.style.expressions.Expression.literal(nativeValue);
 		}
 		return Expression.initWithNative(native) as Expression;
+	}
+
+	public static colorValue(value: PropertyValueSpecification<ColorSpecification>): Expression {
+		return Expression.initWithNative(org.maplibre.android.style.expressions.Expression.literal(value)) as Expression;
 	}
 
 	public static filter(filter: ExpressionFilterSpecification): Expression {

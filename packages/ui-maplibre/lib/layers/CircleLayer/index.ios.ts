@@ -1,8 +1,6 @@
 import { CircleLayerCommon } from './common';
 import { BaseSource } from '../../sources';
 import { Expression } from '../../Expression';
-import { Color } from '@nativescript/core';
-import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
 import { LayerType } from '../LayerManager';
 
 @LayerType('circle')
@@ -20,10 +18,8 @@ export class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
 	}
 
 	public override set circleColor(value) {
-		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeBoxedValue(new Color(value).ios) : value);
-
 		super.circleColor = value;
-		this.native.circleColor = expression?.native;
+		this.native.circleColor = Expression.colorValue(value)?.native;
 	}
 
 	public override get circleRadius() {

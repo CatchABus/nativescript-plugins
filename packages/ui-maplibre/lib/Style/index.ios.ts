@@ -98,8 +98,7 @@ export class Style extends StyleCommon<MLNStyle> {
 			}
 
 			if (options.color) {
-				const val = options.color;
-				const expression = Expression.propertyValue(typeof val === 'string' ? new NativeBoxedValue(new Color(val).ios) : val);
+				const expression = Expression.colorValue(options.color);
 				nativeLight.color = expression?.native;
 			}
 

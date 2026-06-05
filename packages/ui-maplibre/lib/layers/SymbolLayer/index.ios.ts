@@ -1,7 +1,6 @@
 import { BaseSource } from '../../sources/BaseSource';
 import { SymbolLayerCommon } from './common';
 import { Expression } from '../../Expression';
-import { Color } from '@nativescript/core';
 import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
 import { LayerType } from '../LayerManager';
 
@@ -111,10 +110,8 @@ export class SymbolLayer extends SymbolLayerCommon<MLNSymbolStyleLayer> {
 	}
 
 	public override set textColor(value) {
-		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeBoxedValue(new Color(value).ios) : value);
-
 		super.textColor = value;
-		this.native.textColor = expression?.native;
+		this.native.textColor = Expression.colorValue(value)?.native;
 	}
 
 	public override get textFontNames() {

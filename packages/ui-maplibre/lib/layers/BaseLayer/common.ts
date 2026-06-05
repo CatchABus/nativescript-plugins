@@ -1,6 +1,6 @@
 import { Trace } from '@nativescript/core';
 import { BaseLayer as IBaseLayer, LayerProperties } from '.';
-import type { PropertyValueSpecification } from '../../Expression';
+import type { ColorSpecification, PropertyValueSpecification } from '../../Expression';
 import { NativeObject } from '../../nativeWrappers/NativeObject';
 import { LayoutProperty } from '../../utils/decorators';
 
@@ -93,6 +93,8 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 
 		return propertyName;
 	}
+
+	public abstract convertColorValueToNative(value: PropertyValueSpecification<ColorSpecification>): any;
 
 	public toJSON() {
 		return {

@@ -1,8 +1,6 @@
 import { LineLayerCommon } from './common';
 import { BaseSource } from '../../sources';
 import { Expression } from '../../Expression';
-import { Color } from '@nativescript/core';
-import { NativeBoxedValue } from '../../nativeWrappers/NativeBoxedValue';
 import { LayerType } from '../LayerManager';
 
 @LayerType('line')
@@ -20,10 +18,8 @@ export class LineLayer extends LineLayerCommon<MLNLineStyleLayer> {
 	}
 
 	public override set lineColor(value) {
-		const expression = Expression.propertyValue(typeof value === 'string' ? new NativeBoxedValue(new Color(value).ios) : value);
-
 		super.lineColor = value;
-		this.native.lineColor = expression?.native;
+		this.native.lineColor = Expression.colorValue(value)?.native;
 	}
 
 	public override get lineWidth() {
