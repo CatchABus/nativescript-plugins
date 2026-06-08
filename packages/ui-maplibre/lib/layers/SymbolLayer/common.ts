@@ -5,47 +5,21 @@ import { LayoutProperty, PaintProperty } from '../../utils/decorators';
 
 export abstract class SymbolLayerCommon<T> extends AbstractVectorLayer<T, SymbolLayerProperties> implements ISymbolLayer {
 	@LayoutProperty('icon-allow-overlap')
-	public set iconAllowsOverlap(value: PropertyValueSpecification<boolean>) {
-		this.setPropertyValueInternal('icon-allow-overlap', value);
-	}
-
+	public iconAllowsOverlap: PropertyValueSpecification<boolean>;
 	@LayoutProperty('icon-size')
-	public set iconScale(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('icon-size', value);
-	}
-
+	public iconScale: PropertyValueSpecification<number>;
 	@LayoutProperty('icon-image')
-	public set iconImageName(value: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>) {
-		this.setPropertyValueInternal('icon-image', value);
-	}
-
+	public iconImageName: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
 	@LayoutProperty('icon-offset')
-	public set iconOffset(value: DataDrivenPropertyValueSpecification<[number, number]>) {
-		this.setPropertyValueInternal('icon-offset', value);
-	}
-
+	public iconOffset: DataDrivenPropertyValueSpecification<[number, number]>;
 	@LayoutProperty('text-field')
-	public set text(value: PropertyValueSpecification<string>) {
-		this.setPropertyValueInternal('text-field', value);
-	}
-
+	public text: PropertyValueSpecification<string>;
 	@LayoutProperty('text-allow-overlap')
-	public set textAllowsOverlap(value: PropertyValueSpecification<boolean>) {
-		this.setPropertyValueInternal('text-allow-overlap', value);
-	}
-
+	public textAllowsOverlap: PropertyValueSpecification<boolean>;
 	@LayoutProperty('text-size')
-	public set textSize(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('text-size', value);
-	}
-
+	public textSize: PropertyValueSpecification<number>;
 	@PaintProperty('text-color')
-	public set textColor(value: PropertyValueSpecification<ColorSpecification>) {
-		this.setPropertyValueInternal('text-color', value);
-	}
-
+	public textColor: PropertyValueSpecification<ColorSpecification>;
 	@LayoutProperty('text-font')
-	public set textFontNames(value: PropertyValueSpecification<string[]>) {
-		this.setPropertyValueInternal('text-font', value);
-	}
+	public textFontNames: PropertyValueSpecification<string[]>;
 }

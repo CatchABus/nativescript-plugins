@@ -12,12 +12,8 @@ export type FillExtrusionLayerProperties = LayerProperties & {
 
 export declare class FillExtrusionLayer extends AbstractVectorLayer<any, FillExtrusionLayerProperties> {
 	constructor(id: string, source: BaseSource);
-	public get fillExtrusionColor(): PropertyValueSpecification<ColorSpecification>;
-	public set fillExtrusionColor(value: PropertyValueSpecification<ColorSpecification>);
-	public get fillExtrusionHeight(): PropertyValueSpecification<number>;
-	public set fillExtrusionHeight(value: PropertyValueSpecification<ColorSpecification>);
-	public get fillExtrusionBase(): PropertyValueSpecification<number>;
-	public set fillExtrusionBase(value: PropertyValueSpecification<number>);
-	public get fillExtrusionOpacity(): PropertyValueSpecification<number>;
-	public set fillExtrusionOpacity(value: PropertyValueSpecification<number>);
+	public fillExtrusionColor: PropertyValueSpecification<ColorSpecification>;
+	public fillExtrusionHeight: PropertyValueSpecification<number>;
+	public fillExtrusionBase: PropertyValueSpecification<number>;
+	public fillExtrusionOpacity: PropertyValueSpecification<number>;
 }

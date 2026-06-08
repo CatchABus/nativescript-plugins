@@ -12,27 +12,15 @@ export class LineLayer extends LineLayerCommon<org.maplibre.android.style.layers
 		return new org.maplibre.android.style.layers.LineLayer(id, source.getId());
 	}
 
-	public override get lineColor() {
-		return this.getOrSetPropertyValueInternal('line-color', () => this.native.getLineColor().value);
+	public get_native_lineColor() {
+		return this.native.getLineColor().value;
 	}
 
-	public override set lineColor(value) {
-		super.lineColor = value;
+	public get_native_lineWidth() {
+		return this.native.getLineWidth().value?.floatValue?.();
 	}
 
-	public override get lineWidth() {
-		return this.getOrSetPropertyValueInternal('line-width', () => this.native.getLineWidth().value?.floatValue?.());
-	}
-
-	public override set lineWidth(value) {
-		super.lineWidth = value;
-	}
-
-	public override get lineOpacity() {
-		return this.getOrSetPropertyValueInternal('line-opacity', () => this.native.getLineOpacity().value?.floatValue?.());
-	}
-
-	public override set lineOpacity(value) {
-		super.lineOpacity = value;
+	public get_native_lineOpacity() {
+		return this.native.getLineOpacity().value?.floatValue?.();
 	}
 }

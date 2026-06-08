@@ -9,10 +9,7 @@ export type BackgroundLayerProperties = LayerProperties & {
 
 export declare class BackgroundLayer extends BaseLayer<any, BackgroundLayerProperties> {
 	constructor(id: string);
-	public get backgroundColor(): PropertyValueSpecification<ColorSpecification>;
-	public set backgroundColor(value: PropertyValueSpecification<ColorSpecification>);
-	public get backgroundOpacity(): PropertyValueSpecification<number>;
-	public set backgroundOpacity(value: PropertyValueSpecification<number>);
-	public get backgroundPattern(): DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
-	public set backgroundPattern(value: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>);
+	public backgroundColor: PropertyValueSpecification<ColorSpecification>;
+	public backgroundOpacity: PropertyValueSpecification<number>;
+	public backgroundPattern: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
 }

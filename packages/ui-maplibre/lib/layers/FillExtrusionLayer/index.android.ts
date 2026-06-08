@@ -12,35 +12,19 @@ export class FillExtrusionLayer extends FillExtrusionLayerCommon<org.maplibre.an
 		return new org.maplibre.android.style.layers.FillExtrusionLayer(id, source.getId());
 	}
 
-	public override get fillExtrusionColor() {
-		return this.getOrSetPropertyValueInternal('fill-extrusion-color', () => this.native.getFillExtrusionColor().value);
+	public get_native_fillExtrusionColor() {
+		return this.native.getFillExtrusionColor().value;
 	}
 
-	public override set fillExtrusionColor(value) {
-		super.fillExtrusionColor = value;
+	public get_native_fillExtrusionHeight() {
+		return this.native.getFillExtrusionHeight().value?.floatValue?.();
 	}
 
-	public override get fillExtrusionHeight() {
-		return this.getOrSetPropertyValueInternal('fill-extrusion-height', () => this.native.getFillExtrusionHeight().value?.floatValue?.());
+	public get_native_fillExtrusionBase() {
+		return this.native.getFillExtrusionBase().value?.floatValue?.();
 	}
 
-	public override set fillExtrusionHeight(value) {
-		super.fillExtrusionHeight = value;
-	}
-
-	public override get fillExtrusionBase() {
-		return this.getOrSetPropertyValueInternal('fill-extrusion-base', () => this.native.getFillExtrusionBase().value?.floatValue?.());
-	}
-
-	public override set fillExtrusionBase(value) {
-		super.fillExtrusionBase = value;
-	}
-
-	public override get fillExtrusionOpacity() {
-		return this.getOrSetPropertyValueInternal('fill-extrusion-opacity', () => this.native.getFillExtrusionOpacity().value?.floatValue?.());
-	}
-
-	public override set fillExtrusionOpacity(value) {
-		super.fillExtrusionBase = value;
+	public get_native_fillExtrusionOpacity() {
+		return this.native.getFillExtrusionOpacity().value?.floatValue?.();
 	}
 }

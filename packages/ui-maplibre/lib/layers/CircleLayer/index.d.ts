@@ -10,8 +10,6 @@ export type CircleLayerProperties = LayerProperties & {
 
 export declare class CircleLayer extends AbstractVectorLayer<any, CircleLayerProperties> {
 	constructor(id: string, source: BaseSource);
-	public get circleColor(): PropertyValueSpecification<ColorSpecification>;
-	public set circleColor(value: PropertyValueSpecification<ColorSpecification>);
-	public get circleRadius(): PropertyValueSpecification<number>;
-	public set circleRadius(value: PropertyValueSpecification<number>);
+	public circleColor: PropertyValueSpecification<ColorSpecification>;
+	public circleRadius: PropertyValueSpecification<number>;
 }

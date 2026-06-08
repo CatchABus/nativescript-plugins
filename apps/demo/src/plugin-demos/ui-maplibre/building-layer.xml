@@ -4,10 +4,8 @@
         </ActionBar>
   </Page.actionBar>
   <StackLayout class="p-20">
-    <ScrollView class="h-full">
-      <StackLayout>
-        <ui:MapLibreView width="100%" height="500" mapReady="onMapReady" tap="onTap"/>
-      </StackLayout>
-    </ScrollView>
+    <StackLayout>
+      <ui:MapLibreView width="100%" height="500" mapReady="onMapReady" tap="onTap"/>
+    </StackLayout>
   </StackLayout>
 </Page>

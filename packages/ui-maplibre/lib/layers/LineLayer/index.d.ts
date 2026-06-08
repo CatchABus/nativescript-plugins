@@ -11,10 +11,7 @@ export type LineLayerProperties = LayerProperties & {
 
 export declare class LineLayer extends AbstractVectorLayer<any, LineLayerProperties> {
 	constructor(id: string, source: BaseSource);
-	public get lineColor(): PropertyValueSpecification<ColorSpecification>;
-	public set lineColor(value: PropertyValueSpecification<ColorSpecification>);
-	public get lineWidth(): PropertyValueSpecification<number>;
-	public set lineWidth(value: PropertyValueSpecification<number>);
-	public get lineOpacity(): PropertyValueSpecification<number>;
-	public set lineOpacity(value: PropertyValueSpecification<number>);
+	public lineColor: PropertyValueSpecification<ColorSpecification>;
+	public lineWidth: PropertyValueSpecification<number>;
+	public lineOpacity: PropertyValueSpecification<number>;
 }

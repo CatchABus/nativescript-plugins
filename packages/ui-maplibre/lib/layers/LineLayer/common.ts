@@ -5,17 +5,9 @@ import { PaintProperty } from '../../utils/decorators';
 
 export abstract class LineLayerCommon<T> extends AbstractVectorLayer<T, LineLayerProperties> implements ILineLayer {
 	@PaintProperty('line-color')
-	public set lineColor(value: PropertyValueSpecification<ColorSpecification>) {
-		this.setPropertyValueInternal('line-color', value);
-	}
-
+	public lineColor: PropertyValueSpecification<ColorSpecification>;
 	@PaintProperty('line-width')
-	public set lineWidth(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('line-width', value);
-	}
-
+	public lineWidth: PropertyValueSpecification<number>;
 	@PaintProperty('line-opacity')
-	public set lineOpacity(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('line-opacity', value);
-	}
+	public lineOpacity: PropertyValueSpecification<number>;
 }

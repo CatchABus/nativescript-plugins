@@ -1,33 +1,44 @@
 import type { BaseLayer } from '../layers';
 
+function applyLayerPropertyDecorator(name: string, target: typeof BaseLayer.prototype, propertyKey: string, isPaint: boolean) {
+	const mapPropertyKey = isPaint ? 'paintProperties' : 'layoutProperties';
+
+	if (!target[mapPropertyKey]) {
+		target[mapPropertyKey] = new Set<string>();
+	} else {
+		const parentPrototype = Object.getPrototypeOf(target) as typeof BaseLayer.prototype;
+		const parentProperties = parentPrototype?.[mapPropertyKey];
+
+		if (parentProperties && parentProperties === target[mapPropertyKey]) {
+			target[mapPropertyKey] = new Set<string>(parentProperties);
+		}
+	}
+
+	const propertyDescriptor = {
+		get(this: BaseLayer) {
+			return this._getOrSetPropertyValueInternal(name, () => (typeof this[`get_native_${propertyKey}`] === 'function' ? this[`get_native_${propertyKey}`]() : null));
+		},
+		set(this: BaseLayer, value) {
+			this._setPropertyValueInternal(name, value);
+			if (typeof this[`set_native_${propertyKey}`] === 'function') {
+				this[`set_native_${propertyKey}`](value);
+			}
+		},
+	};
+
+	Object.defineProperty(target, propertyKey, propertyDescriptor);
+	Object.defineProperty(target, name, propertyDescriptor);
+	target[mapPropertyKey].add(name);
+}
+
 export function LayoutProperty(name: string): Function {
 	return function (target: typeof BaseLayer.prototype, propertyKey: string) {
-		if (!target.layoutPropertyMappings) {
-			target.layoutPropertyMappings = new Map<string, string>();
-		} else {
-			const parentPrototype = Object.getPrototypeOf(target) as typeof BaseLayer.prototype;
-			const parentPropertyMappings = parentPrototype?.layoutPropertyMappings;
-
-			if (parentPropertyMappings && parentPropertyMappings === target.layoutPropertyMappings) {
-				target.layoutPropertyMappings = new Map<string, string>(parentPropertyMappings);
-			}
-		}
-		target.layoutPropertyMappings.set(name, propertyKey);
+		applyLayerPropertyDecorator(name, target, propertyKey, false);
 	};
 }
 
 export function PaintProperty(name: string): Function {
 	return function (target: typeof BaseLayer.prototype, propertyKey: string) {
-		if (!target.paintPropertyMappings) {
-			target.paintPropertyMappings = new Map<string, string>();
-		} else {
-			const parentPrototype = Object.getPrototypeOf(target) as typeof BaseLayer.prototype;
-			const parentPropertyMappings = parentPrototype?.paintPropertyMappings;
-
-			if (parentPropertyMappings && parentPropertyMappings === target.paintPropertyMappings) {
-				target.paintPropertyMappings = new Map<string, string>(parentPropertyMappings);
-			}
-		}
-		target.paintPropertyMappings.set(name, propertyKey);
+		applyLayerPropertyDecorator(name, target, propertyKey, true);
 	};
 }

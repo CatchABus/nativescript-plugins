@@ -5,22 +5,11 @@ import { PaintProperty } from '../../utils/decorators';
 
 export abstract class FillExtrusionLayerCommon<T> extends AbstractVectorLayer<T, FillExtrusionLayerProperties> implements IFillExtrusionLayer {
 	@PaintProperty('fill-extrusion-color')
-	public set fillExtrusionColor(value: PropertyValueSpecification<ColorSpecification>) {
-		this.setPropertyValueInternal('fill-extrusion-color', value);
-	}
-
+	public fillExtrusionColor: PropertyValueSpecification<ColorSpecification>;
 	@PaintProperty('fill-extrusion-height')
-	public set fillExtrusionHeight(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('fill-extrusion-height', value);
-	}
-
+	public fillExtrusionHeight: PropertyValueSpecification<number>;
 	@PaintProperty('fill-extrusion-base')
-	public set fillExtrusionBase(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('fill-extrusion-base', value);
-	}
-
+	public fillExtrusionBase: PropertyValueSpecification<number>;
 	@PaintProperty('fill-extrusion-opacity')
-	public set fillExtrusionOpacity(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('fill-extrusion-opacity', value);
-	}
+	public fillExtrusionOpacity: PropertyValueSpecification<number>;
 }

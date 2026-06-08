@@ -13,23 +13,20 @@ export class CircleLayer extends CircleLayerCommon<MLNCircleStyleLayer> {
 		return MLNCircleStyleLayer.alloc().initWithIdentifierSource(id, source.native);
 	}
 
-	public override get circleColor() {
-		return this.getOrSetPropertyValueInternal('circle-color', () => (Expression.initWithNative(this.native.circleColor) as Expression).toJSON());
+	public get_native_circleColor() {
+		return (Expression.initWithNative(this.native.circleColor) as Expression).toJSON();
 	}
 
-	public override set circleColor(value) {
-		super.circleColor = value;
+	public set_native_circleColor(value) {
 		this.native.circleColor = Expression.colorValue(value)?.native;
 	}
 
-	public override get circleRadius() {
-		return this.getOrSetPropertyValueInternal('circle-radius', () => (Expression.initWithNative(this.native.circleRadius) as Expression).toJSON());
+	public get_native_circleRadius() {
+		return (Expression.initWithNative(this.native.circleRadius) as Expression).toJSON();
 	}
 
-	public override set circleRadius(value) {
+	public set_native_circleRadius(value) {
 		const expression = Expression.propertyValue(value);
-
-		super.circleRadius = value;
 		this.native.circleRadius = expression?.native;
 	}
 }

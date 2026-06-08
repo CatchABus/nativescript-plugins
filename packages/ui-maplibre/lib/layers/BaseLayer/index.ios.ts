@@ -21,11 +21,11 @@ export abstract class BaseLayer<T extends MLNStyleLayer> extends BaseLayerCommon
 		this.native.maximumZoomLevel = value;
 	}
 
-	public override get visibility() {
-		return this.getOrSetPropertyValueInternal('visibility', () => (this.native.visible ? 'visible' : 'none'));
+	public get_native_visibility() {
+		return this.native.visible ? 'visible' : 'none';
 	}
 
-	public override set visibility(value) {
+	public set_native_visibility(value) {
 		this.native.visible = value === 'visible';
 	}
 }

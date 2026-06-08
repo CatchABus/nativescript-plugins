@@ -5,12 +5,7 @@ import { PaintProperty } from '../../utils/decorators';
 
 export abstract class CircleLayerCommon<T> extends AbstractVectorLayer<T, CircleLayerProperties> implements ICircleLayer {
 	@PaintProperty('circle-color')
-	public set circleColor(value: PropertyValueSpecification<ColorSpecification>) {
-		this.setPropertyValueInternal('circle-color', value);
-	}
-
+	public circleColor: PropertyValueSpecification<ColorSpecification>;
 	@PaintProperty('circle-radius')
-	public set circleRadius(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('circle-radius', value);
-	}
+	public circleRadius: PropertyValueSpecification<number>;
 }

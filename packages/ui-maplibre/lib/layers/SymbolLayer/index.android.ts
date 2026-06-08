@@ -12,95 +12,55 @@ export class SymbolLayer extends SymbolLayerCommon<org.maplibre.android.style.la
 		return new org.maplibre.android.style.layers.SymbolLayer(id, source.getId());
 	}
 
-	public override get iconAllowsOverlap() {
-		return this.getOrSetPropertyValueInternal('icon-allow-overlap', () => this.native.getIconAllowOverlap().value?.booleanValue?.());
+	public get_native_iconAllowsOverlap() {
+		return this.native.getIconAllowOverlap().value?.booleanValue?.();
 	}
 
-	public override set iconAllowsOverlap(value) {
-		super.iconAllowsOverlap = value;
+	public get_native_iconScale() {
+		return this.native.getIconSize().value?.floatValue?.();
 	}
 
-	public override get iconScale() {
-		return this.getOrSetPropertyValueInternal('icon-size', () => this.native.getIconSize().value?.floatValue?.());
+	public get_native_iconImageName() {
+		return this.native.getIconImage().value;
 	}
 
-	public override set iconScale(value) {
-		super.iconScale = value;
+	public get_native_iconOffset() {
+		const nativeArray = this.native.getIconOffset().value;
+		const length = nativeArray?.length ?? 0;
+		const result = new Array<number>(length);
+
+		for (let i = 0; i < length; i++) {
+			result[i] = nativeArray[i].floatValue();
+		}
+
+		return result;
 	}
 
-	public override get iconImageName() {
-		return this.getOrSetPropertyValueInternal('icon-image', () => this.native.getIconImage().value);
+	public get_native_text() {
+		return this.native.getTextField().value?.toString?.();
 	}
 
-	public override set iconImageName(value) {
-		super.iconImageName = value;
+	public get_native_textAllowsOverlap() {
+		return this.native.getTextAllowOverlap().value?.booleanValue?.();
 	}
 
-	public override get iconOffset() {
-		return this.getOrSetPropertyValueInternal('icon-offset', () => {
-			const nativeArray = this.native.getIconOffset().value;
-			const length = nativeArray?.length ?? 0;
-			const result = new Array<number>(length);
-
-			for (let i = 0; i < length; i++) {
-				result[i] = nativeArray[i].floatValue();
-			}
-
-			return result;
-		});
+	public get_native_textSize() {
+		return this.native.getTextSize().value?.floatValue?.();
 	}
 
-	public override set iconOffset(value) {
-		super.iconOffset = value;
+	public get_native_textColor() {
+		return this.native.getTextColor().value;
 	}
 
-	public override get text() {
-		return this.getOrSetPropertyValueInternal('text-field', () => this.native.getTextField().value?.toString?.());
-	}
+	public get_native_textFontNames() {
+		const nativeArray = this.native.getTextFont().value;
+		const length = nativeArray?.length ?? 0;
+		const result = new Array<string>(length);
 
-	public override set text(value) {
-		super.text = value;
-	}
+		for (let i = 0; i < length; i++) {
+			result[i] = nativeArray[i];
+		}
 
-	public override get textAllowsOverlap() {
-		return this.getOrSetPropertyValueInternal('text-allow-overlap', () => this.native.getTextAllowOverlap().value?.booleanValue?.());
-	}
-
-	public override set textAllowsOverlap(value) {
-		super.textAllowsOverlap = value;
-	}
-
-	public override get textSize() {
-		return this.getOrSetPropertyValueInternal('text-size', () => this.native.getTextSize().value?.floatValue?.());
-	}
-
-	public override set textSize(value) {
-		super.textSize = value;
-	}
-
-	public override get textColor() {
-		return this.getOrSetPropertyValueInternal('text-color', () => this.native.getTextColor().value);
-	}
-
-	public override set textColor(value) {
-		super.textColor = value;
-	}
-
-	public override get textFontNames() {
-		return this.getOrSetPropertyValueInternal('text-font', () => {
-			const nativeArray = this.native.getTextFont().value;
-			const length = nativeArray?.length ?? 0;
-			const result = new Array<string>(length);
-
-			for (let i = 0; i < length; i++) {
-				result[i] = nativeArray[i];
-			}
-
-			return result;
-		});
-	}
-
-	public override set textFontNames(value) {
-		super.textFontNames = value;
+		return result;
 	}
 }

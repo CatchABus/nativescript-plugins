@@ -5,17 +5,9 @@ import { PaintProperty } from '../../utils/decorators';
 
 export abstract class BackgroundLayerCommon<T> extends BaseLayer<T, BackgroundLayerProperties> implements IBackgroundLayer {
 	@PaintProperty('background-color')
-	public set backgroundColor(value: PropertyValueSpecification<ColorSpecification>) {
-		this.setPropertyValueInternal('background-color', value);
-	}
-
+	public backgroundColor: PropertyValueSpecification<ColorSpecification>;
 	@PaintProperty('background-opacity')
-	public set backgroundOpacity(value: PropertyValueSpecification<number>) {
-		this.setPropertyValueInternal('background-opacity', value);
-	}
-
+	public backgroundOpacity: PropertyValueSpecification<number>;
 	@PaintProperty('background-pattern')
-	public set backgroundPattern(value: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>) {
-		this.setPropertyValueInternal('background-pattern', value);
-	}
+	public backgroundPattern: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
 }

@@ -13,45 +13,38 @@ export class FillExtrusionLayer extends FillExtrusionLayerCommon<MLNFillExtrusio
 		return MLNFillExtrusionStyleLayer.alloc().initWithIdentifierSource(id, source.native);
 	}
 
-	public override get fillExtrusionColor() {
-		return this.getOrSetPropertyValueInternal('fill-extrusion-color', () => (Expression.initWithNative(this.native.fillExtrusionColor) as Expression).toJSON());
+	public get_native_fillExtrusionColor() {
+		return (Expression.initWithNative(this.native.fillExtrusionColor) as Expression).toJSON();
 	}
 
-	public override set fillExtrusionColor(value) {
-		super.fillExtrusionColor = value;
+	public set_native_fillExtrusionColor(value) {
 		this.native.fillExtrusionColor = Expression.colorValue(value)?.native;
 	}
 
-	public override get fillExtrusionHeight() {
-		return this.getOrSetPropertyValueInternal('fill-extrusion-height', () => (Expression.initWithNative(this.native.fillExtrusionHeight) as Expression).toJSON());
+	public get_native_fillExtrusionHeight() {
+		return (Expression.initWithNative(this.native.fillExtrusionHeight) as Expression).toJSON();
 	}
 
-	public override set fillExtrusionHeight(value) {
+	public set_native_fillExtrusionHeight(value) {
 		const expression = Expression.propertyValue(value);
-
-		super.fillExtrusionHeight = value;
 		this.native.fillExtrusionHeight = expression?.native;
 	}
 
-	public override get fillExtrusionBase() {
-		return this.getOrSetPropertyValueInternal('fill-extrusion-base', () => (Expression.initWithNative(this.native.fillExtrusionBase) as Expression).toJSON());
+	public get_native_fillExtrusionBase() {
+		return (Expression.initWithNative(this.native.fillExtrusionBase) as Expression).toJSON();
 	}
 
-	public override set fillExtrusionBase(value) {
+	public set_native_fillExtrusionBase(value) {
 		const expression = Expression.propertyValue(value);
-
-		super.fillExtrusionBase = value;
 		this.native.fillExtrusionBase = expression?.native;
 	}
 
-	public override get fillExtrusionOpacity() {
-		return this.getOrSetPropertyValueInternal('fill-extrusion-opacity', () => (Expression.initWithNative(this.native.fillExtrusionOpacity) as Expression).toJSON());
+	public get_native_fillExtrusionOpacity() {
+		return (Expression.initWithNative(this.native.fillExtrusionOpacity) as Expression).toJSON();
 	}
 
-	public override set fillExtrusionOpacity(value) {
+	public set_native_fillExtrusionOpacity(value) {
 		const expression = Expression.propertyValue(value);
-
-		super.fillExtrusionOpacity = value;
 		this.native.fillExtrusionOpacity = expression?.native;
 	}
 }

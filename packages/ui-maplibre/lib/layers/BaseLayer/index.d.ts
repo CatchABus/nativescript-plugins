@@ -6,14 +6,14 @@ export type LayerProperties = {
 };
 
 export declare abstract class BaseLayer<T = any, U extends LayerProperties = LayerProperties> extends NativeObject<T> {
-	public layoutPropertyMappings: Map<string, string> | undefined;
-	public paintPropertyMappings: Map<string, string> | undefined;
+	public layoutProperties: Set<string> | undefined;
+	public paintProperties: Set<string> | undefined;
 
 	public getId(): string;
 	public getType(): string;
-	public getPropertyValueInternal(name: string): PropertyValueSpecification<any>;
-	public getOrSetPropertyValueInternal<V>(name: string, lazyValue: () => V): PropertyValueSpecification<any>;
-	public setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean;
+	public _getPropertyValueInternal(name: string): PropertyValueSpecification<any>;
+	public _getOrSetPropertyValueInternal<V>(name: string, lazyValue: () => V): PropertyValueSpecification<any>;
+	public _setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean;
 	public getProperty<K extends keyof U>(name: K): U[K];
 	public setProperty<K extends keyof U>(name: K, value: U[K]): void;
 	public setProperties(value: Partial<U>): void;
@@ -21,6 +21,5 @@ export declare abstract class BaseLayer<T = any, U extends LayerProperties = Lay
 	public set minZoom(value: number);
 	public get maxZoom(): number;
 	public set maxZoom(value: number);
-	public get visibility(): 'visible' | 'none';
-	public set visibility(value: 'visible' | 'none');
+	public visibility: 'visible' | 'none';
 }

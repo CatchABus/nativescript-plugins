@@ -11,27 +11,15 @@ export class BackgroundLayer extends BackgroundLayerCommon<org.maplibre.android.
 		return new org.maplibre.android.style.layers.BackgroundLayer(id);
 	}
 
-	public override get backgroundColor() {
-		return this.getOrSetPropertyValueInternal('background-color', () => this.native.getBackgroundColor().value);
+	public get_native_backgroundColor() {
+		return this.native.getBackgroundColor().value;
 	}
 
-	public override set backgroundColor(value) {
-		super.backgroundColor = value;
+	public get_native_backgroundOpacity() {
+		return this.native.getBackgroundOpacity().value?.floatValue?.();
 	}
 
-	public override get backgroundOpacity() {
-		return this.getOrSetPropertyValueInternal('background-opacity', () => this.native.getBackgroundOpacity().value?.floatValue?.());
-	}
-
-	public override set backgroundOpacity(value) {
-		super.backgroundOpacity = value;
-	}
-
-	public override get backgroundPattern() {
-		return this.getOrSetPropertyValueInternal('background-pattern', () => this.native.getBackgroundPattern().value);
-	}
-
-	public override set backgroundPattern(value) {
-		super.backgroundPattern = value;
+	public get_native_backgroundPattern() {
+		return this.native.getBackgroundPattern().value;
 	}
 }

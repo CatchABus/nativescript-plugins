@@ -12,34 +12,29 @@ export class BackgroundLayer extends BackgroundLayerCommon<MLNBackgroundStyleLay
 		return MLNBackgroundStyleLayer.alloc().initWithIdentifier(id);
 	}
 
-	public override get backgroundColor() {
-		return this.getOrSetPropertyValueInternal('background-color', () => (Expression.initWithNative(this.native.backgroundColor) as Expression).toJSON());
+	public get_native_backgroundColor() {
+		return (Expression.initWithNative(this.native.backgroundColor) as Expression).toJSON();
 	}
 
-	public override set backgroundColor(value) {
-		super.backgroundColor = value;
+	public set_native_backgroundColor(value) {
 		this.native.backgroundColor = Expression.colorValue(value)?.native;
 	}
 
-	public override get backgroundOpacity() {
-		return this.getOrSetPropertyValueInternal('background-opacity', () => (Expression.initWithNative(this.native.backgroundOpacity) as Expression).toJSON());
+	public get_native_backgroundOpacity() {
+		return (Expression.initWithNative(this.native.backgroundOpacity) as Expression).toJSON();
 	}
 
-	public override set backgroundOpacity(value) {
+	public set_native_backgroundOpacity(value) {
 		const expression = Expression.propertyValue(value);
-
-		super.backgroundOpacity = value;
 		this.native.backgroundOpacity = expression?.native;
 	}
 
-	public override get backgroundPattern() {
-		return this.getOrSetPropertyValueInternal('background-pattern', () => (Expression.initWithNative(this.native.backgroundPattern) as Expression).toJSON());
+	public get_native_backgroundPattern() {
+		return (Expression.initWithNative(this.native.backgroundPattern) as Expression).toJSON();
 	}
 
-	public override set backgroundPattern(value) {
+	public set_native_backgroundPattern(value) {
 		const expression = Expression.propertyValue(value);
-
-		super.backgroundPattern = value;
 		this.native.backgroundPattern = expression?.native;
 	}
 }

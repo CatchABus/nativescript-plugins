@@ -36,17 +36,17 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 		return nativeValue;
 	}
 
-	public override setPropertyValueInternal(name: string, value: any): boolean {
-		if (!super.setPropertyValueInternal(name, value)) {
+	public override _setPropertyValueInternal(name: string, value: any): boolean {
+		if (!super._setPropertyValueInternal(name, value)) {
 			return false;
 		}
 
 		const nativeValue = this._convertPropertyValueToNative(value);
 		let nativePair: org.maplibre.android.style.layers.PropertyValue<unknown>;
 
-		if (this.layoutPropertyMappings?.has(name)) {
+		if (this.layoutProperties?.has(name)) {
 			nativePair = new org.maplibre.android.style.layers.LayoutPropertyValue(name, nativeValue);
-		} else if (this.paintPropertyMappings?.has(name)) {
+		} else if (this.paintProperties?.has(name)) {
 			nativePair = new org.maplibre.android.style.layers.PaintPropertyValue(name, nativeValue);
 		} else {
 			nativePair = null;
@@ -68,9 +68,9 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 			for (const [key, value] of entries) {
 				let nativePair: org.maplibre.android.style.layers.PropertyValue<unknown>;
 
-				if (this.layoutPropertyMappings?.has(key)) {
+				if (this.layoutProperties?.has(key)) {
 					nativePair = new org.maplibre.android.style.layers.LayoutPropertyValue(key, this._convertPropertyValueToNative(value));
-				} else if (this.paintPropertyMappings?.has(key)) {
+				} else if (this.paintProperties?.has(key)) {
 					nativePair = new org.maplibre.android.style.layers.PaintPropertyValue(key, this._convertPropertyValueToNative(value));
 				} else {
 					nativePair = null;
@@ -125,11 +125,7 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 		this.native.setMaxZoom(value);
 	}
 
-	public override get visibility() {
-		return this.getOrSetPropertyValueInternal('visibility', () => (this.native.getVisibility().value?.toString?.() === 'visible' ? 'visible' : 'none'));
-	}
-
-	public override set visibility(value) {
-		super.visibility = value;
+	public get_native_visibility() {
+		return this.native.getVisibility().value?.toString?.() === 'visible' ? 'visible' : 'none';
 	}
 }
