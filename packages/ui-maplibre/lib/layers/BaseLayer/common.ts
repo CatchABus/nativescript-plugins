@@ -1,3 +1,4 @@
+import { Trace } from '@nativescript/core';
 import { BaseLayer as IBaseLayer, LayerProperties } from '.';
 import type { ColorSpecification, PropertyValueSpecification } from '../../Expression';
 import { NativeObject } from '../../nativeWrappers/NativeObject';
@@ -42,6 +43,11 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	}
 
 	public _setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean {
+		if (!this.layoutProperties?.has(name) && !this.paintProperties?.has(name)) {
+			Trace.write(`Unsupported property '${name}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
+			return false;
+		}
+
 		this.cachedPropertyValues.set(name, value);
 		return true;
 	}
