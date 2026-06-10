@@ -16,7 +16,7 @@ function applyLayerPropertyDecorator(name: string, target: typeof BaseLayer.prot
 	}
 
 	if (target[mapPropertyKey].has(name)) {
-		Trace.write(`Duplicate property '${name}' with key '${propertyKey}' for class ${target.constructor.name}`, Trace.categories.Error, Trace.messageType.warn);
+		Trace.write(`Duplicate property '${name}' with key '${propertyKey}' for class ${target.constructor.name}`, Trace.categories.Error, Trace.messageType.error);
 	} else {
 		const propertyDescriptor = {
 			get(this: BaseLayer) {

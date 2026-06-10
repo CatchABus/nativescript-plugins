@@ -36,10 +36,8 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 		return nativeValue;
 	}
 
-	public override _setPropertyValueInternal(name: string, value: any): boolean {
-		if (!super._setPropertyValueInternal(name, value)) {
-			return false;
-		}
+	public override _setPropertyValueInternal(name: string, value: any): void {
+		super._setPropertyValueInternal(name, value);
 
 		const nativeValue = this._convertPropertyValueToNative(value);
 		let nativePair: org.maplibre.android.style.layers.PropertyValue<unknown>;
@@ -56,7 +54,7 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 			this.nativePropsArray[0] = nativePair;
 			this.native.setProperties(this.nativePropsArray);
 		} else {
-			Trace.write(`Unsupported property '${name}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
+			Trace.write(`Unsupported property '${name}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.error);
 		}
 	}
 
@@ -83,7 +81,7 @@ export abstract class BaseLayer<T extends org.maplibre.android.style.layers.Laye
 
 					propertyValues.push(nativePair);
 				} else {
-					Trace.write(`Unsupported property '${key}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
+					Trace.write(`Unsupported property '${key}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.error);
 				}
 			}
 

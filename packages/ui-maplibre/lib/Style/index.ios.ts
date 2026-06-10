@@ -124,7 +124,7 @@ export class Style extends StyleCommon<MLNStyle> {
 
 			this.native.light = nativeLight;
 		} else {
-			Trace.write(`Incorrect style light options: ${JSON.stringify(options)}`, Trace.categories.Error, Trace.messageType.warn);
+			Trace.write(`Incorrect style light options: ${JSON.stringify(options)}`, Trace.categories.Error, Trace.messageType.error);
 		}
 	}
 }

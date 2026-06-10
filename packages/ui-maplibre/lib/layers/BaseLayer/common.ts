@@ -42,14 +42,8 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 		return this.cachedPropertyValues.get(name);
 	}
 
-	public _setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): boolean {
-		if (!this.layoutProperties?.has(name) && !this.paintProperties?.has(name)) {
-			Trace.write(`Unsupported property '${name}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.warn);
-			return false;
-		}
-
+	public _setPropertyValueInternal(name: string, value: PropertyValueSpecification<any>): void {
 		this.cachedPropertyValues.set(name, value);
-		return true;
 	}
 
 	public getProperty<K extends keyof LayerProperties>(name: K): LayerProperties[K] {
@@ -57,6 +51,10 @@ export abstract class BaseLayerCommon<T> extends NativeObject<T> implements IBas
 	}
 
 	public setProperty<K extends keyof LayerProperties>(name: K, value: LayerProperties[K]): void {
+		if (!this.layoutProperties?.has(name) && !this.paintProperties?.has(name)) {
+			Trace.write(`Unsupported property '${name}' with value '${value}' for layer ${this.constructor.name}(${this.getId()})`, Trace.categories.Error, Trace.messageType.error);
+			return;
+		}
 		this[name] = value;
 	}
 

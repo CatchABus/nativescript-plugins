@@ -104,7 +104,7 @@ export class Style extends StyleCommon<org.maplibre.android.maps.Style> {
 				nativeLight.setPosition(val ? new org.maplibre.android.style.light.Position(val.radialCoordinate, val.azimuthalAngle, val.polarAngle) : null);
 			}
 		} else {
-			Trace.write(`Incorrect style light options: ${JSON.stringify(options)}`, Trace.categories.Error, Trace.messageType.warn);
+			Trace.write(`Incorrect style light options: ${JSON.stringify(options)}`, Trace.categories.Error, Trace.messageType.error);
 		}
 	}
 }
