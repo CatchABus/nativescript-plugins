@@ -17,13 +17,13 @@ export type SymbolLayerProperties = LayerProperties & {
 
 export declare class SymbolLayer extends AbstractVectorLayer<any, SymbolLayerProperties> {
 	constructor(id: string, source: BaseSource);
-	public get iconAllowsOverlap(): PropertyValueSpecification<boolean>;
-	public get iconScale(): PropertyValueSpecification<number>;
-	public get iconImageName(): DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
-	public get iconOffset(): DataDrivenPropertyValueSpecification<[number, number]>;
-	public get text(): PropertyValueSpecification<string>;
-	public get textAllowsOverlap(): PropertyValueSpecification<boolean>;
-	public get textSize(): PropertyValueSpecification<number>;
-	public get textColor(): PropertyValueSpecification<ColorSpecification>;
-	public get textFontNames(): PropertyValueSpecification<string[]>;
+	public iconAllowsOverlap: PropertyValueSpecification<boolean>;
+	public iconScale: PropertyValueSpecification<number>;
+	public iconImageName: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>;
+	public iconOffset: DataDrivenPropertyValueSpecification<[number, number]>;
+	public text: PropertyValueSpecification<string>;
+	public textAllowsOverlap: PropertyValueSpecification<boolean>;
+	public textSize: PropertyValueSpecification<number>;
+	public textColor: PropertyValueSpecification<ColorSpecification>;
+	public textFontNames: PropertyValueSpecification<string[]>;
 }
