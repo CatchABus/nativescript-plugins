@@ -7,6 +7,8 @@ import { Projection } from '../Projection';
 import { MapLibreMapCommon } from './common';
 import { Expression, ExpressionFilterSpecification } from '../Expression';
 
+const ANIMATION_DURATION = 0.3;
+
 export class MapLibreMap extends MapLibreMapCommon<any> {
 	private _runWithNativeView(callback: (nativeView: MLNMapView) => void): void {
 		this.notify<MapNativeRequestData<MLNMapView>>({
@@ -40,12 +42,19 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 	}
 
 	public override setCamera(camera: CameraPosition, animated?: boolean): void {
+		const isAnimated = !!animated;
+
 		this._runWithNativeView((nativeView) => {
 			if (camera) {
 				camera.native.altitude = MLNAltitudeForZoomLevel(camera.zoom, camera.tilt, camera.target.latitude, nativeView.frame.size);
-				nativeView.setCameraAnimated(camera.native, !!animated);
+
+				if (camera.padding != null) {
+					nativeView.setCameraWithDurationAnimationTimingFunctionEdgePaddingCompletionHandler(camera.native, isAnimated ? ANIMATION_DURATION : 0, null, new UIEdgeInsets(camera.padding), null);
+				} else {
+					nativeView.setCameraAnimated(camera.native, isAnimated);
+				}
 			} else {
-				nativeView.setCameraAnimated(null, !!animated);
+				nativeView.setCameraAnimated(null, isAnimated);
 			}
 		});
 	}

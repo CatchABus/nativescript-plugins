@@ -1,12 +1,13 @@
 import { LatLng } from '../LatLng';
 import { NativeObject } from '../../nativeWrappers/NativeObject';
 import { CameraPosition as ICameraPosition } from '.';
+import { IRect } from '../IRect';
 
 export class CameraPositionCommon<T> extends NativeObject<T> implements ICameraPosition {
 	private readonly mTarget: LatLng;
 
-	constructor(target?: LatLng, zoom?: number, tilt?: number, bearing?: number) {
-		super(target, zoom, tilt, bearing);
+	constructor(target?: LatLng, zoom?: number, tilt?: number, bearing?: number, padding?: IRect | number) {
+		super(target, zoom, tilt, bearing, padding);
 		this.mTarget = target;
 	}
 	public get target(): LatLng {
@@ -19,6 +20,9 @@ export class CameraPositionCommon<T> extends NativeObject<T> implements ICameraP
 		throw new Error('Method not implemented.');
 	}
 	public get heading(): number {
+		throw new Error('Method not implemented.');
+	}
+	public get padding(): IRect {
 		throw new Error('Method not implemented.');
 	}
 }
