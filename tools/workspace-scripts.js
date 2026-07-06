@@ -81,6 +81,13 @@ module.exports = {
 					description: '@nativescript-community/ui-maplibre: Build',
 				},
 			},
+			// @nativescript-community/ui-jsx
+			'ui-jsx': {
+				build: {
+					script: 'nx run ui-jsx:build.all',
+					description: '@nativescript-community/ui-jsx: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
@@ -115,8 +122,12 @@ module.exports = {
 				script: 'nx run ui-maplibre:focus',
 				description: 'Focus on @nativescript-community/ui-maplibre',
 			},
+			'ui-jsx': {
+				script: 'nx run ui-jsx:focus',
+				description: 'Focus on @nativescript-community/ui-jsx',
+			},
 			reset: {
-				script: 'nx run all:focus',
+				script: 'nx g @nativescript/plugin-tools:focus-packages',
 				description: 'Reset Focus',
 			},
 		},

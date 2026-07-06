@@ -1,0 +1,17 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+  <Page.actionBar>
+    <ActionBar title="ui-jsx" icon="" class="action-bar"/>
+  </Page.actionBar>
+  <StackLayout class="p-20">
+    <ScrollView class="h-full">
+      <StackLayout>
+        <Button text="CollectionView" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="Counter" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="PageWithCSS" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="PageWithComponent" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="ReactiveTextField" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+        <Button text="Reactivity" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+      </StackLayout>
+    </ScrollView>
+  </StackLayout>
+</Page>

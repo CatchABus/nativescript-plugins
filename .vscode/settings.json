@@ -1,0 +1,23 @@
+{
+	"files.exclude": {
+		"**/apps/demo": false,
+		"**/packages/dns-lookup": false,
+		"**/packages/nordic-dfu": false,
+		"**/packages/ui-constraintlayout": false,
+		"**/packages/ui-htmlcanvasapi": false,
+		"**/packages/ui-jsx": false,
+		"**/packages/ui-maplibre": false,
+		"**/packages/ui-neumorphiclayout": false
+	},
+	"search.exclude": {
+		"**/apps/demo": false,
+		"**/packages/dns-lookup": false,
+		"**/packages/nordic-dfu": false,
+		"**/packages/ui-constraintlayout": false,
+		"**/packages/ui-htmlcanvasapi": false,
+		"**/packages/ui-jsx": false,
+		"**/packages/ui-maplibre": false,
+		"**/packages/ui-neumorphiclayout": false
+	},
+	"js/ts.tsdk.path": "node_modules/typescript/lib"
+}

@@ -15,6 +15,8 @@
 	},
 	"private": true,
 	"devDependencies": {
+		"@angular-devkit/core": "^21.2.16",
+		"@angular-devkit/schematics": "^21.2.16",
 		"@nativescript/core": "^9.0.16",
 		"@nativescript/plugin-tools": "^5.5.3",
 		"@nativescript/types": "^8.9.1",

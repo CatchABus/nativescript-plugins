@@ -1,0 +1,10 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"outDir": "../../dist/out-tsc",
+		"rootDir": "."
+	},
+	"exclude": ["**/*.spec.ts", "**/*.test.ts", "angular"],
+	"include": ["**/*.ts", "references.d.ts", "nativescript.webpack.js", "virtual-entry.js", "jsx-runtime.js"]
+}

@@ -1,0 +1,66 @@
+{
+	"name": "ui-jsx",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "packages/ui-jsx",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"options": {
+				"outputPath": "dist/packages/ui-jsx",
+				"tsConfig": "packages/ui-jsx/tsconfig.json",
+				"packageJson": "packages/ui-jsx/package.json",
+				"main": "packages/ui-jsx/index.d.ts",
+				"assets": [
+					"packages/ui-jsx/*.md",
+					"packages/ui-jsx/index.d.ts",
+					"packages/ui-jsx/jsx-runtime.d.ts",
+					"LICENSE",
+					{
+						"glob": "**/*",
+						"input": "packages/ui-jsx/platforms/",
+						"output": "./platforms/"
+					}
+				],
+				"dependsOn": [
+					{
+						"target": "build.all",
+						"projects": "dependencies"
+					}
+				]
+			}
+		},
+		"build.all": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["node tools/scripts/build-finish.ts ui-jsx"],
+				"parallel": false
+			},
+			"outputs": ["{workspaceRoot}/dist/packages/ui-jsx"],
+			"dependsOn": [
+				{
+					"target": "build.all",
+					"projects": "dependencies"
+				},
+				{
+					"target": "build",
+					"projects": "self"
+				}
+			]
+		},
+		"focus": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages ui-jsx"],
+				"parallel": false
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:eslint",
+			"options": {
+				"lintFilePatterns": ["packages/ui-jsx/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}
