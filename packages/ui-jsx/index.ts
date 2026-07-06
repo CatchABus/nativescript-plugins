@@ -52,7 +52,7 @@ export class JSXHandler {
 		return JSXRegistry;
 	}
 
-	public static registerElement(type: string, cl: typeof ViewBase) {
+	public static registerElement(type: string, cl: typeof ViewBase): void {
 		this.registry[type] = cl;
 	}
 }

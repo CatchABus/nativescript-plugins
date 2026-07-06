@@ -33,10 +33,12 @@ export type NativeScriptElement<T, E extends new (...args: any[]) => any> = Part
 	>
 > &
 	Omit<GestureEvents, keyof ViewEventNames<E>> &
-	ViewEventNames<E>;
+	ViewEventNames<E> & {
+		children?: ViewBase | ViewBase[];
+	};
 
 export declare class JSXHandler {
 	public static onBeforeSetJSXViewProps: (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => void;
 	public static get registry(): Record<string, typeof ViewBase>;
-	public static registerElement(type: string, cl: typeof ViewBase);
+	public static registerElement(type: string, cl: typeof ViewBase): void;
 }

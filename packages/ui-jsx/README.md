@@ -21,6 +21,22 @@ See how it's done in the [mobx-setup](/apps/demo/src/mobx-setup.ts) module in th
 npm install @nativescript-community/ui-jsx
 ```
 
+Also, make sure to update the following:  
+- tsconfig.json
+```json
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "@nativescript-community/ui-jsx"
+  }
+}
+```
+
+- references.d.ts
+```ts
+/// <reference path="./node_modules/@nativescript-community/ui-jsx/index.d.ts" />
+```
+
 ## Usage
 ```tsx
 // A JSX component
