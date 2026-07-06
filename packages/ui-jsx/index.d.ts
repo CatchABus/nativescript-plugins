@@ -38,6 +38,5 @@ export type NativeScriptElement<T, E extends new (...args: any[]) => any> = Part
 export declare class JSXHandler {
 	public static onBeforeSetJSXViewProps: (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => void;
 	public static get registry(): Record<string, typeof ViewBase>;
-	public static registerJSXElement(type: string, cl: typeof ViewBase);
-	public static getJSXRegistry(): Record<string, typeof ViewBase>;
+	public static registerElement(type: string, cl: typeof ViewBase);
 }

@@ -5,15 +5,15 @@ Build NativeScript user interface using plain JSX syntax.
 This plugin adds JSX support to NativeScript without requiring React or another UI framework. JSX elements are compiled directly into NativeScript views, allowing you to write declarative UI while keeping your application lightweight and close to the NativeScript APIs.  
   
 The following examples are provided in the demo app:
-- CollectionView
-- Counter
-- Page with CSS
-- Page with nested JSX component
-- Reactive counter using mobx
-- Reactive TextField using mobx
+- [CollectionView](/apps/demo/src/plugin-demos/ui-jsx/CollectionView.tsx)
+- [Counter](/apps/demo/src/plugin-demos/ui-jsx/Counter.tsx)
+- [Page with CSS](/apps/demo/src/plugin-demos/ui-jsx/PageWithCSS.tsx)
+- [Page with nested JSX component](/apps/demo/src/plugin-demos/ui-jsx/PageWithComponent.tsx)
+- [Reactive counter using mobx](/apps/demo/src/plugin-demos/ui-jsx/Reactivity.tsx)
+- [Reactive TextField using mobx](/apps/demo/src/plugin-demos/ui-jsx/ReactiveTextField.tsx)
 
-You can also setup your own reactivity system using `onBeforeSetJSXViewProps` callback.
-See how it's done in the `mobx-setup` module in the demo app.
+You can also setup your own reactivity system using `JSXHandler.onBeforeSetJSXViewProps` callback.
+See how it's done in the [mobx-setup](/apps/demo/src/mobx-setup.ts) module in the demo app.
 
 ## Installation
 
@@ -48,6 +48,30 @@ export default function Counter() {
       </stackLayout>
     </page>
   );
+}
+```
+
+### Custom elements
+
+The plugin also provides an API for adding custom elements:  
+TypeScript:
+```ts
+import { JSXHandler } from '@nativescript-community/ui-jsx';
+import { CollectionView } from '@nativescript-community/ui-collectionview';
+
+JSXHandler.registerElement('collectionView', CollectionView);
+```
+Typings:
+```ts
+import { CollectionView } from '@nativescript-community/ui-collectionview';
+import { NativeScriptElement } from '@nativescript-community/ui-jsx';
+
+export {};
+
+declare global {
+	interface NativeScriptJSX {
+		collectionView: NativeScriptElement<CollectionView, typeof CollectionView>;
+	}
 }
 ```
 

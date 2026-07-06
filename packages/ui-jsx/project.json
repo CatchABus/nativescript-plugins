@@ -18,6 +18,11 @@
 					"LICENSE",
 					{
 						"glob": "**/*",
+						"input": "packages/ui-jsx/typings/",
+						"output": "./typings/"
+					},
+					{
+						"glob": "**/*",
 						"input": "packages/ui-jsx/platforms/",
 						"output": "./platforms/"
 					}

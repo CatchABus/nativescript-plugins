@@ -7,6 +7,6 @@ import { JSXHandler } from '@nativescript-community/ui-jsx';
 
 installPolyfills();
 
-JSXHandler.registerJSXElement('collectionView', CollectionView);
+JSXHandler.registerElement('collectionView', CollectionView);
 
 Application.run({ moduleName: 'app-root' });
