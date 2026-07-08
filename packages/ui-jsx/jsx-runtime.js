@@ -87,11 +87,9 @@ function _handleProperties(view, viewClass, props) {
 	}
 
 	if (propertyNames?.length) {
-		view._batchUpdate(() => {
-			for (const key of propertyNames) {
-				view[key] = props[key];
-			}
-		});
+		for (const key of propertyNames) {
+			view[key] = props[key];
+		}
 	}
 }
 
