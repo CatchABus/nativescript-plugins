@@ -23,6 +23,11 @@
 					},
 					{
 						"glob": "**/*",
+						"input": "packages/ui-jsx/webpack/",
+						"output": "./webpack/"
+					},
+					{
+						"glob": "**/*",
 						"input": "packages/ui-jsx/platforms/",
 						"output": "./platforms/"
 					}
