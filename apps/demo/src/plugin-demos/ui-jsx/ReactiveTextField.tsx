@@ -2,7 +2,7 @@ import { EventData, TextField } from '@nativescript/core';
 import { action, observable } from 'mobx';
 
 export default function PageContent() {
-  const userText = observable.box("");
+  const userText = observable.box('');
 
   function onTextFieldChange(args: EventData) {
     const view = args.object as TextField;

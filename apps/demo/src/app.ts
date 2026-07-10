@@ -3,10 +3,10 @@ import { installPolyfills } from '@nativescript-community/ui-htmlcanvasapi';
 import '@nativescript-community/ui-neumorphiclayout';
 import { Application } from '@nativescript/core';
 import './mobx-setup';
-import { JSXHandler } from '@nativescript-community/ui-jsx';
+import { JSXHelper } from '@nativescript-community/ui-jsx';
 
 installPolyfills();
 
-JSXHandler.registerElement('collectionView', CollectionView);
+JSXHelper.registerElement('collectionView', CollectionView);
 
 Application.run({ moduleName: 'app-root' });

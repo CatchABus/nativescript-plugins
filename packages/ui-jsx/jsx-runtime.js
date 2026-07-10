@@ -1,10 +1,10 @@
 import { Span, TextBase, Trace, ViewBase } from '@nativescript/core';
-import { JSXHandler } from '.';
+import { JSXHelper } from '.';
 
 const EVENT_LISTENER_PREFIX = 'on';
 const EVENT_PREFIX_LENGTH = EVENT_LISTENER_PREFIX.length;
 const CHILDREN_KEY = 'children';
-const registry = JSXHandler.registry;
+const registry = JSXHelper.registry;
 
 export const jsxs = jsx;
 
@@ -82,8 +82,8 @@ function _handleProperties(view, viewClass, props) {
 		propertyNames.push(key);
 	}
 
-	if (JSXHandler.onBeforeSetJSXViewProps) {
-		JSXHandler.onBeforeSetJSXViewProps(view, props, propertyNames);
+	if (JSXHelper.onBeforeSetJSXViewProps) {
+		JSXHelper.onBeforeSetJSXViewProps(view, props, propertyNames);
 	}
 
 	if (propertyNames?.length) {

@@ -1,4 +1,4 @@
-import { Frame, Page, Label, StackLayout, Button, ActionBar, ActionItem, NavigationButton, ActivityIndicator, ContentView, DatePicker, HtmlView, Image, AbsoluteLayout, DockLayout, FlexboxLayout, GridLayout, LiquidGlassContainer, LiquidGlass, RootLayout, WrapLayout, ListPicker, ListView, Placeholder, Progress, ProxyViewContainer, Repeater, ScrollView, SearchBar, SegmentedBar, SegmentedBarItem, Slider, SplitView, Switch, TabView, TabViewItem, FormattedString, Span, TextField, TextView, TimePicker, WebView, ViewBase } from '@nativescript/core';
+import { Frame, Page, Label, StackLayout, Button, ActionBar, ActionItem, NavigationButton, ActivityIndicator, ContentView, DatePicker, HtmlView, Image, AbsoluteLayout, DockLayout, FlexboxLayout, GridLayout, LiquidGlassContainer, LiquidGlass, RootLayout, WrapLayout, ListPicker, ListView, Placeholder, Progress, ProxyViewContainer, Repeater, ScrollView, SearchBar, SegmentedBar, SegmentedBarItem, Slider, SplitView, Switch, TabView, TabViewItem, FormattedString, Span, TextField, TextView, TimePicker, WebView, ViewBase, getAncestor, View } from '@nativescript/core';
 
 const JSXRegistry: Record<string, typeof ViewBase> = {
 	actionBar: ActionBar,
@@ -45,11 +45,39 @@ const JSXRegistry: Record<string, typeof ViewBase> = {
 	webView: WebView,
 };
 
-export class JSXHandler {
+export class JSXHelper {
 	public static onBeforeSetJSXViewProps: (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => void;
 
 	public static get registry(): Record<string, typeof ViewBase> {
 		return JSXRegistry;
+	}
+
+	public static __liveSyncNavigationEntry(componentId: string, component: () => View): void {
+		const topFrame = Frame.topmost();
+		if (!topFrame) {
+			return;
+		}
+
+		let matchingFrame: Frame;
+
+		if (topFrame.currentEntry?.create?.['_jsxComponentId'] === componentId) {
+			matchingFrame = topFrame;
+		} else {
+			let parentFrame = getAncestor(topFrame, 'Frame');
+
+			while (parentFrame) {
+				if (parentFrame.currentEntry?.create?.['_jsxComponentId'] === componentId) {
+					matchingFrame = parentFrame;
+					break;
+				}
+
+				parentFrame = getAncestor(parentFrame, 'Frame');
+			}
+		}
+
+		if (matchingFrame) {
+			matchingFrame.currentEntry.create = component;
+		}
 	}
 
 	public static registerElement(type: string, cl: typeof ViewBase): void {

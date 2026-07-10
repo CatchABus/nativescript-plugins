@@ -12,7 +12,7 @@ The following examples are provided in the demo app:
 - [Reactive counter using mobx](/apps/demo/src/plugin-demos/ui-jsx/Reactivity.tsx)
 - [Reactive TextField using mobx](/apps/demo/src/plugin-demos/ui-jsx/ReactiveTextField.tsx)
 
-You can also setup your own reactivity system using `JSXHandler.onBeforeSetJSXViewProps` callback.
+You can also setup your own reactivity system using `JSXHelper.onBeforeSetJSXViewProps` callback.
 See how it's done in the [mobx-setup](/apps/demo/src/mobx-setup.ts) module in the demo app.
 
 ## Installation
@@ -72,10 +72,10 @@ export default function Counter() {
 The plugin also provides an API for adding custom elements:  
 TypeScript:
 ```ts
-import { JSXHandler } from '@nativescript-community/ui-jsx';
+import { JSXHelper } from '@nativescript-community/ui-jsx';
 import { CollectionView } from '@nativescript-community/ui-collectionview';
 
-JSXHandler.registerElement('collectionView', CollectionView);
+JSXHelper.registerElement('collectionView', CollectionView);
 ```
 Typings:
 ```ts
@@ -89,6 +89,19 @@ declare global {
 		collectionView: NativeScriptElement<CollectionView, typeof CollectionView>;
 	}
 }
+```
+
+### HMR
+
+The plugin was designed to make use of NativeScript core's builtin HMR handling, provided that certain rules are followed:
+- Navigating components must always export a default function that returns the `Page` instance
+- The component default function must be assigned to the navigation entry's `create` property
+
+e.g.
+```ts
+Frame.topmost().navigate({
+  create: MyCustomComponent
+});
 ```
 
 ## License

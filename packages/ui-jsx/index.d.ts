@@ -1,6 +1,6 @@
-import { EventData, TapGestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, GestureEventData, TouchGestureEventData, ViewBase } from '@nativescript/core';
+/// <reference path="./typings/shims.d.ts" />
+import { EventData, TapGestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, GestureEventData, TouchGestureEventData, ViewBase, View } from '@nativescript/core';
 export * from './typings/globals';
-export * from './typings/utils';
 
 type StaticKeysOf<T extends new (...args: any[]) => any> = {
 	[K in keyof T]: K extends `_${string}` ? never : K extends `${string}Event` ? (T[K] extends (...args: any[]) => any ? never : K) : never;
@@ -37,8 +37,9 @@ export type NativeScriptElement<T, E extends new (...args: any[]) => any> = Part
 		children?: ViewBase | ViewBase[];
 	};
 
-export declare class JSXHandler {
+export declare class JSXHelper {
 	public static onBeforeSetJSXViewProps: (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => void;
 	public static get registry(): Record<string, typeof ViewBase>;
+	public static __liveSyncNavigationEntry(componentId: string, component: () => View): void;
 	public static registerElement(type: string, cl: typeof ViewBase): void;
 }

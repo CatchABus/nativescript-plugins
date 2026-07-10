@@ -3,7 +3,7 @@ import { Label } from '@nativescript/core';
 import { observable } from 'mobx';
 
 export default function CollectionViewComponent() {
-  const items = observable.array([1, 2, 3, 4, 5, 6, 7, 8].map((num) => "No " + num));
+  const items = observable.array([1, 2, 3, 4, 5, 6, 7, 8].map((num) => 'No ' + num));
 
   function onItemLoading(args: CollectionViewItemEventData) {
     const label = args.view as Label;
@@ -11,7 +11,7 @@ export default function CollectionViewComponent() {
   }
 
   function onItemTap(args: CollectionViewItemEventData) {
-    items[args.index] = "No " + (Math.random() * 10).toFixed(0);
+    items[args.index] = 'No ' + (Math.random() * 10).toFixed(0);
   }
 
   return (
