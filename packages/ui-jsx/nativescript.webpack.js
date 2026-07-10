@@ -6,7 +6,7 @@ const { resolve } = require('path');
  */
 module.exports = (webpack) => {
 	webpack.chainWebpack((config, env) => {
-		config.resolve.extensions.add('.jsx').add('.tsx');
+		config.resolve.extensions.prepend('.jsx').prepend('.tsx');
 
 		config.module
 			.rule('ts')
