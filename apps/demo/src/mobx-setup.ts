@@ -2,7 +2,7 @@ import { JSXHelper } from '@nativescript-community/ui-jsx';
 import { EventData, ObservableArray, ViewBase } from '@nativescript/core';
 import { isBoxedObservable, isComputed, isObservableArray, observe, reaction } from 'mobx';
 
-JSXHelper.onBeforeSetJSXViewProps = (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => {
+JSXHelper.onCreatingView = (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => {
 	if (!attributeNames?.length) {
 		return;
 	}

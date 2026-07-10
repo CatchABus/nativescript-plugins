@@ -38,7 +38,7 @@ export type NativeScriptElement<T, E extends new (...args: any[]) => any> = Part
 	};
 
 export declare class JSXHelper {
-	public static onBeforeSetJSXViewProps: (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => void;
+	public static onCreatingView: (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => void;
 	public static get registry(): Record<string, typeof ViewBase>;
 	public static __liveSyncNavigationEntry(componentId: string, component: () => View): void;
 	public static registerElement(type: string, cl: typeof ViewBase): void;

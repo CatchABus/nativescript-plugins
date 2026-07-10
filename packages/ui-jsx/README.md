@@ -12,7 +12,7 @@ The following examples are provided in the demo app:
 - [Reactive counter using mobx](/apps/demo/src/plugin-demos/ui-jsx/Reactivity.tsx)
 - [Reactive TextField using mobx](/apps/demo/src/plugin-demos/ui-jsx/ReactiveTextField.tsx)
 
-You can also setup your own reactivity system using `JSXHelper.onBeforeSetJSXViewProps` callback.
+You can also setup your own reactivity system using `JSXHelper.onCreatingView` callback.
 See how it's done in the [mobx-setup](/apps/demo/src/mobx-setup.ts) module in the demo app.
 
 ## Installation

@@ -46,7 +46,7 @@ const JSXRegistry: Record<string, typeof ViewBase> = {
 };
 
 export class JSXHelper {
-	public static onBeforeSetJSXViewProps: (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => void;
+	public static onCreatingView: (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => void;
 
 	public static get registry(): Record<string, typeof ViewBase> {
 		return JSXRegistry;

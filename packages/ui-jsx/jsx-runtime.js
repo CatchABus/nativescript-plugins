@@ -82,8 +82,8 @@ function _handleProperties(view, viewClass, props) {
 		propertyNames.push(key);
 	}
 
-	if (JSXHelper.onBeforeSetJSXViewProps) {
-		JSXHelper.onBeforeSetJSXViewProps(view, props, propertyNames);
+	if (JSXHelper.onCreatingView) {
+		JSXHelper.onCreatingView(view, props, propertyNames);
 	}
 
 	if (propertyNames?.length) {

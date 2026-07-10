@@ -1,6 +1,6 @@
 import dedent from 'ts-dedent';
 
-export default function loader(content: string, map: any) {
+export default function loader(content, map) {
 	const hmrCode = this.hot
 		? dedent`
 			/* NATIVESCRIPT-JSX-HOT-LOADER */

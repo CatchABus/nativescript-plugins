@@ -33,7 +33,7 @@ module.exports = (webpack) => {
 				.add(entryPath)
 				.end()
 				.use('jsx-hot-loader')
-				.loader(resolve(__dirname, './jsx-hot-loader'))
+				.loader(resolve(__dirname, './webpack/jsx-hot-loader'))
 				.options({
 					appPath: entryPath,
 				});
