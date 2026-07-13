@@ -67,6 +67,23 @@ export default function Counter() {
 }
 ```
 
+### Custom type configuration
+
+The plugin allows extending types based on your preferences.  
+Supported configurations:
+- commonAttributeType | The additional return type for all jsx element attributes.
+  
+e.g.
+```ts
+import { IComputedValue, IObservableArray, IObservableValue } from 'mobx';
+
+declare global {
+	interface NativeScriptJSXTypeConfig<T> {
+		commonAttributeType: IObservableValue<T> | IComputedValue<T> | IObservableArray<any>;
+	}
+}
+```
+
 ### Custom elements
 
 The plugin also provides an API for adding custom elements:  
