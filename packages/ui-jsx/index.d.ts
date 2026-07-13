@@ -25,7 +25,7 @@ export type NativeScriptElement<T, E extends new (...args: any[]) => any> = Part
 > &
 	Omit<NativeScriptGestureEvents, keyof ViewEventNames<E>> &
 	ViewEventNames<E> & {
-		children?: T extends TextBase ? ViewBase | ViewBase[] | string : ViewBase | ViewBase[];
+		children?: T extends TextBase ? ViewBase | [ViewBase, ...ViewBase[]] | string : ViewBase | [ViewBase, ...ViewBase[]];
 	};
 
 export declare class JSXHelper {
