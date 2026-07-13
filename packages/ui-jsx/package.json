@@ -1,6 +1,6 @@
 {
 	"name": "@nativescript-community/ui-jsx",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"description": "A NativeScript plugin that enables building UI with plain JSX syntax.",
 	"main": "index",
 	"types": "index.d.ts",
