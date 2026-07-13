@@ -2,6 +2,10 @@ import * as nsModules from '@nativescript/core';
 import { NativeScriptElement } from '..';
 
 declare global {
+	interface NativeScriptJSXTypeConfig<T> {
+		// commonAttributeType
+	}
+
 	interface NativeScriptJSX {
 		actionBar: NativeScriptElement<nsModules.ActionBar, typeof nsModules.ActionBar>;
 		actionItem: NativeScriptElement<nsModules.ActionItem, typeof nsModules.ActionItem>;

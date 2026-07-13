@@ -4,17 +4,17 @@
 	"license": "SEE LICENSE IN <your-license-filename>",
 	"repository": "<fill-your-repository-here>",
 	"dependencies": {
-		"@nativescript-community/dns-lookup": "file:../../packages/dns-lookup",
-		"@nativescript-community/nordic-dfu": "file:../../packages/nordic-dfu",
 		"@nativescript-community/ui-canvas": "^4.6.32",
 		"@nativescript-community/ui-collectionview": "^6.0.25",
+		"@nativescript-community/ui-jsx": "file:../../packages/ui-jsx",
+		"@nativescript/core": "file:../../node_modules/@nativescript/core",
+		"mobx": "^6.16.1",
+		"@nativescript-community/dns-lookup": "file:../../packages/dns-lookup",
+		"@nativescript-community/nordic-dfu": "file:../../packages/nordic-dfu",
 		"@nativescript-community/ui-constraintlayout": "file:../../packages/ui-constraintlayout",
 		"@nativescript-community/ui-htmlcanvasapi": "file:../../packages/ui-htmlcanvasapi",
-		"@nativescript-community/ui-jsx": "file:../../packages/ui-jsx",
 		"@nativescript-community/ui-maplibre": "file:../../packages/ui-maplibre",
-		"@nativescript-community/ui-neumorphiclayout": "file:../../packages/ui-neumorphiclayout",
-		"@nativescript/core": "file:../../node_modules/@nativescript/core",
-		"mobx": "^6.16.1"
+		"@nativescript-community/ui-neumorphiclayout": "file:../../packages/ui-neumorphiclayout"
 	},
 	"devDependencies": {
 		"@nativescript/android": "9.0.2",

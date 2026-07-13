@@ -1,5 +1,6 @@
 /// <reference path="./typings/shims.d.ts" />
 import { EventData, TapGestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, GestureEventData, TouchGestureEventData, ViewBase, View } from '@nativescript/core';
+import { GetKey } from './typings/utils';
 export * from './typings/globals';
 
 type StaticKeysOf<T extends new (...args: any[]) => any> = {
@@ -21,7 +22,7 @@ type GestureEvents = {
 };
 
 type NativeScriptProps<T, K extends keyof T> = {
-	[P in K]: T[P] | object;
+	[P in K]: T[P] | GetKey<NativeScriptJSXTypeConfig<T[P]>, 'commonAttributeType'>;
 };
 
 export type NativeScriptElement<T, E extends new (...args: any[]) => any> = Partial<
