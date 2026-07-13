@@ -6,6 +6,17 @@ declare global {
 		// commonAttributeType
 	}
 
+	interface NativeScriptGestureEvents {
+		onTap?: (args: TapGestureEventData) => void;
+		onDoubleTap?: (args: TapGestureEventData) => void;
+		onPinch?: (args: PinchGestureEventData) => void;
+		onPan?: (args: PanGestureEventData) => void;
+		onSwipe?: (args: SwipeGestureEventData) => void;
+		onRotation?: (args: RotationGestureEventData) => void;
+		onLongPress?: (args: GestureEventData) => void;
+		onTouch?: (args: TouchGestureEventData) => void;
+	}
+
 	interface NativeScriptJSX {
 		actionBar: NativeScriptElement<nsModules.ActionBar, typeof nsModules.ActionBar>;
 		actionItem: NativeScriptElement<nsModules.ActionItem, typeof nsModules.ActionItem>;

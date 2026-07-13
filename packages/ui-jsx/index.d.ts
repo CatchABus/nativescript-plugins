@@ -1,5 +1,5 @@
 /// <reference path="./typings/shims.d.ts" />
-import { EventData, TapGestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, GestureEventData, TouchGestureEventData, ViewBase, View } from '@nativescript/core';
+import { EventData, TapGestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, GestureEventData, TouchGestureEventData, ViewBase, View, TextBase } from '@nativescript/core';
 import { GetKey } from './typings/utils';
 export * from './typings/globals';
 
@@ -10,16 +10,6 @@ type StaticKeysOf<T extends new (...args: any[]) => any> = {
 type ViewEventNames<T extends new (...args: any[]) => any> = Partial<{
 	[K in StaticKeysOf<T> as `on${Capitalize<string & (K extends `${infer P}Event` ? P : K)>}`]: (args: EventData) => void;
 }>;
-type GestureEvents = {
-	onTap?: (args: TapGestureEventData) => void;
-	onDoubleTap?: (args: TapGestureEventData) => void;
-	onPinch?: (args: PinchGestureEventData) => void;
-	onPan?: (args: PanGestureEventData) => void;
-	onSwipe?: (args: SwipeGestureEventData) => void;
-	onRotation?: (args: RotationGestureEventData) => void;
-	onLongPress?: (args: GestureEventData) => void;
-	onTouch?: (args: TouchGestureEventData) => void;
-};
 
 type NativeScriptProps<T, K extends keyof T> = {
 	[P in K]: T[P] | GetKey<NativeScriptJSXTypeConfig<T[P]>, 'commonAttributeType'>;
@@ -33,9 +23,9 @@ export type NativeScriptElement<T, E extends new (...args: any[]) => any> = Part
 		}[keyof T]
 	>
 > &
-	Omit<GestureEvents, keyof ViewEventNames<E>> &
+	Omit<NativeScriptGestureEvents, keyof ViewEventNames<E>> &
 	ViewEventNames<E> & {
-		children?: ViewBase | ViewBase[];
+		children?: T extends TextBase ? ViewBase | ViewBase[] | string : ViewBase | ViewBase[];
 	};
 
 export declare class JSXHelper {
