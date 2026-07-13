@@ -18,7 +18,7 @@ export function jsx(elementType, props) {
 
 	if (!viewClass) {
 		Trace.write(`Unknown NativeScript view element type: ${elementType}. Make sure that the element is registered!`, Trace.categories.Error, Trace.messageType.error);
-		return;
+		return null;
 	}
 
 	const view = new viewClass();
@@ -123,6 +123,8 @@ function _appendChild(view, child) {
 			view[child.__jsxElementType] = child;
 		}
 	} else {
-		Trace.write(`Unknown NativeScript child view type ${child} for view ${view}!`, Trace.categories.Error, Trace.messageType.error);
+		if (child != null) {
+			Trace.write(`Unknown NativeScript child view type ${child} for view ${view}!`, Trace.categories.Error, Trace.messageType.error);
+		}
 	}
 }
