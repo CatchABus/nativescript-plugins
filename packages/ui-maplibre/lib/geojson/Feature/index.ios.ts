@@ -3,7 +3,7 @@ import { Geometry } from '../Geometry';
 import { FeatureCommon } from './common';
 
 export class Feature extends FeatureCommon<MLNFeature> {
-	private mDictionary: NSMutableDictionary<string, string | boolean | number>;
+	private mDictionary: NSMutableDictionary<string, any>;
 
 	public override initNative(...args: any[]): MLNFeature {
 		let native: MLNFeature;
@@ -40,7 +40,15 @@ export class Feature extends FeatureCommon<MLNFeature> {
 
 	protected get attributeDictionary() {
 		if (!this.mDictionary) {
-			this.mDictionary = NSMutableDictionary.alloc().init();
+			if (this.native.attributes) {
+				if (this.native.attributes instanceof NSMutableDictionary) {
+					this.mDictionary = this.native.attributes;
+				} else {
+					this.mDictionary = this.native.attributes.mutableCopy();
+				}
+			} else {
+				this.mDictionary = NSMutableDictionary.alloc().init();
+			}
 		}
 		return this.mDictionary;
 	}
