@@ -35,16 +35,19 @@ export class Feature extends FeatureCommon<org.maplibre.geojson.Feature> {
 		const jsonElement = this.native.getProperty(key);
 		let value: string | boolean | number;
 
-		if (jsonElement instanceof com.google.gson.JsonPrimitive) {
-			if (jsonElement.isBoolean()) {
-				value = jsonElement.getAsBoolean();
-			} else if (jsonElement.isNumber()) {
-				value = jsonElement.getAsDouble();
+		if (jsonElement instanceof com.google.gson.JsonElement) {
+			if (jsonElement instanceof com.google.gson.JsonPrimitive) {
+				if (jsonElement.isBoolean()) {
+					value = jsonElement.getAsBoolean();
+				} else if (jsonElement.isNumber()) {
+					value = jsonElement.getAsDouble();
+				} else {
+					value = jsonElement.getAsString();
+				}
 			} else {
-				value = jsonElement.getAsString();
+				value = jsonElement.toString();
 			}
 		} else {
-			// TODO: Add support for other entities
 			value = null;
 		}
 		return value;
