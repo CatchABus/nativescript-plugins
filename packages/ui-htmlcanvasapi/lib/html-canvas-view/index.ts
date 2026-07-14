@@ -100,6 +100,9 @@ class HTMLCanvasView extends CanvasView {
 		}
 
 		this._offscreenContext = new Canvas(width, height);
+		if (__APPLE__) {
+			this._offscreenContext.setDensity(SCREEN_SCALE);
+		}
 		this._offscreenContext.scale(SCREEN_SCALE, SCREEN_SCALE);
 	}
 

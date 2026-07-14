@@ -134,6 +134,10 @@ class NSHTMLCanvasElement extends Observable {
 		// Image is exported in pixels
 		const canvas = new Canvas(measuredWidth, measuredHeight);
 
+		if (__APPLE__) {
+			canvas.setDensity(SCREEN_SCALE);
+		}
+
 		canvas.scale(SCREEN_SCALE, SCREEN_SCALE);
 		view.onDraw(canvas);
 

@@ -1,0 +1,13 @@
+export { CanvasGradient } from './lib/CanvasGradient';
+export { CanvasPattern } from './lib/CanvasPattern';
+export { CanvasRenderingContext2D } from './lib/contexts/CanvasRenderingContext2D';
+export { ImageBitmapRenderingContext } from './lib/contexts/ImageBitmapRenderingContext';
+export { OffscreenCanvasRenderingContext2D } from './lib/contexts/OffscreenCanvasRenderingContext2D';
+export { DOMMatrix } from './lib/DOMMatrix';
+export { DOMPoint } from './lib/DOMPoint';
+export { HTMLCanvasElement } from './lib/elements/HTMLCanvasElement';
+export { OffscreenCanvas } from './lib/elements/OffscreenCanvas';
+export { HTMLCanvasView } from './lib/html-canvas-view';
+export { Path2D } from './lib/Path2D';
+export { installPolyfills } from './lib/polyfills';
+export { TextMetrics } from './lib/TextMetrics';

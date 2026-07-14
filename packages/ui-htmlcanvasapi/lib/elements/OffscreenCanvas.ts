@@ -26,6 +26,9 @@ class NSOffscreenCanvas extends Observable {
 		}
 
 		this._nativeContext = new Canvas(this._width * SCREEN_SCALE, this._height * SCREEN_SCALE);
+		if (__APPLE__) {
+			this._nativeContext.setDensity(SCREEN_SCALE);
+		}
 		this._nativeContext.scale(SCREEN_SCALE, SCREEN_SCALE);
 	}
 
