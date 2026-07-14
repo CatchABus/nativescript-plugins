@@ -17,6 +17,11 @@
 					"LICENSE",
 					{
 						"glob": "**/*",
+						"input": "packages/ui-maplibre/typings/",
+						"output": "./typings/"
+					},
+					{
+						"glob": "**/*",
 						"input": "packages/ui-maplibre/platforms/",
 						"output": "./platforms/"
 					}
