@@ -1,6 +1,6 @@
 import { JSXHelper } from '@nativescript-community/ui-jsx';
 import { EventData, ObservableArray, ViewBase } from '@nativescript/core';
-import { isBoxedObservable, isComputed, isObservableArray, observe, reaction } from 'mobx';
+import { autorun, isBoxedObservable, isComputed, isObservableArray, observe } from 'mobx';
 
 JSXHelper.onCreatingView = (view: ViewBase, propertyBag: Record<string, any>, attributeNames?: string[]) => {
 	if (!attributeNames?.length) {
@@ -29,23 +29,24 @@ JSXHelper.onCreatingView = (view: ViewBase, propertyBag: Record<string, any>, at
 				let disposeCb: () => void;
 
 				if (isBoxedObservable(value) || isComputed(value)) {
-					disposeCb = reaction(
-						() => value.get(),
-						(value) => {
-							args.object[key] = value;
-						}
-					);
-				} else if (isObservableArray(value)) {
-					disposeCb = observe(value, (change) => {
-						const nsArray = args.object[key];
-						if (nsArray instanceof ObservableArray) {
-							if (change.type === 'splice') {
-								nsArray.splice(change.index, change.removedCount, ...change.added);
-							} else {
-								nsArray.setItem(change.index, change.newValue);
-							}
-						}
+					disposeCb = autorun(() => {
+						args.object[key] = value.get();
 					});
+				} else if (isObservableArray(value)) {
+					disposeCb = observe(
+						value,
+						(change) => {
+							const nsArray = args.object[key];
+							if (nsArray instanceof ObservableArray) {
+								if (change.type === 'splice') {
+									nsArray.splice(change.index, change.removedCount, ...change.added);
+								} else {
+									nsArray.setItem(change.index, change.newValue);
+								}
+							}
+						},
+						true
+					);
 				}
 
 				if (disposeCb) {
