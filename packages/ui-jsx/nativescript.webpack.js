@@ -21,6 +21,55 @@ module.exports = (webpack) => {
 				});
 			});
 
+		config.module
+			.rule('css')
+			.test(/\.css$/)
+			.exclude.add(/\.module\.css$/)
+			.end();
+
+		config.module
+			.rule('scss')
+			.test(/\.scss$/)
+			.exclude.add(/\.module\.scss$/)
+			.end();
+
+		config.module
+			.rule('jsx-css')
+			.test(/\.module\.css$/)
+			.use('css-loader')
+			.loader('css-loader')
+			.options({
+				modules: false,
+				exportType: 'string',
+			})
+			.end()
+			.use('postcss-loader')
+			.loader('postcss-loader');
+
+		config.module
+			.rule('jsx-scss')
+			.test(/\.module\.scss$/)
+			.use('css-loader')
+			.loader('css-loader')
+			.options({
+				modules: false,
+				exportType: 'string',
+			})
+			.end()
+			.use('postcss-loader')
+			.loader('postcss-loader')
+			.end()
+			.use('sass-loader')
+			.loader('sass-loader')
+			.options({
+				// helps ensure proper project compatibility
+				// particularly in cases of workspaces
+				// which may have different nested Sass implementations
+				// via transient dependencies
+				implementation: require('sass'),
+			})
+			.end();
+
 		config.when(env.hmr, (config) => {
 			const entryPath = getEntryPath();
 

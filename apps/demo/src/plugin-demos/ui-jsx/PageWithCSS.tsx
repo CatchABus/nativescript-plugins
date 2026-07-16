@@ -1,8 +1,8 @@
-import css from './page-with-css.css';
+import css from './page-with-css.module.css';
 
 export default function PageWithCSS() {
   return (
-    <page class="page" css={css as any}>
+    <page class="page" css={css}>
       <actionBar title="Page with CSS" class="action-bar">
       </actionBar>
       <stackLayout class="p-20">
