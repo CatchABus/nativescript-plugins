@@ -60,11 +60,9 @@ export class MapLibreMap extends MapLibreMapCommon<any> {
 	}
 
 	public override getProjection(): Projection {
-		if (!this.mProjection) {
-			this._runWithNativeView((nativeView) => {
-				this.mProjection = Projection.initWithNative(nativeView.mapProjection()) as Projection;
-			});
-		}
+		this._runWithNativeView((nativeView) => {
+			this.mProjection = Projection.initWithNative(nativeView.mapProjection()) as Projection;
+		});
 		return this.mProjection;
 	}
 
