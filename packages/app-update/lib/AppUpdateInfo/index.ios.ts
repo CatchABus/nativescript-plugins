@@ -7,6 +7,7 @@ import { UpdateAvailbility } from '../UpdateAvailability';
 import { AppUpdateInfoCommon } from './common';
 
 interface AppData {
+	trackId: number;
 	version: string;
 	bundleId: string;
 }
@@ -23,6 +24,10 @@ export class AppUpdateInfo extends AppUpdateInfoCommon {
 
 	public getNative() {
 		return this.mNative;
+	}
+
+	public getTrackId(): string {
+		return this.mNative.trackId + '';
 	}
 
 	public getAvailableVersionCode(): string {

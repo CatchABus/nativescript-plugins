@@ -18,6 +18,10 @@ export class AppUpdateInfo extends AppUpdateInfoCommon {
 		return this.mNative;
 	}
 
+	public getTrackId(): string {
+		return this.mNative.packageName();
+	}
+
 	public getAvailableVersionCode(): string {
 		const versionCode = this.mNative.availableVersionCode();
 		return versionCode != null ? versionCode.toString() : null;

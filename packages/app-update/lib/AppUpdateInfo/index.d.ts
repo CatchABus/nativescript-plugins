@@ -9,6 +9,7 @@ export declare class AppUpdateInfo extends AppUpdateInfoCommon {
 	constructor(native);
 
 	public getNative();
+	public getTrackId(): string;
 	public getAvailableVersionCode(): string;
 	public getBytesDownloaded(): number;
 	public getTotalBytesDownloaded(): number;
