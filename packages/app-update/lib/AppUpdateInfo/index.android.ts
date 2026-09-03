@@ -1,5 +1,5 @@
 import { AppUpdateType } from '../AppUpdateType';
-import { UpdateAvailbility } from '../UpdteAvailability';
+import { UpdateAvailbility } from '../UpdateAvailability';
 import { AppUpdateInfoCommon } from './common';
 import { AppUpdateOptions } from '../AppUpdateOptions';
 import { UpdatePrecondition } from '../UpdatePrecondition';

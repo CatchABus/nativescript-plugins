@@ -3,7 +3,7 @@ import { AppUpdateOptions } from '../AppUpdateOptions';
 import { AppUpdateType } from '../AppUpdateType';
 import { InstallStatus } from '../InstallStatus';
 import { UpdatePrecondition } from '../UpdatePrecondition';
-import { UpdateAvailbility } from '../UpdteAvailability';
+import { UpdateAvailbility } from '../UpdateAvailability';
 import { AppUpdateInfoCommon } from './common';
 
 interface AppData {

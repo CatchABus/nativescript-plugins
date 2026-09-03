@@ -1,7 +1,6 @@
 import { alert } from '@nativescript/core';
 import { DemoSharedBase } from '../utils';
-import { AppUpdateManager } from '@nativescript-community/app-update';
-import { UpdateAvailbility } from '../../../packages/app-update/lib/UpdteAvailability';
+import { AppUpdateManager, UpdateAvailbility } from '@nativescript-community/app-update';
 
 export class DemoSharedAppUpdate extends DemoSharedBase {
 	testIt() {
