@@ -14,12 +14,14 @@ interface AppData {
 
 export class AppUpdateInfo extends AppUpdateInfoCommon {
 	private readonly mNative: AppData;
+	private readonly mCurrentAppShortVersion: string;
 	private readonly mCurrentAppVersion: string;
 
 	constructor(native: AppData) {
 		super();
 		this.mNative = native;
-		this.mCurrentAppVersion = NSBundle.mainBundle.infoDictionary.objectForKey('CFBundleShortVersionString');
+		this.mCurrentAppShortVersion = NSBundle.mainBundle.infoDictionary.objectForKey('CFBundleShortVersionString');
+		this.mCurrentAppVersion = NSBundle.mainBundle.infoDictionary.objectForKey('CFBundleVersion');
 	}
 
 	public getNative() {
@@ -51,7 +53,15 @@ export class AppUpdateInfo extends AppUpdateInfoCommon {
 	}
 
 	public getUpdateAvailability(): UpdateAvailbility {
-		return compareVersions(this.mCurrentAppVersion, this.mNative.version) === -1 ? UpdateAvailbility.UPDATE_AVAILABLE : UpdateAvailbility.UPDATE_NOT_AVAILABLE;
+		if (compareVersions(this.mCurrentAppShortVersion, this.mNative.version) !== -1) {
+			return UpdateAvailbility.UPDATE_NOT_AVAILABLE;
+		}
+
+		if (compareVersions(this.mCurrentAppVersion, this.mNative.version) !== -1) {
+			return UpdateAvailbility.UPDATE_NOT_AVAILABLE;
+		}
+
+		return UpdateAvailbility.UPDATE_AVAILABLE;
 	}
 
 	public getUpdatePriority(): number {
