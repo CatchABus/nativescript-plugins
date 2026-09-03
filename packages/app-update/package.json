@@ -1,6 +1,6 @@
 {
 	"name": "@nativescript-community/app-update",
-	"version": "0.1.4",
+	"version": "0.2.0",
 	"description": "A NativeScript plugin for checking and initiating app updates using Android's AppUpdateManager.",
 	"main": "index",
 	"types": "index.d.ts",
