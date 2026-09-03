@@ -1,0 +1,70 @@
+{
+	"name": "app-update",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "packages/app-update",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"options": {
+				"outputPath": "dist/packages/app-update",
+				"tsConfig": "packages/app-update/tsconfig.json",
+				"packageJson": "packages/app-update/package.json",
+				"main": "packages/app-update/index.d.ts",
+				"assets": [
+					"packages/app-update/*.md",
+					"packages/app-update/**/index.d.ts",
+					"LICENSE",
+					{
+						"glob": "**/*",
+						"input": "packages/app-update/typings/",
+						"output": "./typings/"
+					},
+					{
+						"glob": "**/*",
+						"input": "packages/app-update/platforms/",
+						"output": "./platforms/"
+					}
+				],
+				"dependsOn": [
+					{
+						"target": "build.all",
+						"projects": "dependencies"
+					}
+				]
+			}
+		},
+		"build.all": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["node tools/scripts/build-finish.ts app-update"],
+				"parallel": false
+			},
+			"outputs": ["{workspaceRoot}/dist/packages/app-update"],
+			"dependsOn": [
+				{
+					"target": "build.all",
+					"projects": "dependencies"
+				},
+				{
+					"target": "build",
+					"projects": "self"
+				}
+			]
+		},
+		"focus": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages app-update"],
+				"parallel": false
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:eslint",
+			"options": {
+				"lintFilePatterns": ["packages/app-update/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

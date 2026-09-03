@@ -1,0 +1,8 @@
+export enum UpdatePrecondition {
+	UNKNOWN = 0,
+	CANNOT_DISPLAY = 1,
+	NEED_STORE_TO_PROCEED = 2,
+	INSUFFICIENT_STORAGE = 3,
+	DEVICE_STATUS = 4,
+	APP_VERSION_FRESH = 5,
+}

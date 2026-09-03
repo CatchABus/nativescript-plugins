@@ -1,4 +1,5 @@
 export * from './utils';
+export * from './app-update';
 export * from './dns-lookup';
 export * from './nordic-dfu';
 export * from './ui-constraintlayout';

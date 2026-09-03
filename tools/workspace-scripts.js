@@ -88,6 +88,13 @@ module.exports = {
 					description: '@nativescript-community/ui-jsx: Build',
 				},
 			},
+			// @nativescript-community/app-update
+			'app-update': {
+				build: {
+					script: 'nx run app-update:build.all',
+					description: '@nativescript-community/app-update: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
@@ -125,6 +132,10 @@ module.exports = {
 			'ui-jsx': {
 				script: 'nx run ui-jsx:focus',
 				description: 'Focus on @nativescript-community/ui-jsx',
+			},
+			'app-update': {
+				script: 'nx run app-update:focus',
+				description: 'Focus on @nativescript-community/app-update',
 			},
 			reset: {
 				script: 'nx g @nativescript/plugin-tools:focus-packages',

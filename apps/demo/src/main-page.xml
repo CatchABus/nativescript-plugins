@@ -12,6 +12,7 @@
         <Button text="ui-jsx" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
         <Button text="ui-maplibre" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
         <Button text="ui-neumorphiclayout" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="app-update" tap="{{ viewDemo }}" class="btn btn-primary rounded view-demo"/>
       </StackLayout>
     </ScrollView>
   </StackLayout>
