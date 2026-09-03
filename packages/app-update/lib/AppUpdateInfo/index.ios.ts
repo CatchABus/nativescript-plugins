@@ -53,15 +53,12 @@ export class AppUpdateInfo extends AppUpdateInfoCommon {
 	}
 
 	public getUpdateAvailability(): UpdateAvailbility {
-		if (compareVersions(this.mCurrentAppShortVersion, this.mNative.version) !== -1) {
-			return UpdateAvailbility.UPDATE_NOT_AVAILABLE;
-		}
+		const cmpShortVer = compareVersions(this.mCurrentAppShortVersion, this.mNative.version);
 
-		if (compareVersions(this.mCurrentAppVersion, this.mNative.version) !== -1) {
-			return UpdateAvailbility.UPDATE_NOT_AVAILABLE;
+		if (cmpShortVer === -1 || (cmpShortVer === 0 && compareVersions(this.mCurrentAppVersion, this.mNative.version) === -1)) {
+			return UpdateAvailbility.UPDATE_AVAILABLE;
 		}
-
-		return UpdateAvailbility.UPDATE_AVAILABLE;
+		return UpdateAvailbility.UPDATE_NOT_AVAILABLE;
 	}
 
 	public getUpdatePriority(): number {
