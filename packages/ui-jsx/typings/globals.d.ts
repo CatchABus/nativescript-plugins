@@ -8,12 +8,12 @@ declare global {
 
 	interface NativeScriptGestureEvents {
 		onTap?: (args: TapGestureEventData) => void;
-		onDoubleTap?: (args: TapGestureEventData) => void;
+		onDoubletap?: (args: TapGestureEventData) => void;
 		onPinch?: (args: PinchGestureEventData) => void;
 		onPan?: (args: PanGestureEventData) => void;
 		onSwipe?: (args: SwipeGestureEventData) => void;
 		onRotation?: (args: RotationGestureEventData) => void;
-		onLongPress?: (args: GestureEventData) => void;
+		onLongpress?: (args: GestureEventData) => void;
 		onTouch?: (args: TouchGestureEventData) => void;
 	}
 
