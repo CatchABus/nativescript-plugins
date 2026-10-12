@@ -52,10 +52,10 @@ export class JSXHelper {
 		return JSXRegistry;
 	}
 
-	public static __liveSyncNavigationEntry(componentId: string, component: () => View): void {
+	public static __liveSyncNavigationEntry(componentId: string, component: () => View): boolean {
 		const topFrame = Frame.topmost();
 		if (!topFrame) {
-			return;
+			return false;
 		}
 
 		let matchingFrame: Frame;
@@ -77,7 +77,10 @@ export class JSXHelper {
 
 		if (matchingFrame) {
 			matchingFrame.currentEntry.create = component;
+			return true;
 		}
+
+		return false;
 	}
 
 	public static registerElement(type: string, cl: typeof ViewBase): void {

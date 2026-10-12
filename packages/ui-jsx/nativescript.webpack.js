@@ -73,6 +73,11 @@ module.exports = (webpack) => {
 		config.when(env.hmr, (config) => {
 			const entryPath = getEntryPath();
 
+			// The plugin provides a better handling for HMR
+			if (config.module.rules.has('hmr-core')) {
+				config.module.rules.delete('hmr-core');
+			}
+
 			// Set up JSX HMR
 			config.module
 				.rule('hmr-jsx')
