@@ -3,13 +3,19 @@ import { ImageSource, Observable } from '@nativescript/core';
 import { CanvasContextType } from '../../CanvasTypes';
 import { CanvasRenderingContext2D } from '../contexts/CanvasRenderingContext2D';
 import { ImageBitmapRenderingContext } from '../contexts/ImageBitmapRenderingContext';
-import { SCREEN_SCALE, SUPPORTED_CANVAS_IMAGE_FORMATS } from '../helpers';
+import { SCREEN_SCALE } from '../helpers';
 import type { HTMLCanvasView } from '../html-canvas-view'; // Avoid importing module itself as it might result in circular dependencies
 import { OffscreenCanvas } from './OffscreenCanvas';
 
 class NSHTMLCanvasElement extends Observable {
 	private _contexts: Map<CanvasContextType, CanvasRenderingContext2D | ImageBitmapRenderingContext>;
 	private _isControlledByOffscreen: boolean;
+
+	/**
+	 * We merely simulate those for now so that size comparisons pass in libraries that use the plugin.
+	 */
+	private _width: number;
+	private _height: number;
 
 	private readonly _nativeElement: HTMLCanvasView;
 
@@ -93,19 +99,19 @@ class NSHTMLCanvasElement extends Observable {
 	}
 
 	get width(): number {
-		return this._nativeElement.getActualSize().width;
+		return this._width ?? this._nativeElement.getActualSize().width;
 	}
 
 	set width(val: number) {
-		this._nativeElement.width = val;
+		this._width = val;
 	}
 
 	get height(): number {
-		return this._nativeElement.getActualSize().height;
+		return this._height ?? this._nativeElement.getActualSize().height;
 	}
 
 	set height(val: number) {
-		this._nativeElement.height = val;
+		this._height = val;
 	}
 
 	public get nativeElement(): HTMLCanvasView {
