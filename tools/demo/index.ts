@@ -2,6 +2,7 @@ export * from './utils';
 export * from './app-update';
 export * from './dns-lookup';
 export * from './nordic-dfu';
+export * from './tz-datasource';
 export * from './ui-constraintlayout';
 export * from './ui-htmlcanvasapi';
 export * from './ui-jsx';

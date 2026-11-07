@@ -1,0 +1,65 @@
+{
+	"name": "tz-datasource",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "packages/tz-datasource",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"options": {
+				"outputPath": "dist/packages/tz-datasource",
+				"tsConfig": "packages/tz-datasource/tsconfig.json",
+				"packageJson": "packages/tz-datasource/package.json",
+				"main": "packages/tz-datasource/index.d.ts",
+				"assets": [
+					"packages/tz-datasource/*.md",
+					"packages/tz-datasource/index.d.ts",
+					"LICENSE",
+					{
+						"glob": "**/*",
+						"input": "packages/tz-datasource/platforms/",
+						"output": "./platforms/"
+					}
+				],
+				"dependsOn": [
+					{
+						"target": "build.all",
+						"projects": "dependencies"
+					}
+				]
+			}
+		},
+		"build.all": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["node tools/scripts/build-finish.ts tz-datasource"],
+				"parallel": false
+			},
+			"outputs": ["{workspaceRoot}/dist/packages/tz-datasource"],
+			"dependsOn": [
+				{
+					"target": "build.all",
+					"projects": "dependencies"
+				},
+				{
+					"target": "build",
+					"projects": "self"
+				}
+			]
+		},
+		"focus": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages tz-datasource"],
+				"parallel": false
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:eslint",
+			"options": {
+				"lintFilePatterns": ["packages/tz-datasource/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

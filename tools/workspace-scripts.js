@@ -95,6 +95,13 @@ module.exports = {
 					description: '@nativescript-community/app-update: Build',
 				},
 			},
+			// @nativescript-community/tz-datasource
+			'tz-datasource': {
+				build: {
+					script: 'nx run tz-datasource:build.all',
+					description: '@nativescript-community/tz-datasource: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
@@ -136,6 +143,10 @@ module.exports = {
 			'app-update': {
 				script: 'nx run app-update:focus',
 				description: 'Focus on @nativescript-community/app-update',
+			},
+			'tz-datasource': {
+				script: 'nx run tz-datasource:focus',
+				description: 'Focus on @nativescript-community/tz-datasource',
 			},
 			reset: {
 				script: 'nx g @nativescript/plugin-tools:focus-packages',

@@ -1,0 +1,24 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+    <Page.actionBar>
+        <ActionBar title="tz-datasource" icon="" class="action-bar">
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout class="p-20">
+        <ScrollView class="h-full">
+          <StackLayout>
+            <Label text="Current time (local)" class="h2"/>
+            <Label text="{{ currentTimeLocal }}" marginBottom="16"/>
+            <Label text="Current time (Africa/Niamey)" class="h2"/>
+            <Label text="{{ currentTime1 }}" marginBottom="16"/>
+            <Label text="Current time (Europe/Athens)" class="h2"/>
+            <Label text="{{ currentTime2 }}" marginBottom="16"/>
+            <Label text="Current time (America/New_York)" class="h2"/>
+            <Label text="{{ currentTime3 }}" marginBottom="16"/>
+            <Label text="Current time (Asia/Tokyo)" class="h2"/>
+            <Label text="{{ currentTime4 }}" marginBottom="16"/>
+            <Label text="Current time (Australia/Sydney)" class="h2"/>
+            <Label text="{{ currentTime5 }}" marginBottom="16"/>
+          </StackLayout>
+        </ScrollView>
+    </StackLayout>
+</Page>
