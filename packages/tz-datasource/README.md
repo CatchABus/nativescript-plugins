@@ -4,6 +4,8 @@ A NativeScript plugin that provides access to the device's timezone data.
 It was designed to be compatible with [@formatjs/intl-datetimeformat](https://www.npmjs.com/package/@formatjs/intl-datetimeformat) polyfill. The polyfill itself provides large timezone polyfills which can be easily avoided by using this plugin.  
 The plugin was designed in such a way that it lazily loads only whatever timezone data are needed by dates.  
 
+*Note: In the case of android, this plugin will work on Android 8 (SDK 26) or later.  
+
 ## Installation
 
 ```javascript
