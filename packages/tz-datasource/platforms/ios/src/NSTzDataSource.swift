@@ -11,28 +11,37 @@ import Foundation
                let endPoint = curCalendar.date(byAdding: Calendar.Component.year, value: yearDataRange, to: curDate) {
                 let startTimestamp = startPoint.timeIntervalSince1970
                 let endTimestamp = endPoint.timeIntervalSince1970
+                var jsonArray: [[Any]] = []
                 
                 var transition = tz.nextDaylightSavingTimeTransition(after: startPoint)
-                if (transition != nil && transition!.timeIntervalSince1970 >= startTimestamp && transition!.timeIntervalSince1970 <= endTimestamp) {
-                    var jsonArray: [Any] = []
-                    
-                    while (transition != nil && transition!.timeIntervalSince1970 >= startTimestamp && transition!.timeIntervalSince1970 <= endTimestamp) {
-                        jsonArray.append([
-                            transition!.timeIntervalSince1970,
-                            tz.abbreviation(for: transition!) ?? "",
-                            tz.secondsFromGMT(for: transition!),
-                            tz.isDaylightSavingTime(for: transition!)
-                        ])
-                        transition = tz.nextDaylightSavingTimeTransition(after: transition!)
-                    }
-                    
-                    if let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray) {
-                        return NSString.init(data: jsonData, encoding: NSUTF8StringEncoding)
-                    }
+                while (transition != nil && transition!.timeIntervalSince1970 >= startTimestamp && transition!.timeIntervalSince1970 <= endTimestamp) {
+                    jsonArray.append(createJSONZoneEntry(transition!, tz))
+                    transition = tz.nextDaylightSavingTimeTransition(after: transition!)
+                }
+                
+                /**
+                 * Handle cases of zone IDs without transitions in the specified year range.
+                 * In such cases, this method will return the timezone data as fallback using the range start timestamp as transition point.
+                 */
+                if (jsonArray.isEmpty) {
+                    jsonArray.append(createJSONZoneEntry(startPoint, tz))
+                }
+                
+                if let jsonData = try? JSONSerialization.data(withJSONObject: jsonArray) {
+                    return NSString.init(data: jsonData, encoding: NSUTF8StringEncoding)
                 }
             }
         }
         
         return nil
+    }
+    
+    private static func createJSONZoneEntry(_ transition: Date, _ tz: NSTimeZone) -> [Any] {
+        return [
+            transition.timeIntervalSince1970,
+            tz.abbreviation(for: transition) ?? "",
+            tz.secondsFromGMT(for: transition),
+            tz.isDaylightSavingTime(for: transition)
+        ]
     }
 }
