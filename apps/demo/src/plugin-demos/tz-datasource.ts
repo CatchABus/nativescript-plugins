@@ -16,7 +16,7 @@ import '@formatjs/intl-relativetimeformat/locale-data/en.js';
 export function navigatingTo(args: EventData) {
 	const page = <Page>args.object;
 
-	const tzData = createTzDataSource(250);
+	const tzData = createTzDataSource(10);
 	const date = new Date();
 
 	Intl.DateTimeFormat['tzData'] = tzData;

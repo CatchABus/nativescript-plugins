@@ -18,10 +18,9 @@ import { createTzDataSource } from '@nativescript-community/tz-datasource';
 
 /**
  * The parameter is the range of transitions in years.
- * In this case, the plugin is asked to only fetch data for -125/+125 years based on current date.
- * Note: A small year range can result in empty results for zones like Asia/Tokyo.
+ * In this case, the plugin is asked to only fetch data for -5/+5 years based on current date.
  */
-const tzData = createTzDataSource(250);
+const tzData = createTzDataSource(10);
 
 // For Intl polyfill users, this is the way to apply the plugin timezone data
 Intl.DateTimeFormat['tzData'] = tzData;

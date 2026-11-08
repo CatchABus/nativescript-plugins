@@ -17,6 +17,11 @@
 					"LICENSE",
 					{
 						"glob": "**/*",
+						"input": "packages/tz-datasource/typings/",
+						"output": "./typings/"
+					},
+					{
+						"glob": "**/*",
 						"input": "packages/tz-datasource/platforms/",
 						"output": "./platforms/"
 					}
