@@ -22,7 +22,8 @@
 		"@nativescript-community/ui-maplibre": "file:../../packages/ui-maplibre",
 		"@nativescript-community/ui-neumorphiclayout": "file:../../packages/ui-neumorphiclayout",
 		"@nativescript/core": "file:../../node_modules/@nativescript/core",
-		"mobx": "^6.16.1"
+		"mobx": "^6.16.1",
+		"@nativescript-community/intl": "file:../../packages/intl"
 	},
 	"devDependencies": {
 		"@nativescript/android": "9.0.2",

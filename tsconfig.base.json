@@ -28,7 +28,8 @@
 			"@nativescript-community/ui-maplibre": ["packages/ui-maplibre/index.d.ts"],
 			"@nativescript-community/ui-jsx": ["packages/ui-jsx/index.d.ts"],
 			"@nativescript-community/app-update": ["packages/app-update/index.d.ts"],
-			"@nativescript-community/tz-datasource": ["packages/tz-datasource/index.d.ts"]
+			"@nativescript-community/tz-datasource": ["packages/tz-datasource/index.d.ts"],
+			"@nativescript-community/intl": ["packages/intl/index.d.ts"]
 		}
 	},
 	"exclude": ["node_modules", "tmp"]

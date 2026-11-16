@@ -1,6 +1,7 @@
 export * from './utils';
 export * from './app-update';
 export * from './dns-lookup';
+export * from './intl';
 export * from './nordic-dfu';
 export * from './tz-datasource';
 export * from './ui-constraintlayout';

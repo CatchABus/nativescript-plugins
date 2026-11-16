@@ -1,0 +1,65 @@
+{
+	"name": "intl",
+	"$schema": "../../node_modules/nx/schemas/project-schema.json",
+	"projectType": "library",
+	"sourceRoot": "packages/intl",
+	"targets": {
+		"build": {
+			"executor": "@nx/js:tsc",
+			"options": {
+				"outputPath": "dist/packages/intl",
+				"tsConfig": "packages/intl/tsconfig.json",
+				"packageJson": "packages/intl/package.json",
+				"main": "packages/intl/index.d.ts",
+				"assets": [
+					"packages/intl/*.md",
+					"packages/intl/index.d.ts",
+					"LICENSE",
+					{
+						"glob": "**/*",
+						"input": "packages/intl/platforms/",
+						"output": "./platforms/"
+					}
+				],
+				"dependsOn": [
+					{
+						"target": "build.all",
+						"projects": "dependencies"
+					}
+				]
+			}
+		},
+		"build.all": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["node tools/scripts/build-finish.ts intl"],
+				"parallel": false
+			},
+			"outputs": ["{workspaceRoot}/dist/packages/intl"],
+			"dependsOn": [
+				{
+					"target": "build.all",
+					"projects": "dependencies"
+				},
+				{
+					"target": "build",
+					"projects": "self"
+				}
+			]
+		},
+		"focus": {
+			"executor": "nx:run-commands",
+			"options": {
+				"commands": ["nx g @nativescript/plugin-tools:focus-packages intl"],
+				"parallel": false
+			}
+		},
+		"lint": {
+			"executor": "@nx/eslint:eslint",
+			"options": {
+				"lintFilePatterns": ["packages/intl/**/*.ts"]
+			}
+		}
+	},
+	"tags": []
+}

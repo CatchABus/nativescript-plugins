@@ -102,6 +102,13 @@ module.exports = {
 					description: '@nativescript-community/tz-datasource: Build',
 				},
 			},
+			// @nativescript-community/intl
+			intl: {
+				build: {
+					script: 'nx run intl:build.all',
+					description: '@nativescript-community/intl: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run-many --target=build.all --all',
 				description: 'Build all packages',
@@ -147,6 +154,10 @@ module.exports = {
 			'tz-datasource': {
 				script: 'nx run tz-datasource:focus',
 				description: 'Focus on @nativescript-community/tz-datasource',
+			},
+			intl: {
+				script: 'nx run intl:focus',
+				description: 'Focus on @nativescript-community/intl',
 			},
 			reset: {
 				script: 'nx g @nativescript/plugin-tools:focus-packages',
