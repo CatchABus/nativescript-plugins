@@ -1,23 +1,9 @@
-import { getCanonicalLocales, supportedValuesOf } from './lib/utilities';
+import { IntlPolyfill } from './lib';
 
 export function install(): void {
-	const polyfill: typeof Intl = {
-		Collator: null,
-		NumberFormat: null,
-		DateTimeFormat: null,
-		RelativeTimeFormat: null,
-		PluralRules: null,
-		Locale: null,
-		DisplayNames: null,
-		ListFormat: null,
-		Segmenter: null,
-		getCanonicalLocales: getCanonicalLocales,
-		supportedValuesOf: supportedValuesOf,
-	};
-
 	if (typeof Intl === 'undefined') {
-		global.Intl = polyfill;
+		global.Intl = IntlPolyfill;
 	} else {
-		Object.assign(Intl, polyfill);
+		Object.assign(Intl, IntlPolyfill);
 	}
 }
